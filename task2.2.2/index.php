@@ -9,6 +9,7 @@
     <img src="./2.2.PNG"></img>
     <img src="./2.3.PNG"></img>
     <img src="./2.4.PNG"></img>
+    <img src="./2.5.PNG"></img>
 
 </body>
 </html>
