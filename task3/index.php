@@ -1,31 +1,53 @@
 <?php
 header('Content-Type: text/html; charset=UTF-8');
 
+function validate_email($email) {
+    return filter_var($email, FILTER_VALIDATE_EMAIL);
+}
+
+function validate_phone($phone) {
+    // Пример простой валидации для телефона (можно доработать по необходимости)
+    return preg_match("/^\+?\d{1,3}\s?\(?\d{3}\)?[-\s]?\d{3}[-\s]?\d{2}[-\s]?\d{2}$/", $phone);
+}
+
+$errors = [];
+
+// Проверка метода запроса
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     if (!empty($_GET['save'])) {
-        print('Спасибо, результаты сохранены.');
+        echo 'Спасибо, результаты сохранены.';
     }
     include('form.php');
     exit();
 }
 
-$errors = FALSE;
-
+// Валидация данных
 if (empty($_POST['name'])) {
-    print('Заполните ФИО.<br/>');
-    $errors = TRUE;
+    $errors[] = 'Заполните ФИО.';
 }
 
-// Проверка остальных полей, включая валидацию email, даты рождения и других полей.
+// Валидация email
+if (!empty($_POST['email']) && !validate_email($_POST['email'])) {
+    $errors[] = 'Введите корректный email.';
+}
 
-if ($errors) {
+// Валидация телефона
+if (!empty($_POST['phone']) && !validate_phone($_POST['phone'])) {
+    $errors[] = 'Введите корректный номер телефона.';
+}
+
+// Другие валидации для остальных полей формы
+
+if (!empty($errors)) {
+    foreach ($errors as $error) {
+        echo $error . '<br>';
+    }
     exit();
 }
 
-
 $user = 'u67498';
-$pass = '2427367'; 
-$dbname = 'u67498'; 
+$pass = '2427367';
+$dbname = 'u67498';
 $db = new PDO("mysql:host=localhost;dbname=$dbname", $user, $pass);
 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
@@ -33,8 +55,8 @@ try {
     // Вставка данных в таблицу application
     $stmt = $db->prepare("INSERT INTO application (name, phone, email, dob, gender, bio, contract) VALUES (?, ?, ?, ?, ?, ?, ?)");
     $stmt->execute([$_POST['name'], $_POST['phone'], $_POST['email'], $_POST['dob'], $_POST['gender'], $_POST['bio'], isset($_POST['contract']) ? 1 : 0]);
-    
-    // Получаем ID вставленной записи
+
+    // Получение ID вставленной записи
     $application_id = $db->lastInsertId();
 
     // Вставка данных в таблицу application_ability
@@ -45,8 +67,9 @@ try {
 
     // Перенаправление с сообщением об успешном сохранении
     header('Location: ?save=1');
-} catch(PDOException $e){
-    print('Error : ' . $e->getMessage());
+} catch(PDOException $e) {
+    echo 'Ошибка выполнения запроса: ' . $e->getMessage();
+    // Здесь можно предоставить дополнительную информацию или инструкции для пользователя
     exit();
 }
 ?>
