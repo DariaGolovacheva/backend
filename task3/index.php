@@ -1,80 +1,52 @@
 <?php
-// Отправляем браузеру правильную кодировку,
-// файл index.php должен быть в кодировке UTF-8 без BOM.
 header('Content-Type: text/html; charset=UTF-8');
 
-// В суперглобальном массиве $_SERVER PHP сохраняет некторые заголовки запроса HTTP
-// и другие сведения о клиненте и сервере, например метод текущего запроса $_SERVER['REQUEST_METHOD'].
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-  // В суперглобальном массиве $_GET PHP хранит все параметры, переданные в текущем запросе через URL.
-  if (!empty($_GET['save'])) {
-    // Если есть параметр save, то выводим сообщение пользователю.
-    print('Спасибо, результаты сохранены.');
-  }
-  // Включаем содержимое файла form.php.
-  include('form.php');
-  // Завершаем работу скрипта.
-  exit();
+    if (!empty($_GET['save'])) {
+        print('Спасибо, результаты сохранены.');
+    }
+    include('form.php');
+    exit();
 }
-// Иначе, если запрос был методом POST, т.е. нужно проверить данные и сохранить их в XML-файл.
 
-// Проверяем ошибки.
 $errors = FALSE;
-if (empty($_POST['fio'])) {
-  print('Заполните имя.<br/>');
-  $errors = TRUE;
+
+if (empty($_POST['name'])) {
+    print('Заполните ФИО.<br/>');
+    $errors = TRUE;
 }
 
-if (empty($_POST['year']) || !is_numeric($_POST['year']) || !preg_match('/^\d+$/', $_POST['year'])) {
-  print('Заполните год.<br/>');
-  $errors = TRUE;
-}
-
-
-// *************
-// Тут необходимо проверить правильность заполнения всех остальных полей.
-// *************
+// Проверка остальных полей, включая валидацию email, даты рождения и других полей.
 
 if ($errors) {
-  // При наличии ошибок завершаем работу скрипта.
-  exit();
+    exit();
 }
 
-// Сохранение в базу данных.
 
-$user = 'u67498'; // Заменить на ваш логин uXXXXX
-$pass = '2427367'; // Заменить на пароль, такой же, как от SSH
-$db = new PDO('mysql:host=localhost;dbname=u67498', $user, $pass,
-  [PDO::ATTR_PERSISTENT => true, PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]); // Заменить test на имя БД, совпадает с логином uXXXXX
+$user = 'u67498';
+$pass = '2427367'; 
+$dbname = 'u67498'; 
+$db = new PDO("mysql:host=localhost;dbname=$dbname", $user, $pass);
+$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-// Подготовленный запрос. Не именованные метки.
 try {
-  $stmt = $db->prepare("INSERT INTO application SET name = ?");
-  $stmt->execute([$_POST['fio']]);
-}
-catch(PDOException $e){
-  print('Error : ' . $e->getMessage());
-  exit();
-}
+    // Вставка данных в таблицу application
+    $stmt = $db->prepare("INSERT INTO application (name, phone, email, dob, gender, bio, contract) VALUES (?, ?, ?, ?, ?, ?, ?)");
+    $stmt->execute([$_POST['name'], $_POST['phone'], $_POST['email'], $_POST['dob'], $_POST['gender'], $_POST['bio'], isset($_POST['contract']) ? 1 : 0]);
+    
+    // Получаем ID вставленной записи
+    $application_id = $db->lastInsertId();
 
-//  stmt - это "дескриптор состояния".
- 
-//  Именованные метки.
-//$stmt = $db->prepare("INSERT INTO test (label,color) VALUES (:label,:color)");
-//$stmt -> execute(['label'=>'perfect', 'color'=>'green']);
- 
-//Еще вариант
-/*$stmt = $db->prepare("INSERT INTO users (firstname, lastname, email) VALUES (:firstname, :lastname, :email)");
-$stmt->bindParam(':firstname', $firstname);
-$stmt->bindParam(':lastname', $lastname);
-$stmt->bindParam(':email', $email);
-$firstname = "John";
-$lastname = "Smith";
-$email = "john@test.com";
-$stmt->execute();
-*/
+    // Вставка данных в таблицу application_ability
+    foreach ($_POST['abilities'] as $ability) {
+        $stmt = $db->prepare("INSERT INTO application_ability (application_id, language_id) VALUES (?, ?)");
+        $stmt->execute([$application_id, $ability]);
+    }
 
-// Делаем перенаправление.
-// Если запись не сохраняется, но ошибок не видно, то можно закомментировать эту строку чтобы увидеть ошибку.
-// Если ошибок при этом не видно, то необходимо настроить параметр display_errors для PHP.
-header('Location: ?save=1');
+    // Перенаправление с сообщением об успешном сохранении
+    header('Location: ?save=1');
+} catch(PDOException $e){
+    print('Error : ' . $e->getMessage());
+    exit();
+}
+?>
