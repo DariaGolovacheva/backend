@@ -35,6 +35,32 @@ if (!empty($_POST['email']) && !validate_email($_POST['email'])) {
 if (!empty($_POST['phone']) && !validate_phone($_POST['phone'])) {
     $errors[] = 'Введите корректный номер телефона.';
 }
+// вадидация ФИО
+if (empty($_POST['fio'])) {
+    $errors[] = 'Заполните ФИО.';
+}etseif(!preg_match("/^[а-яА-яЁёя-zA-Z\s]+$/u",$_POST['fio'])){
+    $errors[]='ФИО должно содержать только буквы и пробелы';
+    }etseif (strlen($_POST['fio']>150){
+             $errors[]='ФИО не должно превышать 150 символов';
+             }
+             
+
+//валидация даты рождения 
+if empty($_POST['date'])){
+    $errors[]='заполните дату рождения';
+    }else {
+    $date=$_POST['date'];
+$date_timestamp=strtotime($date);
+if($date_timestamp===false){
+    $errors='некорректный ввод даты рождения';
+}else{
+    $min_age=18;
+    $min_date_timestamp=strtotime("-$min_age years");
+    if($date_timestamp>$min_date_timestamp){
+        $errors[]='вы должны  быть старше'.$min_age.'лет';
+    }
+}
+}
 
 // Другие валидации для остальных полей формы
 
