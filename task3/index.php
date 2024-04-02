@@ -36,11 +36,11 @@ if (!empty($_POST['phone']) && !validate_phone($_POST['phone'])) {
     $errors[] = 'Введите корректный номер телефона.';
 }
 // вадидация ФИО
-if (empty($_POST['fio'])) {
+if (empty($_POST['name'])) {
     $errors[] = 'Заполните ФИО.';
 }etseif(!preg_match("/^[а-яА-яЁёя-zA-Z\s]+$/u",$_POST['fio'])){
     $errors[]='ФИО должно содержать только буквы и пробелы';
-    }etseif (strlen($_POST['fio']>150){
+    }etseif (strlen($_POST['name']>150){
              $errors[]='ФИО не должно превышать 150 символов';
              }
              
@@ -80,7 +80,7 @@ $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 try {
     // Вставка данных в таблицу applicationn
     $stmt = $db->prepare("INSERT INTO applicationn (name, phone, email, dob, gender, bio, contract) VALUES (?, ?, ?, ?, ?, ?, ?)");
-    $stmt->execute([$_POST['name'], $_POST['phone'], $_POST['email'], $_POST['dob'], $_POST['gender'], $_POST['bio'], isset($_POST['contract'])]);
+    $stmt->execute([$_POST['name'], $_POST['phone'], $_POST['email'], $_POST['dob'], $_POST['gender'], $_POST['bio'], isset($_POST['contract'])? 1:0]);
 
     // Получение ID вставленной записи
     $application_id = $db->lastInsertId();
