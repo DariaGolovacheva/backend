@@ -38,15 +38,15 @@ if (!empty($_POST['phone']) && !validate_phone($_POST['phone'])) {
 // вадидация ФИО
 if (empty($_POST['name'])) {
     $errors[] = 'Заполните ФИО.';
-}etseif(!preg_match("/^[а-яА-яЁёя-zA-Z\s]+$/u",$_POST['name'])){
+}elseif(!preg_match("/^[а-яА-яЁёя-zA-Z\s]+$/u",$_POST['name'])){
     $errors[]='ФИО должно содержать только буквы и пробелы';
-    }etseif (strlen($_POST['name']>150){
+    }elseif (strlen($_POST['name']>150){
              $errors[]='ФИО не должно превышать 150 символов';
              }
              
 
 //валидация даты рождения 
-if empty($_POST['dob'])){
+if (empty($_POST['dob'])){
     $errors[]='заполните дату рождения';
     }else {
     $dob=$_POST['dob'];
