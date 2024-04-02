@@ -1,50 +1,64 @@
-<form action="" method="POST">
-  <label for="fio">ФИО:</label>
-  <input type="text" name="fio" id="fio" required />
-  <br/>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Регистрационная форма</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
 
-  <label for="phone">Телефон:</label>
-  <input type="tel" name="phone" id="phone" required />
-  <br/>
+<div class="container">
+  <h2>Регистрационная форма</h2>
+  <form id="registrationForm" method="POST" action="">
+    <div class="form-group">
+      <label for="fullName">ФИО:</label>
+      <input type="text" id="fullName" name="fullName" required>
+    </div>
+    <div class="form-group">
+      <label for="phone">Телефон:</label>
+      <input type="tel" id="phone" name="phone" required>
+    </div>
+    <div class="form-group">
+      <label for="email">E-mail:</label>
+      <input type="email" id="email" name="email" required>
+    </div>
+    <div class="form-group">
+      <label for="dob">Дата рождения:</label>
+      <input type="date" id="dob" name="dob" required>
+    </div>
+    <div class="form-group">
+      <label>Пол:</label>
+      <label><input type="radio" name="gender" value="male"> Мужской</label>
+      <label><input type="radio" name="gender" value="female"> Женский</label>
+    </div>
+    <div class="form-group">
+      <label for="favoriteLanguage">Любимый язык программирования:</label>
+      <select id="favoriteLanguage" name="favoriteLanguage" multiple required>
+        <option value="Pascal">Pascal</option>
+        <option value="C">C</option>
+        <option value="C++">C++</option>
+        <option value="JavaScript">JavaScript</option>
+        <option value="PHP">PHP</option>
+        <option value="Python">Python</option>
+        <option value="Java">Java</option>
+        <option value="Haskel">Haskel</option>
+        <option value="Clojure">Clojure</option>
+        <option value="Prolog">Prolog</option>
+        <option value="Scala">Scala</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="bio">Биография:</label>
+      <textarea id="bio" name="bio" rows="5" required></textarea>
+    </div>
+    <div class="form-group">
+      <label><input type="checkbox" id="contract" name="contract" required> С контрактом ознакомлен (а)</label>
+    </div>
+    <button type="submit">Сохранить</button>
+  </form>
+</div>
 
-  <label for="email">Email:</label>
-  <input type="email" name="email" id="email" required />
-  <br/>
 
-  <label for="dob">Дата рождения:</label>
-  <input type="date" name="dob" id="dob" required />
-  <br/>
-
-  <label for="gender">Пол:</label>
-  <select name="gender" id="gender" required>
-    <option value="male">Мужской</option>
-    <option value="female">Женский</option>
-  </select>
-  <br/>
-
-  <label for="languages">Языки программирования:</label>
-  <select name="languages[]" id="languages" multiple required>
-    <option value="1">Pascal</option>
-    <option value="2">C</option>
-    <option value="3">C++</option>
-    <option value="4">JavaScript</option>
-    <option value="5">PHP</option>
-    <option value="6">Python</option>
-    <option value="7">Java</option>
-    <option value="8">Haskel</option>
-    <option value="9">Clojure</option>
-    <option value="10">Prolog</option>
-    <option value="11">Scala</option>
-  </select>
-  <br/>
-
-  <label for="bio">Биография:</label><br/>
-  <textarea name="bio" id="bio" rows="4" required></textarea>
-  <br/>
-
-  <label for="contract">С контрактом ознакомлен:</label>
-  <input type="checkbox" name="contract" id="contract" required />
-  <br/>
-
-  <input type="submit" value="Отправить" />
-</form>
+</body>
+</html>
