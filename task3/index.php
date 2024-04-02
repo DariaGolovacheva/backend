@@ -46,17 +46,17 @@ if (empty($_POST['fio'])) {
              
 
 //валидация даты рождения 
-if empty($_POST['date'])){
+if empty($_POST['dob'])){
     $errors[]='заполните дату рождения';
     }else {
-    $date=$_POST['date'];
-$date_timestamp=strtotime($date);
-if($date_timestamp===false){
+    $dob=$_POST['dob'];
+$date_timestamp=strtotime($dob);
+if($dob_timestamp===false){
     $errors='некорректный ввод даты рождения';
 }else{
     $min_age=18;
-    $min_date_timestamp=strtotime("-$min_age years");
-    if($date_timestamp>$min_date_timestamp){
+    $min_dob_timestamp=strtotime("-$min_age years");
+    if($dob_timestamp>$min_dob_timestamp){
         $errors[]='вы должны  быть старше'.$min_age.'лет';
     }
 }
