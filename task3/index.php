@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     if (!empty($_GET['save'])) {
         echo 'Спасибо, результаты сохранены.';
     }
-    include('index.html');
+    include('form.php');
     exit();
 }
 
