@@ -42,16 +42,7 @@ if(empty($phone)){
         $errors=TRUE;
     }
 }
-$name=$_POST['phone'];
-if(empty($phone)){
-    print('enter your phone nunber');
-    $errors=TRUE;
-}else{
-    if(!preg_match('/^\+?\d{1,3}\s?\(\d{3}\)\s?\d{3}-\d{2}-\s{2}$/',$phone)){
-        print('wrong format');
-        $errors=TRUE;
-    }
-}
+
 // вадидация ФИО
 $name=$_POST['name'];
 if (empty($name)) {
@@ -63,7 +54,20 @@ if (empty($name)) {
     $errors=TRUE;
 }
 }
-             
+// вадидация ФИО
+$gender=$_POST['gender'];
+if (empty($gender)) {
+    print('enter your gender');
+    $errors=TRUE;
+}
+// вадидация ФИО
+$bio=$_POST['bio'];
+if (empty($bio)) {
+    print('enter your bio');
+    $errors=TRUE;
+}
+
+               
 
 //валидация даты рождения 
 $date=$_POST['dob'];
