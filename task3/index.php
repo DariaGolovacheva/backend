@@ -81,14 +81,7 @@ print('wrong date');
 $errors=TRUE;
 }}}
 
-// Другие валидации для остальных полей формы
 
-if (!empty($errors)) {
-    foreach ($errors as $error) {
-        echo $error . '<br>';
-    }
-    exit();
-}
 
 $user = 'u67498';
 $pass = '2427367';
