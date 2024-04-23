@@ -32,8 +32,15 @@ if (!empty($_POST['email']) && !validate_email($_POST['email'])) {
 }
 
 // Валидация телефона
-if (!empty($_POST['phone']) && !validate_phone($_POST['phone'])) {
-    $errors[] = 'Введите корректный номер телефона.';
+$phone=$_POST['phone'];
+if(empty($phone)){
+    print('enter your phone number');
+    $errors=TRUE;
+}else{
+    if(!preg_match('/^\+?\d{1,3}\s?\(\d{3}\)\s?\d{3}-\d{2}-\s{2}$/',$phone)){
+        print('wrong format');
+        $errors=TRUE;
+    }
 }
 // вадидация ФИО
 if (empty($_POST['name'])) {
