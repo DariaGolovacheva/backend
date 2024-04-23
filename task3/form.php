@@ -29,7 +29,7 @@
     </div>
     <div class="form-group">
       <label>Пол:</label>
-      <label><input type="radio" name="gender" value="male"> Мужской</label>
+      <label><input type="radio" name="gender" value="male" checked> Мужской</label>
       <label><input type="radio" name="gender" value="female"> Женский</label>
     </div>
     <div class="form-group">
