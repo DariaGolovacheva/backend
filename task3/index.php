@@ -42,23 +42,32 @@ if(empty($phone)){
         $errors=TRUE;
     }
 }
+$name=$_POST['phone'];
+if(empty($phone)){
+    print('enter your phone nunber');
+    $errors=TRUE;
+}else{
+    if(!preg_match('/^\+?\d{1,3}\s?\(\d{3}\)\s?\d{3}-\d{2}-\s{2}$/',$phone)){
+        print('wrong format');
+        $errors=TRUE;
+    }
+}
 // вадидация ФИО
 $name=$_POST['name'];
 if (empty($name)) {
     print('enter your name');
     $errors=TRUE;
-}else{
-    if(!preg_match("/^[а-яА-яЁёя-zA-Z\s]{1,150}$/',$name)){
+} elseif
+{ (!preg_match('/^[a-zA-Za-яА-Я\s]{1,150}$/',$name))
     print('wrong format');
     $errors=TRUE;
-    }
 }
              
 
 //валидация даты рождения 
 $date=$_POST['dob'];
 if(empty($dob)){
-print('enter your date');
+    print('enter your date');
 $errors=TRUE;
 }else{
 if(!preg_match('/^\d{4}-\d{2}-\d{2}$/',$dob)){
