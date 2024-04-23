@@ -13,19 +13,19 @@
   <form id="registrationForm" method="POST" action="">
     <div class="form-group">
       <label for="name">ФИО:</label>
-      <input type="text" id="fullName" name="name" required>
+      <input type="text" id="fullName" name="name" >
     </div>
     <div class="form-group">
       <label for="phone">Телефон:</label>
-      <input type="tel" id="phone" name="phone" required>
+      <input type="tel" id="phone" name="phone">
     </div>
     <div class="form-group">
       <label for="email">E-mail:</label>
-      <input type="email" id="email" name="email" required>
+      <input type="email" id="email" name="email" >
     </div>
     <div class="form-group">
       <label for="dob">Дата рождения:</label>
-      <input type="date" id="dob" name="dob" required>
+      <input type="date" id="dob" name="dob" >
     </div>
     <div class="form-group">
       <label>Пол:</label>
@@ -34,7 +34,7 @@
     </div>
     <div class="form-group">
       <label for="favoriteLanguage">Любимый язык программирования:</label>
-      <select id="favoriteLanguage" name="favoriteLanguage" multiple required>
+      <select id="favoriteLanguage" name="favoriteLanguage" multiple >
         <option value="Pascal">Pascal</option>
         <option value="C">C</option>
         <option value="C++">C++</option>
@@ -50,10 +50,10 @@
     </div>
     <div class="form-group">
       <label for="bio">Биография:</label>
-      <textarea id="bio" name="bio" rows="5" required></textarea>
+      <textarea id="bio" name="bio" rows="5" ></textarea>
     </div>
     <div class="form-group">
-      <label><input type="checkbox" id="contract" name="contract" required> С контрактом ознакомлен (а)</label>
+      <label><input type="checkbox" id="contract" name="contract" > С контрактом ознакомлен (а)</label>
     </div>
     <button type="submit">Сохранить</button>
   </form>
