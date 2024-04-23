@@ -12,8 +12,8 @@
   <h2>Регистрационная форма</h2>
   <form id="registrationForm" method="POST" action="">
     <div class="form-group">
-      <label for="fullName">ФИО:</label>
-      <input type="text" id="fullName" name="fullName" required>
+      <label for="name">ФИО:</label>
+      <input type="text" id="fullName" name="name" required>
     </div>
     <div class="form-group">
       <label for="phone">Телефон:</label>
