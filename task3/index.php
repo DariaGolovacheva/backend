@@ -51,12 +51,12 @@ if (empty($_POST['dob'])){
     }else {
     $dob=$_POST['dob'];
 $date_timestamp=strtotime($dob);
-if($dob_timestamp===false){
+if($dob_timestamp==false){
     $errors='некорректный ввод даты рождения';
 }else{
     $min_age=18;
     $min_dob_timestamp=strtotime("-$min_age years");
-    if($dob_timestamp>$min_dob_timestamp){
+    if($dob_timestamp > $min_dob_timestamp){
         $errors[]='вы должны  быть старше'.$min_age.'лет';
     }
 }
