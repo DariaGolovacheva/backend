@@ -56,7 +56,7 @@ if (empty($name)) {
              
 
 //валидация даты рождения 
-if (empty($_POST['dob'])){
+if (empty($_POST['dob']){
     $errors[]='заполните дату рождения';
     }else {
     $dob=$_POST['dob'];
