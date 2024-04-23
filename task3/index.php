@@ -43,13 +43,16 @@ if(empty($phone)){
     }
 }
 // вадидация ФИО
-if (empty($_POST['name'])) {
-    $errors[] = 'Заполните ФИО.';
-}elseif(!preg_match("/^[а-яА-яЁёя-zA-Z\s]+$/u",$_POST['name'])){
-    $errors[]='ФИО должно содержать только буквы и пробелы';
-    }elseif (strlen($_POST['name']>150)){
-             $errors[]='ФИО не должно превышать 150 символов';
-             }
+$name=$_POST['name'];
+if (empty($name)) {
+    print('enter your name');
+    $errors=TRUE;
+}else{
+    if(!preg_match("/^[а-яА-яЁёя-zA-Z\s]{1,150}$/',$name)){
+    print('wrong format');
+    $errors=TRUE;
+    }
+}
              
 
 //валидация даты рождения 
