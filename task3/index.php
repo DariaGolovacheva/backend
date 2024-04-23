@@ -50,7 +50,7 @@ if (empty($_POST['dob'])){
     $errors[]='заполните дату рождения';
     }else {
     $dob=$_POST['dob'];
-$date_timestamp=strtotime($dob);
+$dob_timestamp=strtotime($dob);
 if($dob_timestamp==false){
     $errors='некорректный ввод даты рождения';
 }else{
