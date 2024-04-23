@@ -57,10 +57,11 @@ $name=$_POST['name'];
 if (empty($name)) {
     print('enter your name');
     $errors=TRUE;
-} elseif
-{ (!preg_match('/^[a-zA-Za-яА-Я\s]{1,150}$/',$name))
+} else{
+    if(!preg_match('/^[a-zA-Za-яА-Я\s]{1,150}$/',$name)){
     print('wrong format');
     $errors=TRUE;
+}
 }
              
 
