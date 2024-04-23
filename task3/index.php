@@ -56,15 +56,20 @@ if (empty($name)) {
              
 
 //валидация даты рождения 
-if (empty($_POST['dob']){
-    $errors[]='заполните дату рождения';
-    }else {
-    $dob=$_POST['dob'];
-$dob_timestamp=strtotime($dob);
-if($dob_timestamp==false){
-    $errors='некорректный ввод даты рождения';
-}
-}
+$date=$_POST['dob'];
+if(empty($dob)){
+print('enter your date');
+$errors=TRUE;
+}else{
+if(!preg_match('/^\d{4}-\d{2}-\d{2}$/',$dob)){
+print('wrong format');
+$errors=TRUE;
+}else{
+list($year,$month,$day)=explode('-',$dob);
+if(!checkdate($month,$day,$year)){
+print('wrong date');
+$errors=TRUE;
+}}}
 
 // Другие валидации для остальных полей формы
 
