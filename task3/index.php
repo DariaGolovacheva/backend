@@ -90,7 +90,8 @@ try {
 
     // Получение идентификаторов языков программирования из таблицы programming_language
     $stmt = $db->prepare("SELECT id, name FROM programming_language WHERE name IN (?)");
-    $stmt->execute([$_POST['favoriteLanguage']]);
+   $stmt->execute([$application_id, $language['id']]);
+
     $languages = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     // Вставка данных в таблицу application_ability
