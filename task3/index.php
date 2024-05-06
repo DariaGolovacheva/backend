@@ -82,7 +82,14 @@ $db = new PDO("mysql:host=localhost;dbname=$dbname", $user, $pass);
 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 try {
-    // Сохранение выбранных языков программирования в таблицу programming_language (если они еще не существуют)
+    // Вставка данных в таблицу application
+    $stmt = $db->prepare("INSERT INTO application (name, phone, email, dob, gender, bio, contract) VALUES (?, ?, ?, ?, ?, ?, ?)");
+    $stmt->execute([$name, $phone, $email, $dob, $gender, $bio, $contract]);
+
+    // Получение ID вставленной записи
+    $application_id = $db->lastInsertId();
+
+    // Вставка данных в таблицу programming_language (если они еще не существуют)
     foreach ($_POST['favoriteLanguage'] as $language) {
         $stmt = $db->prepare("INSERT IGNORE INTO programming_language (name) VALUES (?)");
         $stmt->execute([$language]);
@@ -94,20 +101,16 @@ try {
     $languages = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     // Вставка данных в таблицу application_ability
-    $application_id = $db->lastInsertId();
     foreach ($languages as $language) {
         $stmt = $db->prepare("INSERT INTO application_ability (application_id, language_id) VALUES (?, ?)");
-        $success = $stmt->execute([$application_id, $language['id']]);
-        if (!$success) {
-            $errorInfo = $stmt->errorInfo();
-            echo "Ошибка при вставке в таблицу application_ability: " . $errorInfo[2];
-        }
+        $stmt->execute([$application_id, $language['id']]);
     }
 
     echo 'Данные успешно сохранены в базе данных!';
 } catch(PDOException $e) {
     echo 'Ошибка выполнения запроса: ' . $e->getMessage();
 }
+
 
     
 }
