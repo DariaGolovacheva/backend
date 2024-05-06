@@ -22,70 +22,61 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 }
 
 // Валидация данных
+
+// Валидация ФИО
 if (empty($_POST['name'])) {
-    $errors[] = 'Заполните ФИО.';
+    $errors[] = 'Введите ФИО.';
+} elseif (!preg_match('/^[a-zA-Za-яА-Я\s]{1,150}$/', $_POST['name'])) {
+    $errors[] = 'Неправильный формат ФИО.';
 }
 
 // Валидация email
-if (!empty($_POST['email']) && !validate_email($_POST['email'])) {
-    $errors[] = 'Введите корректный email.';
+if (empty($_POST['email'])) {
+    $errors[] = 'Введите email.';
+} elseif (!validate_email($_POST['email'])) {
+    $errors[] = 'Неправильный формат email.';
 }
 
 // Валидация телефона
-$phone=$_POST['phone'];
-if(empty($phone)){
-    print('enter your phone number');
-    $errors=TRUE;
-}else{
-    if(!preg_match('/^\+?\d{1,3}\s?\(\d{3}\)\s?\d{3}-\d{2}-\s{2}$/',$phone)){
-        print('wrong format');
-        $errors=TRUE;
+if (empty($_POST['phone'])) {
+    $errors[] = 'Введите номер телефона.';
+} elseif (!validate_phone($_POST['phone'])) {
+    $errors[] = 'Неправильный формат номера телефона.';
+}
+
+// Валидация даты рождения
+if (empty($_POST['dob'])) {
+    $errors[] = 'Введите дату рождения.';
+} elseif (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $_POST['dob'])) {
+    $errors[] = 'Неправильный формат даты рождения.';
+} else {
+    list($year, $month, $day) = explode('-', $_POST['dob']);
+    if (!checkdate($month, $day, $year)) {
+        $errors[] = 'Неправильная дата рождения.';
     }
 }
 
-// вадидация ФИО
-$name=$_POST['name'];
-if (empty($name)) {
-    print('enter your name');
-    $errors=TRUE;
-} else{
-    if(!preg_match('/^[a-zA-Za-яА-Я\s]{1,150}$/',$name)){
-    print('wrong format');
-    $errors=TRUE;
-}
-}
-// вадидация ФИО
-$gender=$_POST['gender'];
-if (empty($gender)) {
-    print('enter your gender');
-    $errors=TRUE;
-}
-// вадидация ФИО
-$bio=$_POST['bio'];
-if (empty($bio)) {
-    print('enter your bio');
-    $errors=TRUE;
+// Валидация пола
+if (empty($_POST['gender'])) {
+    $errors[] = 'Укажите ваш пол.';
 }
 
-               
+// Валидация биографии
+if (empty($_POST['bio'])) {
+    $errors[] = 'Введите вашу биографию.';
+}
 
-//валидация даты рождения 
-$date=$_POST['dob'];
-if(empty($dob)){
-    print('enter your date');
-$errors=TRUE;
-}else{
-if(!preg_match('/^\d{4}-\d{2}-\d{2}$/',$dob)){
-print('wrong format');
-$errors=TRUE;
-}else{
-list($year,$month,$day)=explode('-',$dob);
-if(!checkdate($month,$day,$year)){
-print('wrong date');
-$errors=TRUE;
-}}}
+// Валидация навыков
+if (empty($_POST['abilities'])) {
+    $errors[] = 'Выберите хотя бы один навык.';
+}
 
-
+if (!empty($errors)) {
+    foreach ($errors as $error) {
+        echo $error . "<br>";
+    }
+    exit();
+}
 
 $user = 'u67498';
 $pass = '2427367';
@@ -96,7 +87,7 @@ $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 try {
     // Вставка данных в таблицу applicationn
     $stmt = $db->prepare("INSERT INTO applicationn (name, phone, email, dob, gender, bio, contract) VALUES (?, ?, ?, ?, ?, ?, ?)");
-    $stmt->execute([$_POST['name'], $_POST['phone'], $_POST['email'], $_POST['dob'], $_POST['gender'], $_POST['bio'], isset($_POST['contract'])? 1:0]);
+    $stmt->execute([$_POST['name'], $_POST['phone'], $_POST['email'], $_POST['dob'], $_POST['gender'], $_POST['bio'], isset($_POST['contract']) ? 1 : 0]);
 
     // Получение ID вставленной записи
     $application_id = $db->lastInsertId();
@@ -109,7 +100,7 @@ try {
 
     // Перенаправление с сообщением об успешном сохранении
     header('Location: ?save=1');
-} catch(PDOException $e) {
+} catch (PDOException $e) {
     echo 'Ошибка выполнения запроса: ' . $e->getMessage();
     // Здесь можно предоставить дополнительную информацию или инструкции для пользователя
     exit();
