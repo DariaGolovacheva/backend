@@ -75,7 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         // Подключение к базе данных
        // Подключение к базе данных
-$user = '67498';
+$user = 'u67498';
 $pass = '2427367';
 $dbname = 'u67498';
 $db = new PDO("mysql:host=localhost;dbname=$dbname", $user, $pass);
