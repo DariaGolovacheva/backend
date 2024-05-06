@@ -104,8 +104,10 @@ try {
 } catch(PDOException $e) {
     echo 'Ошибка выполнения запроса: ' . $e->getMessage();
 }
-    }
+    
 }
+} 
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
