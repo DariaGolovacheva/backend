@@ -71,11 +71,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $gender = $_POST['gender'];
         $bio = $_POST['bio'];
         $contract = isset($_POST['contract']) ? 1 : 0;
-        $favoriteLanguages = $_POST['favoriteLanguage'];
+        $favoriteLanguages = implode(', ', $_POST['favoriteLanguage']); // Преобразуем массив в строку
 
-        // Далее можно добавить код для сохранения данных в базу данных или выполнять другие операции
+        // Подключение к базе данных
+        $user = 'ваш_пользователь';
+        $pass = 'ваш_пароль';
+        $dbname = 'ваша_база_данных';
+        $db = new PDO("mysql:host=localhost;dbname=$dbname", $user, $pass);
+        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        echo 'Данные успешно обработаны и готовы к сохранению!';
+        try {
+            // Вставка данных в таблицу application
+            $stmt = $db->prepare("INSERT INTO application (name, phone, email, dob, gender, bio, contract, favorite_languages) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+            $stmt->execute([$name, $phone, $email, $dob, $gender, $bio, $contract, $favoriteLanguages]);
+
+            echo 'Данные успешно сохранены в базе данных!';
+        } catch(PDOException $e) {
+            echo 'Ошибка выполнения запроса: ' . $e->getMessage();
+        }
     } else {
         // Если есть ошибки, вывести их пользователю
         foreach ($errors as $error) {
