@@ -22,29 +22,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 }
 
 // Валидация данных
-
-// Валидация ФИО
 if (empty($_POST['name'])) {
     $errors[] = 'Введите ФИО.';
-} elseif (!preg_match('/^[a-zA-Za-яА-Я\s]{1,150}$/', $_POST['name'])) {
+} elseif (!preg_match('/^[a-zA-Zа-яА-Я\s]{1,150}$/', $_POST['name'])) {
     $errors[] = 'Неправильный формат ФИО.';
 }
 
-// Валидация email
 if (empty($_POST['email'])) {
     $errors[] = 'Введите email.';
 } elseif (!validate_email($_POST['email'])) {
     $errors[] = 'Неправильный формат email.';
 }
 
-// Валидация телефона
 if (empty($_POST['phone'])) {
     $errors[] = 'Введите номер телефона.';
 } elseif (!validate_phone($_POST['phone'])) {
     $errors[] = 'Неправильный формат номера телефона.';
 }
 
-// Валидация даты рождения
 if (empty($_POST['dob'])) {
     $errors[] = 'Введите дату рождения.';
 } elseif (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $_POST['dob'])) {
@@ -56,17 +51,14 @@ if (empty($_POST['dob'])) {
     }
 }
 
-// Валидация пола
 if (empty($_POST['gender'])) {
     $errors[] = 'Укажите ваш пол.';
 }
 
-// Валидация биографии
 if (empty($_POST['bio'])) {
     $errors[] = 'Введите вашу биографию.';
 }
 
-// Валидация навыков
 if (empty($_POST['abilities'])) {
     $errors[] = 'Выберите хотя бы один навык.';
 }
