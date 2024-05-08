@@ -71,8 +71,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $gender = $_POST['gender'];
         $bio = $_POST['bio'];
         $contract = isset($_POST['contract']) ? 1 : 0;
-        $favoriteLanguages = implode(', ', $_POST['favoriteLanguage']); // Преобразуем массив в строку
-
+      if (is_array($_POST['favoriteLanguage'])) {
+    $favoriteLanguages = implode(', ', $_POST['favoriteLanguage']);
+} else {
+    $favoriteLanguages = '';
+}
         // Подключение к базе данных
        // Подключение к базе данных
   $user = 'u67498';
