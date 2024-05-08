@@ -84,19 +84,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $db = new PDO("mysql:host=localhost;dbname=$dbname", $user, $pass);
     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 try {
-    // Получение идентификаторов языков программирования из таблицы programming_language
-    $stmt = $db->prepare("SELECT id, name FROM programming_language WHERE name IN (?)");
-    $stmt->execute([$_POST['favoriteLanguage']]);
-    $languages = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+   // Получение идентификаторов языков программирования из таблицы programming_language
+$stmt = $db->prepare("SELECT id, name FROM programming_language WHERE name IN (?)");
+$stmt->execute([$_POST['favoriteLanguage']]);
+$languages = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    if ($languages) {
-        // Вставка данных в таблицу application_ability
-        $application_id = $db->lastInsertId();
-        foreach ($languages as $language) {
-            $stmt = $db->prepare("INSERT INTO application_ability (application_id, language_id) VALUES (?, ?)");
-            $stmt->execute([strval($application_id), strval($language['id'])]);
-
-        }
+// Вставка данных в таблицу application_ability
+$application_id = $db->lastInsertId();
+foreach ($languages as $language) {
+    $stmt = $db->prepare("INSERT INTO application_ability (application_id, language_id) VALUES (?, ?)");
+    $stmt->execute([$application_id, $language['id']]);
+}
 
         echo 'Данные успешно сохранены в базе данных!';
     } else {
@@ -107,8 +106,8 @@ try {
 }
 
 
-}
-} 
+
+    
 
 ?>
 <!DOCTYPE html>
