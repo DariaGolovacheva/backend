@@ -74,11 +74,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $favoriteLanguages = implode(', ', $_POST['favoriteLanguage']); // Преобразуем массив в строку
 
         // Подключение к базе данных
-        $user = 'ваш_пользователь';
-        $pass = 'ваш_пароль';
-        $dbname = 'ваша_база_данных';
-        $db = new PDO("mysql:host=localhost;dbname=$dbname", $user, $pass);
-        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+         $user = 'u67498';
+    $pass = '2427367';
+    $dbname = 'u67498';
+    $db = new PDO("mysql:host=localhost;dbname=$dbname", $user, $pass);
+    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
         try {
             // Сохранение выбранных языков программирования в таблицу programming_language (если они еще не существуют)
