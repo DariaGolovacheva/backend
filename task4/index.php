@@ -13,22 +13,19 @@ function validate_phone($phone) {
 // Функция для проверки ФИО
 function validate_name($name) {
     // Допустимые символы: буквы, пробелы, тире, апостроф
-    return preg_match('/^[a-zA-Zа-яА-Я\s\-\'']+$/u', $name);
+    return preg_match('/^[a-zA-Zа-яА-Я\s\-\'\']+$/u', $name);
 }
 
 // Проверка метода запроса
-
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $errors = [];
 
     // Валидация ФИО
     if (empty($_POST['name']) || !validate_name($_POST['name'])) {
-
         $errors['name'] = 'Введите корректное ФИО.';
     }
 
     // Валидация email
-    
     if (empty($_POST['email']) || !validate_email($_POST['email'])) {
         $errors['email'] = 'Введите корректный email.';
     }
