@@ -100,7 +100,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // Вставка данных в таблицу application_ability
             foreach ($languages as $language) {
                 $stmt = $db->prepare("INSERT INTO application_ability (application_id, language_id) VALUES (?, ?)");
-                $stmt->execute([$application_id, $language['id']]);
+                $stmt->execute([$application_id, implode(', ', $language)]);
+
             }
 
             echo 'Данные успешно сохранены в базе данных!';
