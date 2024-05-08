@@ -94,7 +94,8 @@ try {
         $application_id = $db->lastInsertId();
         foreach ($languages as $language) {
             $stmt = $db->prepare("INSERT INTO application_ability (application_id, language_id) VALUES (?, ?)");
-            $stmt->execute([$application_id, $language['id']]);
+            $stmt->execute([strval($application_id), strval($language['id'])]);
+
         }
 
         echo 'Данные успешно сохранены в базе данных!';
