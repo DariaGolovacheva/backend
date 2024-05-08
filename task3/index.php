@@ -146,4 +146,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </div>
     <div class="form-group">
       <label>Пол:</label>
-      <label><input type="radio" name="gender" value="male" checked> Мужской</
+      <label><input type="radio" name="gender" value="male" checked> Мужской</label>
+      <label><input type="radio" name="gender" value="female"> Женский</label>
+    </div>
+    <div class="form-group">
+      <label for="favoriteLanguage">Любимый язык программирования:</label>
+      <select id="favoriteLanguage" name="favoriteLanguage[]" multiple >
+        <option value="Pascal">Pascal</option>
+        <option value="C">C</option>
+        <option value="C++">C++</option>
+        <option value="JavaScript">JavaScript</option>
+        <option value="PHP">PHP</option>
+        <option value="Python">Python</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="bio">Биография:</label>
+      <textarea id="bio" name="bio" rows="5" ></textarea>
+    </div>
+    <div class="form-group">
+      <label><input type="checkbox" id="contract" name="contract" > С контрактом ознакомлен (а)</label>
+    </div>
+    <button type="submit">Сохранить</button>
+  </form>
+</div>
+
+</body>
+</html>
