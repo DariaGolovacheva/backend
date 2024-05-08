@@ -1,5 +1,6 @@
 <?php
 header('Content-Type: text/html; charset=UTF-8');
+<link rel="stylesheet" type="text/css" href="styles.css">
 
 function validate_email($email) {
     return filter_var($email, FILTER_VALIDATE_EMAIL);
