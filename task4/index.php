@@ -23,6 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Валидация ФИО
     if (empty($_POST['name']) || !validate_name($_POST['name'])) {
+
         $errors['name'] = 'Введите корректное ФИО.';
     }
 
