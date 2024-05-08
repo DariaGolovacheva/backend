@@ -1,6 +1,6 @@
 <?php
 header('Content-Type: text/html; charset=UTF-8');
-<link rel="stylesheet" type="text/css" href="styles.css">
+
 
 function validate_email($email) {
     return filter_var($email, FILTER_VALIDATE_EMAIL);
@@ -96,7 +96,7 @@ $form_data = isset($_COOKIE['form_data']) ? unserialize($_COOKIE['form_data']) :
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Регистрационная форма</title>
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
 
