@@ -107,7 +107,7 @@ if ($languages) {
     
 }
 } 
-
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
