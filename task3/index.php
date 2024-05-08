@@ -94,16 +94,16 @@ $stmt->execute($_POST['favoriteLanguage']);
 
 
     // Вставка данных в таблицу application_ability
-    $application_id = $db->lastInsertId();
+  $application_id = $db->lastInsertId();
+if ($languages) {
     foreach ($languages as $language) {
         $stmt = $db->prepare("INSERT INTO application_ability (application_id, language_id) VALUES (?, ?)");
         $stmt->execute([$application_id, $language['id']]);
     }
-
-    echo 'Данные успешно сохранены в базе данных!';
-} catch(PDOException $e) {
-    echo 'Ошибка выполнения запроса: ' . $e->getMessage();
+} else {
+    echo "Языки программирования не найдены.";
 }
+
     
 }
 } 
