@@ -88,26 +88,29 @@ try {
     }
 
     // Получение идентификаторов языков программирования из таблицы programming_language
-   $placeholders = rtrim(str_repeat('?, ', count($_POST['favoriteLanguage'])), ', ');
-$stmt = $db->prepare("SELECT id, name FROM programming_language WHERE name IN ($placeholders)");
-$stmt->execute($_POST['favoriteLanguage']);
-
+    $stmt = $db->prepare("SELECT id, name FROM programming_language WHERE name IN (?)");
+    $stmt->execute([$_POST['favoriteLanguage']]);
+    $languages = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     // Вставка данных в таблицу application_ability
-  $application_id = $db->lastInsertId();
-if ($languages) {
-    foreach ($languages as $language) {
-        $stmt = $db->prepare("INSERT INTO application_ability (application_id, language_id) VALUES (?, ?)");
-        $stmt->execute([$application_id, $language['id']]);
+    $application_id = $db->lastInsertId();
+    if ($languages) {
+        foreach ($languages as $language) {
+            $stmt = $db->prepare("INSERT INTO application_ability (application_id, language_id) VALUES (?, ?)");
+            $stmt->execute([$application_id, $language['id']]);
+        }
+    } else {
+        echo "Языки программирования не найдены.";
     }
-} else {
-    echo "Языки программирования не найдены.";
+
+    echo 'Данные успешно сохранены в базе данных!';
+} catch(PDOException $e) {
+    echo 'Ошибка выполнения запроса: ' . $e->getMessage();
 }
 
-    
 }
 } 
-}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
