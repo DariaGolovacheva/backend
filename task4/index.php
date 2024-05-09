@@ -28,13 +28,40 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
     // Выдаем сообщения об ошибках
     if ($errors['name']) {
-        // Удаляем куки, чтобы они больше не отображались
         setcookie('name_error', '', 100000);
         setcookie('name_value', '', 100000);
-        // Выводим сообщение
-        $messages[] = '<div class="error">Введите ФИО.</div>';
+        $messages[] = '<div class="error">Заполните ФИО.</div>';
     }
-    // Аналогично для остальных полей
+    if ($errors['phone']) {
+        setcookie('phone_error', '', 100000);
+        setcookie('phone_value', '', 100000);
+        $messages[] = '<div class="error">Заполните телефон.</div>';
+    }
+    if ($errors['email']) {
+        setcookie('email_error', '', 100000);
+        setcookie('email_value', '', 100000);
+        $messages[] = '<div class="error">Заполните email.</div>';
+    }
+    if ($errors['dob']) {
+        setcookie('dob_error', '', 100000);
+        setcookie('dob_value', '', 100000);
+        $messages[] = '<div class="error">Заполните дату рождения.</div>';
+    }
+    if ($errors['favoriteLanguage']) {
+        setcookie('favoriteLanguage_error', '', 100000);
+        setcookie('favoriteLanguage_value', '', 100000);
+        $messages[] = '<div class="error">Выберите хотя бы один язык программирования.</div>';
+    }
+    if ($errors['bio']) {
+        setcookie('bio_error', '', 100000);
+        setcookie('bio_value', '', 100000);
+        $messages[] = '<div class="error">Заполните биографию.</div>';
+    }
+    if ($errors['contract']) {
+        setcookie('contract_error', '', 100000);
+        setcookie('contract_value', '', 100000);
+        $messages[] = '<div class="error">Необходимо ознакомиться с контрактом.</div>';
+    }
 
     // Складываем предыдущие значения полей в массив, если они были сохранены в куки
     $values = array();
@@ -74,6 +101,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         if (empty($_POST['contract'])) {
             setcookie('contract_error', '1', time() + 24 * 60 * 60);
         }
+
         $errors = true;
     }
 
@@ -82,7 +110,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     setcookie('phone_value', $_POST['phone'], time() + 30 * 24 * 60 * 60);
     setcookie('email_value', $_POST['email'], time() + 30 * 24 * 60 * 60);
     setcookie('dob_value', $_POST['dob'], time() + 30 * 24 * 60 * 60);
-    setcookie('favoriteLanguage_value', $_POST['favoriteLanguage'], time() + 30 * 24 * 60 * 60);
+    setcookie('favoriteLanguage_value', implode(', ', $_POST['favoriteLanguage']), time() + 30 * 24 * 60 * 60);
     setcookie('bio_value', $_POST['bio'], time() + 30 * 24 * 60 * 60);
     setcookie('contract_value', $_POST['contract'], time() + 30 * 24 * 60 * 60);
 
@@ -136,6 +164,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     header('Location: index.php');
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
