@@ -1,112 +1,142 @@
 <?php
+// Отправляем браузеру правильную кодировку,
+// файл index.php должен быть в кодировке UTF-8 без BOM.
 header('Content-Type: text/html; charset=UTF-8');
 
-// Функция для установки Cookie
-function set_cookie($name, $value, $expiration) {
-    setcookie($name, $value, $expiration, '/');
-}
+// Проверяем, был ли запрос методом GET или POST
+if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+    // Массив для временного хранения сообщений пользователю.
+    $messages = array();
 
-// Функция для получения Cookie
-function get_cookie($name) {
-    return $_COOKIE[$name] ?? '';
-}
-
-// Функция для валидации текста
-function validate_text($text) {
-    return preg_match('/^[a-zA-Zа-яА-Я\s.,!?()-]{1,255}$/', $text);
-}
-
-$errors = [];
-
-// Проверка метода запроса
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Валидация ФИО
-    if (empty($_POST['name']) || !validate_text($_POST['name'])) {
-        $errors['name'] = 'Введите ФИО. Допустимы буквы, пробелы и знаки препинания.';
+    // Проверяем, была ли установлена кука с сообщением об успешном сохранении
+    if (!empty($_COOKIE['save'])) {
+        // Удаляем куку, чтобы она больше не отображалась
+        setcookie('save', '', 100000);
+        // Если есть параметр save, то выводим сообщение пользователю
+        $messages[] = 'Спасибо, результаты сохранены.';
     }
 
-    // Валидация email
-    if (empty($_POST['email']) || !filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
-        $errors['email'] = 'Введите корректный email.';
+    // Складываем признаки ошибок в массив
+    $errors = array();
+    $errors['name'] = !empty($_COOKIE['name_error']);
+    $errors['phone'] = !empty($_COOKIE['phone_error']);
+    $errors['email'] = !empty($_COOKIE['email_error']);
+    $errors['dob'] = !empty($_COOKIE['dob_error']);
+    $errors['favoriteLanguage'] = !empty($_COOKIE['favoriteLanguage_error']);
+    $errors['bio'] = !empty($_COOKIE['bio_error']);
+    $errors['contract'] = !empty($_COOKIE['contract_error']);
+
+    // Выдаем сообщения об ошибках
+    if ($errors['name']) {
+        // Удаляем куки, чтобы они больше не отображались
+        setcookie('name_error', '', 100000);
+        setcookie('name_value', '', 100000);
+        // Выводим сообщение
+        $messages[] = '<div class="error">Введите ФИО.</div>';
     }
+    // Аналогично для остальных полей
 
-    // Валидация телефона
-    if (empty($_POST['phone']) || !preg_match("/^\+?\d{1,3}\s?\(?\d{3}\)?[-\s]?\d{3}[-\s]?\d{2}[-\s]?\d{2}$/", $_POST['phone'])) {
-        $errors['phone'] = 'Введите корректный номер телефона.';
-    }
+    // Складываем предыдущие значения полей в массив, если они были сохранены в куки
+    $values = array();
+    $values['name'] = empty($_COOKIE['name_value']) ? '' : $_COOKIE['name_value'];
+    $values['phone'] = empty($_COOKIE['phone_value']) ? '' : $_COOKIE['phone_value'];
+    $values['email'] = empty($_COOKIE['email_value']) ? '' : $_COOKIE['email_value'];
+    $values['dob'] = empty($_COOKIE['dob_value']) ? '' : $_COOKIE['dob_value'];
+    $values['favoriteLanguage'] = empty($_COOKIE['favoriteLanguage_value']) ? '' : $_COOKIE['favoriteLanguage_value'];
+    $values['bio'] = empty($_COOKIE['bio_value']) ? '' : $_COOKIE['bio_value'];
+    $values['contract'] = empty($_COOKIE['contract_value']) ? '' : $_COOKIE['contract_value'];
 
-    // Валидация даты рождения
-    if (empty($_POST['dob']) || !preg_match('/^\d{4}-\d{2}-\d{2}$/', $_POST['dob'])) {
-        $errors['dob'] = 'Введите корректную дату рождения в формате YYYY-MM-DD.';
-    }
-
-    // Валидация выбранного языка программирования
-    if (empty($_POST['favoriteLanguage'])) {
-        $errors['favoriteLanguage'] = 'Выберите хотя бы один язык программирования.';
-    }
-
-    // Валидация биографии
-    if (empty($_POST['bio']) || !validate_text($_POST['bio'])) {
-        $errors['bio'] = 'Введите корректную биографию. Допустимы буквы, пробелы и знаки препинания.';
-    }
-
-    // Валидация контракта
-    if (!isset($_POST['contract'])) {
-        $errors['contract'] = 'Необходимо ознакомиться с контрактом.';
-    }
-
-    if (empty($errors)) {
-        // Если ошибок нет, можно обрабатывать данные
-        $name = $_POST['name'];
-        $email = $_POST['email'];
-        $phone = $_POST['phone'];
-        $dob = $_POST['dob'];
-        $favoriteLanguages = implode(', ', $_POST['favoriteLanguage']); // Преобразуем массив в строку
-        $bio = $_POST['bio'];
-        $contract = isset($_POST['contract']) ? 1 : 0;
-
-        // Сохранение данных в Cookies на один год
-        set_cookie('name', $name, time() + 31536000); // 31536000 секунд в году
-        set_cookie('email', $email, time() + 31536000);
-        set_cookie('phone', $phone, time() + 31536000);
-        set_cookie('dob', $dob, time() + 31536000);
-        set_cookie('favoriteLanguages', $favoriteLanguages, time() + 31536000);
-        set_cookie('bio', $bio, time() + 31536000);
-        set_cookie('contract', $contract, time() + 31536000);
-
-        include('../db.php');
-        $db = new PDO('mysql:host=localhost;dbname=' . $db_name, $db_login, $db_pass,
-            [PDO::ATTR_PERSISTENT => true, PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]); // Заменить test на имя БД, совпадает с логином uXXXXX
-        // Подготовленный запрос. Не именованные метки.
-        try {
-            $stmt = $db->prepare("INSERT INTO application (name, phone, email, data, pol, bio, ok) VALUES (?, ?, ?, ?, ?, ?, ?)");
-            $stmt->execute([$_POST['name'], $_POST['phone'], $_POST['email'], $_POST['data'], $_POST['pol'], $_POST['bio'], $_POST['ok']]);
-            $lastId = $db->lastInsertId();
-
-            foreach ($_POST['abilities'] as $ability) {
-                $stmtLang = $db->prepare("SELECT id FROM language WHERE name = ?");
-                $stmtLang->execute([$ability]);
-                $languageId = $stmtLang->fetchColumn();
-
-                $stmtApLang = $db->prepare("INSERT INTO ap_lan (id_application, id_language) VALUES (:lastId, :languageId)");
-                $stmtApLang->bindParam(':lastId', $lastId);
-                $stmtApLang->bindParam(':languageId', $languageId);
-                $stmtApLang->execute();
-            }
+    // Включаем содержимое файла form.php
+    include('form.php');
+} else {
+    // Проверяем ошибки
+    $errors = false;
+    if (empty($_POST['name']) || empty($_POST['phone']) || empty($_POST['email']) || empty($_POST['dob']) || empty($_POST['favoriteLanguage']) || empty($_POST['bio']) || empty($_POST['contract'])) {
+        // Выдаем куку на день с флажком об ошибке в нужных полях
+        if (empty($_POST['name'])) {
+            setcookie('name_error', '1', time() + 24 * 60 * 60);
         }
-        catch(PDOException $e){
-            print('Error : ' . $e->getMessage());
-            exit();
+        if (empty($_POST['phone'])) {
+            setcookie('phone_error', '1', time() + 24 * 60 * 60);
         }
+        if (empty($_POST['email'])) {
+            setcookie('email_error', '1', time() + 24 * 60 * 60);
+        }
+        if (empty($_POST['dob'])) {
+            setcookie('dob_error', '1', time() + 24 * 60 * 60);
+        }
+        if (empty($_POST['favoriteLanguage'])) {
+            setcookie('favoriteLanguage_error', '1', time() + 24 * 60 * 60);
+        }
+        if (empty($_POST['bio'])) {
+            setcookie('bio_error', '1', time() + 24 * 60 * 60);
+        }
+        if (empty($_POST['contract'])) {
+            setcookie('contract_error', '1', time() + 24 * 60 * 60);
+        }
+        $errors = true;
+    }
 
-        // Сохраняем куку с признаком успешного сохранения.
-        setcookie('save', '1');
+    // Сохраняем ранее введенное в форму значение на месяц
+    setcookie('name_value', $_POST['name'], time() + 30 * 24 * 60 * 60);
+    setcookie('phone_value', $_POST['phone'], time() + 30 * 24 * 60 * 60);
+    setcookie('email_value', $_POST['email'], time() + 30 * 24 * 60 * 60);
+    setcookie('dob_value', $_POST['dob'], time() + 30 * 24 * 60 * 60);
+    setcookie('favoriteLanguage_value', $_POST['favoriteLanguage'], time() + 30 * 24 * 60 * 60);
+    setcookie('bio_value', $_POST['bio'], time() + 30 * 24 * 60 * 60);
+    setcookie('contract_value', $_POST['contract'], time() + 30 * 24 * 60 * 60);
 
-        // Делаем перенаправление.
+    if ($errors) {
+        // При наличии ошибок перезагружаем страницу и завершаем работу скрипта
         header('Location: index.php');
+        exit();
+    } else {
+        // Удаляем Cookies с признаками ошибок
+        setcookie('name_error', '', 100000);
+        setcookie('phone_error', '', 100000);
+        setcookie('email_error', '', 100000);
+        setcookie('dob_error', '', 100000);
+        setcookie('favoriteLanguage_error', '', 100000);
+        setcookie('bio_error', '', 100000);
+        setcookie('contract_error', '', 100000);
     }
+
+    // Вставляем данные в базу данных
+    try {
+        // Подключение к базе данных
+        include('../db.php');
+        $db = new PDO('mysql:host=localhost;dbname=' . $db_name, $db_login, $db_pass, [PDO::ATTR_PERSISTENT => true, PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
+
+        // Подготовленный запрос для вставки данных в таблицу application
+        $stmt = $db->prepare("INSERT INTO application (name, phone, email, dob, favoriteLanguages, bio, contract) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        $stmt->execute([$_POST['name'], $_POST['phone'], $_POST['email'], $_POST['dob'], implode(', ', $_POST['favoriteLanguage']), $_POST['bio'], $_POST['contract']]);
+
+        // Получаем ID последней вставленной записи
+        $lastId = $db->lastInsertId();
+
+        // Вставляем данные в связанную таблицу ap_lan
+        foreach ($_POST['favoriteLanguage'] as $language) {
+            $stmtLang = $db->prepare("SELECT id FROM language WHERE name = ?");
+            $stmtLang->execute([$language]);
+            $languageId = $stmtLang->fetchColumn();
+
+            $stmtApLang = $db->prepare("INSERT INTO ap_lan (id_application, id_language) VALUES (?, ?)");
+            $stmtApLang->execute([$lastId, $languageId]);
+        }
+    } catch (PDOException $e) {
+        // В случае ошибки выводим сообщение об ошибке
+        print('Error : ' . $e->getMessage());
+        exit();
+    }
+
+    // Сохраняем куку с признаком успешного сохранения
+    setcookie('save', '1');
+
+    // Делаем перенаправление
+    header('Location: index.php');
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
