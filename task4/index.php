@@ -74,19 +74,36 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         set_cookie('bio', $bio, time() + 31536000);
         set_cookie('contract', $contract, time() + 31536000);
 
-        // Редирект на страницу формы с успешным сообщением
-        header('Location: form.php?success=true');
-        exit;
-    } else {
-        // Сохранение ошибок в Cookies до конца сессии
-        foreach ($errors as $key => $error) {
-            set_cookie($key.'_error', $error, 0);
-        }
+        include('../db.php');
+$db = new PDO('mysql:host=localhost;dbname=' . $db_name, $db_login, $db_pass,
+  [PDO::ATTR_PERSISTENT => true, PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]); // Заменить test на имя БД, совпадает с логином uXXXXX
+// Подготовленный запрос. Не именованные метки.
+try {
+$stmt = $db->prepare("INSERT INTO application (name, phone, email, data, pol, bio, ok) VALUES (?, ?, ?, ?, ?, ?, ?)");
+$stmt->execute([$_POST['name'], $_POST['phone'], $_POST['email'], $_POST['data'], $_POST['pol'], $_POST['bio'], $_POST['ok']]);
+$lastId = $db->lastInsertId();
 
-        // Редирект на страницу формы с ошибками
-        header('Location: form.php?success=false');
-        exit;
-    }
+foreach ($_POST['abilities'] as $ability) {
+    $stmtLang = $db->prepare("SELECT id FROM language WHERE name = ?");
+    $stmtLang->execute([$ability]);
+    $languageId = $stmtLang->fetchColumn();
+
+    $stmtApLang = $db->prepare("INSERT INTO ap_lan (id_application, id_language) VALUES (:lastId, :languageId)");
+    $stmtApLang->bindParam(':lastId', $lastId);
+    $stmtApLang->bindParam(':languageId', $languageId);
+    $stmtApLang->execute();
+}
+}
+catch(PDOException $e){
+  print('Error : ' . $e->getMessage());
+  exit();
+}
+
+  // Сохраняем куку с признаком успешного сохранения.
+  setcookie('save', '1');
+
+  // Делаем перенаправление.
+  header('Location: index.php');
 }
 ?>
 <!DOCTYPE html>
