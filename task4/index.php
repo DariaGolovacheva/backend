@@ -127,7 +127,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       <label for="favoriteLanguage">Любимый язык программирования:</label>
       <select id="favoriteLanguage" name="favoriteLanguage[]" multiple>
         <option value="Pascal">Pascal</option>
-        <!-- Добавьте остальные опции языков программирования -->
+           <option value="C">C</option>
+    <option value="C++">C++</option>
+    <option value="JavaScript">JavaScript</option>
+    <option value="PHP">PHP</option>
+    <option value="Python">Python</option>
+    <option value="Java">Java</option>
+    <option value="Haskell">Haskell</option>
+    <option value="Clojure">Clojure</option>
+    <option value="Prolog">Prolog</option>
+    <option value="Scala">Scala</option>
       </select>
       <?php echo isset($_COOKIE['favoriteLanguage_error']) ? '<span class="error">' . $_COOKIE['favoriteLanguage_error'] . '</span>' : ''; ?>
     </div>
