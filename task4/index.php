@@ -129,6 +129,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         setcookie('contract_error', '', 100000);
     }
 
+    / Сохранение в базу данных.
+include('../db.php');
+$db = new PDO('mysql:host=localhost;dbname=' . $u67498, $u67498, $2427367,
+  [PDO::ATTR_PERSISTENT => true, PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]); // Заменить test на имя БД, совпадает с логином uXXXXX
+// Подготовленный запрос. Не именованные метки.
+try {
+$stmt = $db->prepare("INSERT INTO application (name, phone, email, data, pol, bio, ok) VALUES (?, ?, ?, ?, ?, ?, ?)");
+$stmt->execute([$_POST['name'], $_POST['phone'], $_POST['email'], $_POST['data'], $_POST['pol'], $_POST['bio'], $_POST['ok']]);
+$lastId = $db->lastInsertId();
     // Вставляем данные в базу данных
     try {
         // Подключение к базе данных
