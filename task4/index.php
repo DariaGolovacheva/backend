@@ -95,7 +95,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Регистрационная форма</title>
-    <link rel="stylesheet" href="styles.css">
+   <link rel="stylesheet" href="path/to/styles.css">
+
 </head>
 <body>
 
