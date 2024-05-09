@@ -74,7 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $values['contract'] = empty($_COOKIE['contract_value']) ? '' : $_COOKIE['contract_value'];
 
     // Включаем содержимое файла form.php
-    //include('form.php'); // Удаляем эту строку
+    // include('form.php');
 } else {
     // Проверяем ошибки
     $errors = false;
@@ -255,22 +255,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   <form id="registrationForm" method="POST" action="">
     <div class="form-group <?php echo isset($_COOKIE['name_error']) ? 'has-error' : ''; ?>">
       <label for="name">ФИО:</label>
-      <input type="text" id="fullName" name="name" value="<?php echo htmlspecialchars(get_cookie('name')); ?>">
+      <input type="text" id="fullName" name="name" value="<?php echo htmlspecialchars($_COOKIE['name']); ?>">
       <?php echo isset($_COOKIE['name_error']) ? '<span class="error">' . $_COOKIE['name_error'] . '</span>' : ''; ?>
     </div>
     <div class="form-group <?php echo isset($_COOKIE['phone_error']) ? 'has-error' : ''; ?>">
       <label for="phone">Телефон:</label>
-      <input type="tel" id="phone" name="phone" value="<?php echo htmlspecialchars(get_cookie('phone')); ?>">
+      <input type="tel" id="phone" name="phone" value="<?php echo htmlspecialchars($_COOKIE['phone']); ?>">
       <?php echo isset($_COOKIE['phone_error']) ? '<span class="error">' . $_COOKIE['phone_error'] . '</span>' : ''; ?>
     </div>
     <div class="form-group <?php echo isset($_COOKIE['email_error']) ? 'has-error' : ''; ?>">
       <label for="email">E-mail:</label>
-      <input type="email" id="email" name="email" value="<?php echo htmlspecialchars(get_cookie('email')); ?>">
+      <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($_COOKIE['email']); ?>">
       <?php echo isset($_COOKIE['email_error']) ? '<span class="error">' . $_COOKIE['email_error'] . '</span>' : ''; ?>
     </div>
     <div class="form-group <?php echo isset($_COOKIE['dob_error']) ? 'has-error' : ''; ?>">
       <label for="dob">Дата рождения:</label>
-      <input type="date" id="dob" name="dob" value="<?php echo htmlspecialchars(get_cookie('dob')); ?>">
+      <input type="date" id="dob" name="dob" value="<?php echo htmlspecialchars($_COOKIE['dob']); ?>">
       <?php echo isset($_COOKIE['dob_error']) ? '<span class="error">' . $_COOKIE['dob_error'] . '</span>' : ''; ?>
     </div>
     <div class="form-group <?php echo isset($_COOKIE['favoriteLanguage_error']) ? 'has-error' : ''; ?>">
@@ -292,7 +292,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     </div>
     <div class="form-group <?php echo isset($_COOKIE['bio_error']) ? 'has-error' : ''; ?>">
       <label for="bio">Биография:</label>
-      <textarea id="bio" name="bio" rows="5"><?php echo htmlspecialchars(get_cookie('bio')); ?></textarea>
+      <textarea id="bio" name="bio" rows="5"><?php echo htmlspecialchars($_COOKIE['bio']); ?></textarea>
       <?php echo isset($_COOKIE['bio_error']) ? '<span class="error">' . $_COOKIE['bio_error'] . '</span>' : ''; ?>
     </div>
     <div class="form-group <?php echo isset($_COOKIE['contract_error']) ? 'has-error' : ''; ?>">
