@@ -49,8 +49,8 @@
       </select>
     </div>
     <div class="form-group">
-      <label for="bio">Биография:</label>
-      <textarea id="bio" name="bio" rows="5" ></textarea>
+      <label for="biography">Биография:</label>
+      <textarea id="biography" name="biofraphy" rows="5" ></textarea>
     </div>
     <div class="form-group">
       <label><input type="checkbox" id="contract" name="contract" > С контрактом ознакомлен (а)</label>
