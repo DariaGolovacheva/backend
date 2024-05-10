@@ -80,10 +80,10 @@ if (empty($_POST['email'])) {
     $errors = TRUE;
 }
 
-if (empty($_POST['pol'])) {
-    print('Заполните пол.<br/>');
+if (empty($_POST['sex'])) {
+    print('Выберите пол.<br/>');
     $errors = TRUE;
-} elseif ($_POST['pol'] !== 'male' && $_POST['pol'] !== 'female') {
+} elseif ($_POST['sex'] !== 'male' && $_POST['sex'] !== 'female') {
     print('Выберите только мужской или женский пол.<br/>');
     $errors = TRUE;
 }
@@ -137,7 +137,7 @@ $db = new PDO('mysql:host=localhost;dbname=u67498', $user, $pass,
 // Подготовленный запрос. Не именованные метки.
 try {
     $stmt = $db->prepare("INSERT INTO application (name, phone, email, data, pol, bio, ok) VALUES (?, ?, ?, ?, ?, ?, ?)");
-    $stmt->execute([$_POST['name'], $_POST['phone'], $_POST['email'], $_POST['data'], $_POST['pol'], $_POST['biography'], $_POST['ok']]);
+    $stmt->execute([$_POST['name'], $_POST['phone'], $_POST['email'], $_POST['data'], $_POST['sex'], $_POST['biography'], $_POST['ok']]);
     $lastId = $db->lastInsertId();
 
     foreach ($_POST['langs'] as $lang) {
