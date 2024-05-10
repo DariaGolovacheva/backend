@@ -12,12 +12,12 @@
   <h2>Регистрационная форма</h2>
   <form id="registrationForm" method="POST" action="">
     <div class="form-group">
-      <label for="name">ФИО:</label>
-      <input type="text" id="fullName" name="name" >
+      <label for="fio">ФИО:</label>
+      <input type="text" id="fio" name="fio" >
     </div>
     <div class="form-group">
       <label for="phone">Телефон:</label>
-      <input type="tel" id="phone" name="phone">
+      <input type="tel" id="telephone" name="telephone">
     </div>
     <div class="form-group">
       <label for="email">E-mail:</label>
@@ -25,12 +25,12 @@
     </div>
     <div class="form-group">
       <label for="dob">Дата рождения:</label>
-      <input type="date" id="dob" name="dob" >
+      <input type="date" id="bday" name="bday" >
     </div>
     <div class="form-group">
       <label>Пол:</label>
-      <label><input type="radio" name="gender" value="male" checked> Мужской</label>
-      <label><input type="radio" name="gender" value="female"> Женский</label>
+      <label><input type="radio" name="sex" value="male" checked> Мужской</label>
+      <label><input type="radio" name="sex" value="female"> Женский</label>
     </div>
     <div class="form-group">
       <label for="favoriteLanguage">Любимый язык программирования:</label>
