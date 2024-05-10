@@ -50,7 +50,7 @@
     </div>
     <div class="form-group">
       <label for="biography">Биография:</label>
-      <textarea id="biography" name="biofraphy" rows="5" ></textarea>
+      <textarea id="biography" name="biography" rows="5" ></textarea>
     </div>
     <div class="form-group">
       <label><input type="checkbox" id="contract" name="contract" > С контрактом ознакомлен (а)</label>
