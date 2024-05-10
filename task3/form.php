@@ -71,56 +71,70 @@
 </head>
 <body>
 
-<div class="container">
-  <h2>Регистрационная форма</h2>
-  <form id="registrationForm" method="POST" action="">
-    <div class="form-group">
-      <label for="name">ФИО:</label>
-      <input type="text" id="fio" name="name" >
-    </div>
-    <div class="form-group">
-      <label for="phone">Телефон:</label>
-      <input type="tel" id="phone" name="phone">
-    </div>
-    <div class="form-group">
-      <label for="email">E-mail:</label>
-      <input type="email" id="email" name="email" >
-    </div>
-    <div class="form-group">
-      <label for="dob">Дата рождения:</label>
-      <input type="date" id="data" name="data" >
-    </div>
-    <div class="form-group">
-      <label>Пол:</label>
-      <label><input type="radio" name="pol" value="male" checked> Мужской</label>
-      <label><input type="radio" name="pol" value="female"> Женский</label>
-    </div>
-    <div class="form-group">
-      <label for="abilities">Любимый язык программирования:</label>
-      <select id="abilities" name="abilities" multiple >
-        <option value="Pascal">Pascal</option>
-        <option value="C">C</option>
-        <option value="C++">C++</option>
-        <option value="JavaScript">JavaScript</option>
-        <option value="PHP">PHP</option>
-        <option value="Python">Python</option>
-        <option value="Java">Java</option>
-        <option value="Haskel">Haskel</option>
-        <option value="Clojure">Clojure</option>
-        <option value="Prolog">Prolog</option>
-        <option value="Scala">Scala</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label for="bio">Биография:</label>
-      <textarea id="bio" name="bio" rows="5" ></textarea>
-    </div>
-    <div class="form-group">
-      <label><input type="checkbox" id="contract" name="contract" > С контрактом ознакомлен (а)</label>
-    </div>
-    <button type="submit">Сохранить</button>
-  </form>
+<div class="main-block">
+<div class="left-part">
+<i class="fas fa-envelope"></i>
+<i class="fas fa-at"></i>
+<i class="fas fa-mail-bulk"></i>
 </div>
-
+<form action="" method="POST">
+<h1 style="display: flex;
+justify-content: center;
+align-items: center;">Заявка</h1>
+    <label>
+      ФИО:<br />
+      <input class = "f" name="name"
+      placeholder="Введите ваше ФИО" />
+    </label><br />
+    <label>
+    Телефон:<br />
+    <input class = "f" name="phone"
+      type="tel"
+      placeholder="Введите ваш телефон" />
+  </label><br />
+  <label>
+    Email:<br />
+    <input class = "f" name="email"
+      placeholder="Введите вашу почту" /></label>
+      <label>
+        <br />
+        Дата рождения:<br />
+        <input class = "f" name="data"
+          value="2000-01-01"
+          type="date" />
+      </label>
+      Пол:<br />
+  <label><input type="radio" checked="checked"
+    name="pol" value="M" />
+    Мужской</label>
+  <label><input type="radio"
+    name="pol" value="W" />
+    Женский</label><br />
+             <label>
+                <br />
+      Любимый язык программирования:
+      <br />
+    <select class = "f" name="abilities[]" multiple="multiple">
+            <option disabled>Выберите любимый язык пр.</option>
+            <option value="Pascal">Pascal</option>
+            <option value="C">C</option>
+            <option value="C++">C++</option>
+            <option value="JavaScript">JavaScript</option>
+            <option value="PHP">PHP</option>
+            <option value="Python">Python</option>
+            <option value="Java">Java</option>
+            <option value="Haskel">Haskel</option>
+        </select>
+    </label><br />
+    <label>
+      Биография:<br />
+      <textarea class = "f" name="bio" placeholder="Ваша биография" ></textarea>
+    </label><br />
+  <label><input type="checkbox" checked="checked"
+    name="ok" />    С контрактом ознакомлен(а)</label>
+    <br />
+<button type="submit" href="/">Сохранить</button>
+</form>
+</div>
 </body>
 </html>
