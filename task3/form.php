@@ -33,8 +33,8 @@
       <label><input type="radio" name="sex" value="female"> Женский</label>
     </div>
     <div class="form-group">
-      <label for="favoriteLanguage">Любимый язык программирования:</label>
-      <select id="favoriteLanguage" name="favoriteLanguage" multiple >
+      <label for="langs">Любимый язык программирования:</label>
+      <select id="langs" name="langs" multiple >
         <option value="Pascal">Pascal</option>
         <option value="C">C</option>
         <option value="C++">C++</option>
