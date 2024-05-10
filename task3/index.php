@@ -61,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
         print('The data is stored in the database.');
     }
-    include('body.php');
+    include('form.php');
     exit();
 }
 $form_data = $_POST;
