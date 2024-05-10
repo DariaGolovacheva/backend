@@ -75,12 +75,12 @@
   <h2>Регистрационная форма</h2>
   <form id="registrationForm" method="POST" action="">
     <div class="form-group">
-      <label for="fio">ФИО:</label>
-      <input type="text" id="fio" name="fio" >
+      <label for="name">ФИО:</label>
+      <input type="text" id="fio" name="name" >
     </div>
     <div class="form-group">
       <label for="phone">Телефон:</label>
-      <input type="tel" id="telephone" name="telephone">
+      <input type="tel" id="phone" name="phone">
     </div>
     <div class="form-group">
       <label for="email">E-mail:</label>
@@ -88,16 +88,16 @@
     </div>
     <div class="form-group">
       <label for="dob">Дата рождения:</label>
-      <input type="date" id="bday" name="bday" >
+      <input type="date" id="data" name="data" >
     </div>
     <div class="form-group">
       <label>Пол:</label>
-      <label><input type="radio" name="sex" value="male" checked> Мужской</label>
-      <label><input type="radio" name="sex" value="female"> Женский</label>
+      <label><input type="radio" name="pol" value="male" checked> Мужской</label>
+      <label><input type="radio" name="pol" value="female"> Женский</label>
     </div>
     <div class="form-group">
-      <label for="langs">Любимый язык программирования:</label>
-      <select id="langs" name="langs" multiple >
+      <label for="abilities">Любимый язык программирования:</label>
+      <select id="abilities" name="abilities" multiple >
         <option value="Pascal">Pascal</option>
         <option value="C">C</option>
         <option value="C++">C++</option>
@@ -112,8 +112,8 @@
       </select>
     </div>
     <div class="form-group">
-      <label for="biography">Биография:</label>
-      <textarea id="biography" name="biography" rows="5" ></textarea>
+      <label for="bio">Биография:</label>
+      <textarea id="bio" name="bio" rows="5" ></textarea>
     </div>
     <div class="form-group">
       <label><input type="checkbox" id="contract" name="contract" > С контрактом ознакомлен (а)</label>
