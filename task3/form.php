@@ -105,6 +105,15 @@
     <input type="date" id="bday" name="bday" value="<?php echo isset($_COOKIE['dob']) ? htmlspecialchars($_COOKIE['dob']) : ''; ?>">
     <?php echo isset($_COOKIE['dob_error']) ? '<span class="error">' . $_COOKIE['dob_error'] . '</span>' : ''; ?>
 </div>
+      <div class="form-group <?php echo isset($_COOKIE['sex_error']) ? 'has-error' : ''; ?>">
+    <label for="sex">Пол:</label>
+    <select id="sex" name="sex">
+        <option value="male">Мужской</option>
+        <option value="female">Женский</option>
+    </select>
+    <?php echo isset($_COOKIE['sex_error']) ? '<span class="error">' . $_COOKIE['sex_error'] . '</span>' : ''; ?>
+</div>
+
 <div class="form-group <?php echo isset($_COOKIE['favoriteLanguage_error']) ? 'has-error' : ''; ?>">
     <label for="langs">Любимый язык программирования:</label>
     <select id="langs" name="langs[]" multiple>
