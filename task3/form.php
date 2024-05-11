@@ -1,114 +1,140 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" href="../style.css">
-    <link rel="stylesheet" type="text/css" href="style.css">
-    <link rel="shortcut icon" href="../../logo.png" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100;200;300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <title>Задание 3</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Регистрационная форма</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #000; /* Черный фон */
+        color: #fff; /* Белый цвет текста */
+        margin: 0;
+        padding: 0;
+      }
+      
+      .container {
+        max-width: 600px;
+        margin: 50px auto;
+        background-color: #222; /* Черный цвет фона контейнера */
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      }
+      
+      h2 {
+        text-align: center;
+        color: #FFA500; /* Оранжевый цвет заголовка */
+      }
+      
+      .form-group {
+        margin-bottom: 20px;
+      }
+      
+      label {
+        font-weight: bold;
+        color: #fff; /* Белый цвет текста меток */
+      }
+      
+      input[type="text"],
+      input[type="tel"],
+      input[type="email"],
+      input[type="date"],
+      textarea,
+      select {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+        background-color: #333; /* Черный цвет поля ввода */
+        color: #fff; /* Белый цвет текста в полях ввода */
+      }
+      
+      input[type="checkbox"] {
+        margin-right: 5px;
+      }
+      
+      button {
+        background-color: #FFA500; /* Оранжевый цвет кнопки */
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      
+      button:hover {
+        background-color: #FF8C00; /* Темно-оранжевый цвет кнопки при наведении */
+      }
+      
+      .error {
+        color: #ff0000; /* Красный цвет текста ошибки */
+        font-size: 12px;
+      }
+      
+      .has-error input,
+      .has-error select,
+      .has-error textarea {
+        border-color: #ff0000; /* Красная рамка вокруг поля ввода с ошибкой */
+      }
+    </style>
 </head>
-
 <body>
-<header>
-    <nav class="header-logo">
-        <img class="header-logo" src="../../logo.png" alt="Logo">
-    </nav>
-    <nav class="header-info">
-        <h2 class="header-title">$$$ website?</h2>
-        <h3 class="header-task">Задание 3</h3>
-    </nav>
 
-</header>
+<div class="container">
+  <h2>Регистрационная форма</h2>
+  <form id="registrationForm" method="POST" action="">
+<div class="form-group <?php echo isset($_COOKIE['name_error']) ? 'has-error' : ''; ?>">
+    <label for="name">ФИО:</label>
+    <input type="text" id="fullName" name="name" value="<?php echo isset($_COOKIE['name']) ? htmlspecialchars($_COOKIE['name']) : ''; ?>">
+    <?php echo isset($_COOKIE['name_error']) ? '<span class="error">' . $_COOKIE['name_error'] . '</span>' : ''; ?>
+</div>
+<div class="form-group <?php echo isset($_COOKIE['phone_error']) ? 'has-error' : ''; ?>">
+    <label for="phone">Телефон:</label>
+    <input type="tel" id="phone" name="phone" value="<?php echo isset($_COOKIE['phone']) ? htmlspecialchars($_COOKIE['phone']) : ''; ?>">
+    <?php echo isset($_COOKIE['phone_error']) ? '<span class="error">' . $_COOKIE['phone_error'] . '</span>' : ''; ?>
+</div>
+<div class="form-group <?php echo isset($_COOKIE['email_error']) ? 'has-error' : ''; ?>">
+    <label for="email">E-mail:</label>
+    <input type="email" id="email" name="email" value="<?php echo isset($_COOKIE['email']) ? htmlspecialchars($_COOKIE['email']) : ''; ?>">
+    <?php echo isset($_COOKIE['email_error']) ? '<span class="error">' . $_COOKIE['email_error'] . '</span>' : ''; ?>
+</div>
+<div class="form-group <?php echo isset($_COOKIE['dob_error']) ? 'has-error' : ''; ?>">
+    <label for="dob">Дата рождения:</label>
+    <input type="date" id="dob" name="dob" value="<?php echo isset($_COOKIE['dob']) ? htmlspecialchars($_COOKIE['dob']) : ''; ?>">
+    <?php echo isset($_COOKIE['dob_error']) ? '<span class="error">' . $_COOKIE['dob_error'] . '</span>' : ''; ?>
+</div>
+<div class="form-group <?php echo isset($_COOKIE['favoriteLanguage_error']) ? 'has-error' : ''; ?>">
+    <label for="favoriteLanguage">Любимый язык программирования:</label>
+    <select id="favoriteLanguage" name="favoriteLanguage[]" multiple>
+        <option value="Pascal">Pascal</option>
+        <option value="C">C</option>
+        <option value="C++">C++</option>
+        <option value="JavaScript">JavaScript</option>
+        <option value="PHP">PHP</option>
+        <option value="Python">Python</option>
+        <option value="Java">Java</option>
+        <option value="Haskell">Haskell</option>
+        <option value="Clojure">Clojure</option>
+        <option value="Prolog">Prolog</option>
+        <option value="Scala">Scala</option>
+    </select>
+    <?php echo isset($_COOKIE['favoriteLanguage_error']) ? '<span class="error">' . $_COOKIE['favoriteLanguage_error'] . '</span>' : ''; ?>
+</div>
+<div class="form-group <?php echo isset($_COOKIE['bio_error']) ? 'has-error' : ''; ?>">
+    <label for="bio">Биография:</label>
+    <textarea id="bio" name="bio" rows="5"><?php echo isset($_COOKIE['bio']) ? htmlspecialchars($_COOKIE['bio']) : ''; ?></textarea>
+    <?php echo isset($_COOKIE['bio_error']) ? '<span class="error">' . $_COOKIE['bio_error'] . '</span>' : ''; ?>
+</div>
+<div class="form-group <?php echo isset($_COOKIE['contract_error']) ? 'has-error' : ''; ?>">
+    <label><input type="checkbox" id="contract" name="contract"> С контрактом ознакомлен (а)</label>
+    <?php echo isset($_COOKIE['contract_error']) ? '<span class="error">' . $_COOKIE['contract_error'] . '</span>' : ''; ?>
+</div>
 
-<aside>
-    <nav class="aside-link">
-        <a href="../index.html" class="">Задания 4-го семестра</a>
-    </nav>
-</aside>
+    <button type="submit">Сохранить</button>
+  </form>
+</div>
 
-<main>
-    <div class="tasks" id="div_form">
-        <form method="post" id="form">
-            <h1 id="h1-form" class="black">Форма</h1>
-            <div id="div-result">
-            </div>
-            <div class="div-input">
-                <label id="for-fio" class="black label-center" for="fio">ФИО</label>
-                <input name="fio" class="size-input" id="fio" type="text" >
-            </div>
-
-            <div class="div-input">
-                <label id="for-telephone" class="black label-center" for="telephone">Телефон</label>
-                <input name="telephone" class="size-input" id="telephone" type="tel" >
-            </div>
-
-            <div class="div-input">
-                <label id="for-email" class="black label-center" for="email">Email</label>
-                <input name="email" class="size-input" id="email" type="email" >
-            </div>
-
-            <div class="div-input">
-                <label id="for-bday" class="black label-center" for="bday">Дата рождения</label>
-                <input name="bday" class="size-input" id="bday" type="date" >
-            </div>
-
-            <div class="div-input">
-                <label id="for-organization" class="black label-center">Пол</label>
-                <div id="sex-radios" class="label-center">
-                    <input name="sex" class="" id="sex-man" type="radio" value="man" >
-                    <label id="for-sex-man" class="black label-center">Мужской</label>
-
-                    <input name="sex" class="" id="sex-woman" type="radio" value="woman" >
-                    <label id="for-sex-woman" class="black label-center">Женский</label>
-                </div>
-            </div>
-
-            <div class="div-input">
-                <label id="for-prog-lang" class="black label-center">Любимый язык программирования</label>
-                <select name="langs[]" multiple="multiple" id="prog-lang" class="size-input" >
-                    <option value="0">Pascal</option>
-                    <option value="1">C</option>
-                    <option value="2">C++</option>
-                    <option value="3">JavaScript</option>
-                    <option value="4">PHP</option>
-                    <option value="5">Python</option>
-                    <option value="6">Java</option>
-                    <option value="7">Haskel</option>
-                    <option value="8">Clojure</option>
-                    <option value="9">Prolog</option>
-                    <option value="10">Scala</option>
-                </select>
-            </div>
-
-            <div class="div-input">
-                <label id="for-biography" class="black" for="biography">Биография</label>
-                <textarea class="size-input" id="biography" name="biography" ></textarea>
-            </div>
-
-            <div class="label-center">
-                <input id="contract" type="checkbox" name="contract" value="1">
-                <label id="for-contract" class="black" for="contract">С контрактом ознакомлен</label>
-            </div>
-
-            <div id="div-with-submit">
-                <input id="submit-request" class="div_button" type="submit" value="Сохранить">
-            </div>
-            <!--            <script>-->
-            <!--                document.getElementById('form').addEventListener('submit', function(event) {-->
-            <!--                    event.preventDefault();-->
-            <!--            </script>-->
-        </form>
-    </div>
-</main>
-
-<footer>
-    <p class=" text_in_footer">created by</p>
-    <h3 class=" text_in_footer">Antoha bidZ footbpli$t</h3>
-</footer>
 </body>
-
 </html>
