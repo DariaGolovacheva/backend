@@ -1,4 +1,5 @@
 <?php
+
 function print_error($error)
 {
     print($error);
@@ -7,67 +8,117 @@ function print_error($error)
 
 function validate_data($data)
 {
-    $all_names = ["fio", "telephone", "email", "bday", "sex", "langs", "biography", "contract"];
-    $size_limits = ["fio" => 255, "email" => 255, "biography" => 512];
-    foreach ($all_names as $key) {
-        if (empty($data[$key])) {
-            print_error("Field " . $key . " is empty.");
-        } elseif (in_array($key, array_keys($size_limits))
-            && strlen($data[$key]) > $size_limits[$key]) {
-            print_error("Length of the contents of the field " . $key . " more than " . $size_limits[$key]
-                . " symbols.");
-        } elseif ($key == "telephone" && !preg_match('/^(\s*)?(\+)?([- _():=+]?\d[- _():=+]?){10,14}(\s*)?$/', $data[$key])) {
-            print_error("Invalid telephone.");
-        }
+    $errors = [];
+
+    // Validate Full Name (fio)
+    if (empty($data['fio'])) {
+        $errors['fio'] = 'Please enter your full name.';
+    } elseif (strlen($data['fio']) > 255) {
+        $errors['fio'] = 'Full name must be less than 255 characters.';
     }
+
+    // Validate Telephone Number (telephone)
+    if (empty($data['telephone'])) {
+        $errors['telephone'] = 'Please enter your telephone number.';
+    } elseif (!preg_match('/^(\s*)?(\+)?([- _():=+]?\d[- _():=+]?){10,14}(\s*)?$/', $data['telephone'])) {
+        $errors['telephone'] = 'Invalid telephone number.';
+    }
+
+    // Validate Email Address (email)
+    if (empty($data['email'])) {
+        $errors['email'] = 'Please enter your email address.';
+    } elseif (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
+        $errors['email'] = 'Invalid email address format.';
+    }
+
+    // Validate Date of Birth (bday)
+    if (empty($data['bday'])) {
+        $errors['bday'] = 'Please enter your date of birth.';
+    } // Additional validation for date of birth can be added if needed
+
+    // Validate Gender (sex)
+    if (empty($data['sex'])) {
+        $errors['sex'] = 'Please select your gender.';
+    } // Additional validation for gender can be added if needed
+
+    // Validate Selected Programming Languages (langs)
+    if (empty($data['langs'])) {
+        $errors['langs'] = 'Please select at least one programming language.';
+    } // Additional validation for selected programming languages can be added if needed
+
+    // Validate Biography (biography)
+    if (empty($data['biography'])) {
+        $errors['biography'] = 'Please enter your biography.';
+    } elseif (strlen($data['biography']) > 512) {
+        $errors['biography'] = 'Biography must be less than 512 characters.';
+    }
+
+    // Validate Agreement to Terms and Conditions (contract)
+    if (empty($data['contract'])) {
+        $errors['contract'] = 'Please agree to the terms and conditions.';
+    }
+
+    // If there are no errors, return true
+    // Otherwise, return the array of errors
+    return empty($errors) ? true : $errors;
 }
 
 function save_to_database($data)
 {
-    $user = 'u67498'; // Replace with your username (uXXXXX)
-    $pass = '2427367'; // Replace with your password
-    $dbname = 'u67498'; // Replace with your database name (same as your username uXXXXX)
+    // Database connection details
+    $user = 'u67498'; // Replace with your database username
+    $pass = '2427367'; // Replace with your database password
+    $dbname = 'u67498'; // Replace with your database name
 
     try {
-        $db = new PDO('mysql:host=localhost;dbname=' . $dbname, $user, $pass,
-            [PDO::ATTR_PERSISTENT => true, PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
+        // Establish database connection
+        $db = new PDO('mysql:host=localhost;dbname=' . $dbname, $user, $pass, [
+            PDO::ATTR_PERSISTENT => true,
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+        ]);
 
-        $names_data_for_app = ['fio', 'telephone', 'email', 'bday', 'sex', 'biography'];
-        $app_req = "INSERT INTO application (" . implode(', ', $names_data_for_app) .
-            ") VALUES (";
-        $data_for_app = [];
-        foreach ($names_data_for_app as $name) {
-            $data_for_app[] = "'" . $data[$name] . "'";
-        }
-        $app_req = $app_req . implode(', ', $data_for_app) . ");";
-        $app_stmt = $db->prepare($app_req);
-        $app_stmt->execute();
+        // Prepare INSERT statement for application table
+        $app_stmt = $db->prepare("INSERT INTO application (fio, telephone, email, bday, sex, biography) VALUES (?, ?, ?, ?, ?, ?)");
 
-        $last_app_id = $db->lastInsertId();
-        $link_req = "INSERT INTO app_link_lang (id_app, id_prog_lang) VALUES ";
-        $data_for_link = [];
-        foreach ($data["langs"] as $lang) {
-            $data_for_link[] = "(" . $last_app_id . ", " . $lang . ")";
+        // Bind parameters and execute INSERT statement
+        $app_stmt->execute([$data['fio'], $data['telephone'], $data['email'], $data['bday'], $data['sex'], $data['biography']]);
+
+        // Prepare INSERT statement for app_link_lang table
+        $link_stmt = $db->prepare("INSERT INTO app_link_lang (id_app, id_prog_lang) VALUES (?, ?)");
+
+        // Assuming $data['langs'] is an array of selected programming languages
+        foreach ($data['langs'] as $lang) {
+            // Bind parameters and execute INSERT statement for each language
+            $link_stmt->execute([$db->lastInsertId(), $lang]);
         }
-        $link_req = $link_req . implode(", ", $data_for_link) . ";";
-        $link_stmt = $db->prepare($link_req);
-        $link_stmt->execute();
+
+        // Print success message
         print("Data successfully saved to the database.");
     } catch (PDOException $e) {
+        // Handle database connection errors
         print_error($e->getMessage());
     }
 }
 
 header('Content-Type: text/html; charset=UTF-8');
-if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-    if (!empty($_GET['save'])) {
-        print('The data is stored in the database.');
+
+// Handle form submission
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // Validate form data
+    $form_data = $_POST;
+    $validation_result = validate_data($form_data);
+
+    if ($validation_result === true) {
+        // If validation succeeds, save data to the database
+        save_to_database($form_data);
+    } else {
+        // If validation fails, display validation errors
+        foreach ($validation_result as $error) {
+            echo "<p>Error: $error</p>";
+        }
     }
-    include('form.php');
-    exit();
 }
 
-$form_data = $_POST;
-validate_data($form_data);
-save_to_database($form_data);  
+// Include form HTML
+include('form.php');
 ?>
