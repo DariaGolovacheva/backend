@@ -4,6 +4,7 @@ function print_error($error)
     print($error);
     exit();
 }
+
 function validate_data($data)
 {
     $all_names = ["fio", "telephone", "email", "bday", "sex", "langs", "biography", "contract"];
@@ -23,11 +24,14 @@ function validate_data($data)
 
 function save_to_database($data)
 {
-    include("../hid_vars.php");
-    $db_req = 'mysql:dbname=' . $database . ';host=' . $host;
+    $user = 'u67498'; // Replace with your username (uXXXXX)
+    $pass = '2427367'; // Replace with your password
+    $dbname = 'u67498'; // Replace with your database name (same as your username uXXXXX)
+
     try {
-        $db = new PDO($db_req, $user, $password,
+        $db = new PDO('mysql:host=localhost;dbname=' . $dbname, $user, $pass,
             [PDO::ATTR_PERSISTENT => true, PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
+
         $names_data_for_app = ['fio', 'telephone', 'email', 'bday', 'sex', 'biography'];
         $app_req = "INSERT INTO application (" . implode(', ', $names_data_for_app) .
             ") VALUES (";
@@ -54,21 +58,16 @@ function save_to_database($data)
     }
 }
 
-
 header('Content-Type: text/html; charset=UTF-8');
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     if (!empty($_GET['save'])) {
-
         print('The data is stored in the database.');
     }
     include('form.php');
     exit();
 }
-$form_data = $_POST;
-//foreach ($form_data as $key => $val)
-//{
-//    print($key . " = '" . $val . "' empty = " . isset($val) . " ");
-//}
-validate_data($form_data);
-save_to_database($form_data);
 
+$form_data = $_POST;
+validate_data($form_data);
+save_to_database($form_data);  
+?>
