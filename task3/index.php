@@ -4,7 +4,7 @@ header('Content-Type: text/html; charset=UTF-8');
 function validate_email($email) {
     return filter_var($email, FILTER_VALIDATE_EMAIL);
 }
-
+ include('form.php');
 function validate_phone($phone) {
     // Пример простой валидации для телефона (можно доработать по необходимости)
     return preg_match("/^\+?\d{1,3}\s?\(?\d{3}\)?[-\s]?\d{3}[-\s]?\d{2}[-\s]?\d{2}$/", $phone);
@@ -107,5 +107,3 @@ try {
     
 }
 } 
-
-
