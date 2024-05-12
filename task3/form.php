@@ -84,8 +84,8 @@
 
 <div class="container">
   <h2>Регистрационная форма</h2>
-  <form id="registrationForm" method="POST" action="" onsubmit="return validateForm()">
-<div class="form-group <?php echo isset($_COOKIE['name_error']) ? 'has-error' : ''; ?>" id="nameGroup">
+  <form id="registrationForm" method="POST" action="">
+<div class="form-group <?php echo isset($_COOKIE['name_error']) ? 'has-error' : ''; ?>">
     <label for="name">ФИО:</label>
     <input type="text" id="fullName" name="name" value="<?php echo isset($_COOKIE['name']) ? htmlspecialchars($_COOKIE['name']) : ''; ?>">
     <?php echo isset($_COOKIE['name_error']) ? '<span class="error">' . $_COOKIE['name_error'] . '</span>' : ''; ?>
@@ -135,21 +135,6 @@
     <button type="submit">Сохранить</button>
   </form>
 </div>
-
-<script>
-  function validateForm() {
-    var nameInput = document.getElementById('fullName');
-    var nameGroup = document.getElementById('nameGroup');
-    
-    if (nameInput.value.trim() === '') {
-      nameGroup.classList.add('has-error');
-      return false;
-    } else {
-      nameGroup.classList.remove('has-error');
-      return true;
-    }
-  }
-</script>
 
 </body>
 </html>
