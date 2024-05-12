@@ -77,19 +77,19 @@ function save_to_database($data)
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
         ]);
 
-        // Prepare INSERT statement for application table
-        $app_stmt = $db->prepare("INSERT INTO application (fio, telephone, email, bday, sex, biography) VALUES (?, ?, ?, ?, ?, ?)");
+        // Prepare INSERT statement for users table
+        $user_stmt = $db->prepare("INSERT INTO users (full_name, telephone, email, date_of_birth, gender, biography, agreed_to_terms) VALUES (?, ?, ?, ?, ?, ?, 1)");
 
         // Bind parameters and execute INSERT statement
-        $app_stmt->execute([$data['fio'], $data['telephone'], $data['email'], $data['bday'], $data['sex'], $data['biography']]);
+        $user_stmt->execute([$data['fio'], $data['telephone'], $data['email'], $data['bday'], $data['sex'], $data['biography']]);
 
-        // Prepare INSERT statement for app_link_lang table
-        $link_stmt = $db->prepare("INSERT INTO app_link_lang (id_app, id_prog_lang) VALUES (?, ?)");
+        // Prepare INSERT statement for user_programming_languages table
+        $lang_stmt = $db->prepare("INSERT INTO user_programming_languages (user_id, lang_id) VALUES (?, ?)");
 
         // Assuming $data['langs'] is an array of selected programming languages
         foreach ($data['langs'] as $lang) {
             // Bind parameters and execute INSERT statement for each language
-            $link_stmt->execute([$db->lastInsertId(), $lang]);
+            $lang_stmt->execute([$db->lastInsertId(), $lang]);
         }
 
         // Print success message
