@@ -30,9 +30,7 @@
       .form-group {
         margin-bottom: 20px;
       }
-      input[type="text"]:hover {
-  border-color: #FFA500; /* Оранжевая рамка при наведении */
-}
+    
 
       label {
         font-weight: bold;
@@ -67,9 +65,7 @@
         cursor: pointer;
       }
       
-      button:hover {
-        background-color: #FF8C00; /* Темно-оранжевый цвет кнопки при наведении */
-      }
+   
       
       .error {
         color: #ff0000; /* Красный цвет текста ошибки */
