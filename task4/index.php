@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (empty($_POST['name'])) {
         $errors['name'] = 'Введите ФИО.';
     } elseif (!preg_match('/^[a-zA-Zа-яА-Я\s]{1,150}$/', $_POST['name'])) {
-        $errors['name'] = 'Неправильный формат ФИО. Разрешены только буквы и пробелы.';
+        $errors['name'] = 'Неправильный формат ФИО.';
     }
 
     // Валидация email
@@ -73,49 +73,42 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $contract = isset($_POST['contract']) ? 1 : 0;
         $favoriteLanguages = implode(', ', $_POST['favoriteLanguage']); // Преобразуем массив в строку
 
-        // Установка Cookies на один год
-        $expiry = time() + (365 * 24 * 60 * 60); // текущее время + один год
-        setcookie('name', $name, $expiry);
-        setcookie('email', $email, $expiry);
-        setcookie('phone', $phone, $expiry);
-        setcookie('dob', $dob, $expiry);
-        setcookie('gender', $gender, $expiry);
-        setcookie('bio', $bio, $expiry);
-        setcookie('contract', $contract, $expiry);
-        setcookie('favoriteLanguages', $favoriteLanguages, $expiry);
+        // Здесь ваш код для сохранения данных в базе данных
 
-        // Перенаправление на успешную страницу
-        header('Location: success.php');
-        exit();
+        // Сохранение значений в Cookies
+        $cookieExpiration = time() + (365 * 24 * 60 * 60); // На год
+        setcookie('name', $name, $cookieExpiration);
+        setcookie('email', $email, $cookieExpiration);
+        setcookie('phone', $phone, $cookieExpiration);
+        setcookie('dob', $dob, $cookieExpiration);
+        setcookie('gender', $gender, $cookieExpiration);
+        setcookie('bio', $bio, $cookieExpiration);
+        setcookie('favoriteLanguages', $favoriteLanguages, $cookieExpiration);
+
+        // Выводим сообщение об успешном сохранении
+        echo 'Данные успешно сохранены в базе данных!';
     } else {
-        // Сохранение ошибок в Cookies
-        setcookie('errors', json_encode($errors), 0);
-
-        // Сохранение значений полей в Cookies
-        foreach ($_POST as $key => $value) {
-            setcookie($key, $value, 0);
+        // Если есть ошибки, сохраняем их в Cookies
+        $cookieExpiration = 0; // до конца сессии
+        foreach ($errors as $key => $value) {
+            setcookie($key . '_error', $value, $cookieExpiration);
         }
 
-        // Перенаправление на страницу с формой
-        header('Location: ' . $_SERVER['PHP_SELF']);
-        exit();
+        // Перенаправляем обратно на форму с GET запросом
+        header('Location: ' . $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING']);
+        exit;
     }
 }
 
-// Восстановление значений полей из Cookies
-$name = isset($_COOKIE['name']) ? $_COOKIE['name'] : '';
-$email = isset($_COOKIE['email']) ? $_COOKIE['email'] : '';
-$phone = isset($_COOKIE['phone']) ? $_COOKIE['phone'] : '';
-$dob = isset($_COOKIE['dob']) ? $_COOKIE['dob'] : '';
-$gender = isset($_COOKIE['gender']) ? $_COOKIE['gender'] : '';
-$bio = isset($_COOKIE['bio']) ? $_COOKIE['bio'] : '';
-$contract = isset($_COOKIE['contract']) ? $_COOKIE['contract'] : '';
-$favoriteLanguages = isset($_COOKIE['favoriteLanguages']) ? $_COOKIE['favoriteLanguages'] : '';
-
-// Восстановление ошибок из Cookies
-$errors = isset($_COOKIE['errors']) ? json_decode($_COOKIE['errors'], true) : [];
-
-?> 
+// Проверяем наличие ошибок в Cookies и удаляем их
+$errorsFromCookies = [];
+foreach ($_COOKIE as $key => $value) {
+    if (strpos($key, '_error') !== false) {
+        $field = str_replace('_error', '', $key);
+        $errorsFromCookies[$field] = $value;
+        setcookie($key, '', time() - 3600); // Удаление Cookie
+    }
+}
 <!DOCTYPE html>
 <html lang="en">
 <head>
