@@ -1,4 +1,4 @@
-Daria Golovacheva, [06.05.2024 21:35]
+
 <?php
 header('Content-Type: text/html; charset=UTF-8');
 
@@ -76,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         // Подключение к базе данных
        // Подключение к базе данных
-$user = '67498';
+$user = 'u67498';
 $pass = '2427367';
 $dbname = 'u67498';
 $db = new PDO("mysql:host=localhost;dbname=$dbname", $user, $pass);
@@ -120,7 +120,7 @@ try {
 </head>
 <body>
 
-Daria Golovacheva, [06.05.2024 21:35]
+
 
 
 <div class="container">
