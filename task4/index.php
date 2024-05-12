@@ -72,6 +72,9 @@ function save_to_database($data)
                 ':programming_language_id' => $lang_id
             ]);
         }
+
+        // Выводим сообщение об успешной отправке данных
+        echo "<p style='color: green; text-align: center;'>Данные успешно отправлены!</p>";
     } catch (PDOException $e) {
         print_error($e->getMessage());
     }
