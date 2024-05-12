@@ -1,10 +1,11 @@
+Daria Golovacheva, [06.05.2024 21:35]
 <?php
 header('Content-Type: text/html; charset=UTF-8');
 
 function validate_email($email) {
     return filter_var($email, FILTER_VALIDATE_EMAIL);
 }
- include('form.php');
+
 function validate_phone($phone) {
     // Пример простой валидации для телефона (можно доработать по необходимости)
     return preg_match("/^\+?\d{1,3}\s?\(?\d{3}\)?[-\s]?\d{3}[-\s]?\d{2}[-\s]?\d{2}$/", $phone);
@@ -75,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         // Подключение к базе данных
        // Подключение к базе данных
-$user = 'u67498';
+$user = '67498';
 $pass = '2427367';
 $dbname = 'u67498';
 $db = new PDO("mysql:host=localhost;dbname=$dbname", $user, $pass);
@@ -107,3 +108,71 @@ try {
     
 }
 } 
+
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Регистрационная форма</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+Daria Golovacheva, [06.05.2024 21:35]
+
+
+<div class="container">
+  <h2>Регистрационная форма</h2>
+  <form id="registrationForm" method="POST" action="">
+    <div class="form-group">
+      <label for="name">ФИО:</label>
+      <input type="text" id="fullName" name="name" >
+    </div>
+    <div class="form-group">
+      <label for="phone">Телефон:</label>
+      <input type="tel" id="phone" name="phone">
+    </div>
+    <div class="form-group">
+      <label for="email">E-mail:</label>
+      <input type="email" id="email" name="email" >
+    </div>
+    <div class="form-group">
+      <label for="dob">Дата рождения:</label>
+      <input type="date" id="dob" name="dob" >
+    </div>
+    <div class="form-group">
+      <label>Пол:</label>
+      <label><input type="radio" name="gender" value="male" checked> Мужской</label>
+      <label><input type="radio" name="gender" value="female"> Женский</label>
+    </div>
+    <div class="form-group">
+      <label for="favoriteLanguage">Любимый язык программирования:</label>
+      <select id="favoriteLanguage" name="favoriteLanguage[]" multiple >
+        <option value="Pascal">Pascal</option>
+        <option value="C">C</option>
+        <option value="C++">C++</option>
+        <option value="JavaScript">JavaScript</option>
+        <option value="PHP">PHP</option>
+        <option value="Python">Python</option>
+        <option value="Java">Java</option>
+        <option value="Haskel">Haskel</option>
+        <option value="Clojure">Clojure</option>
+        <option value="Prolog">Prolog</option>
+        <option value="Scala">Scala</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="bio">Биография:</label>
+      <textarea id="bio" name="bio" rows="5" ></textarea>
+    </div>
+    <div class="form-group">
+      <label><input type="checkbox" id="contract" name="contract" > С контрактом ознакомлен (а)</label>
+    </div>
+    <button type="submit">Сохранить</button>
+  </form>
+</div>
+
+</body>
+</html>
