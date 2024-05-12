@@ -66,7 +66,9 @@
       }
       
    
-      
+          button:hover {
+        background-color: #FF8C00; /* Темно-оранжевый цвет кнопки при наведении */
+      }
       .error {
         color: #ff0000; /* Красный цвет текста ошибки */
         font-size: 12px;
