@@ -74,41 +74,44 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $favoriteLanguages = implode(', ', $_POST['favoriteLanguage']); // Преобразуем массив в строку
 
         // Подключение к базе данных
-       // Подключение к базе данных
-$user = 'u67498';
-$pass = '2427367';
-$dbname = 'u67498';
-$db = new PDO("mysql:host=localhost;dbname=$dbname", $user, $pass);
-$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $user = 'u67498';
+        $pass = '2427367';
+        $dbname = 'u67498';
+        $db = new PDO("mysql:host=localhost;dbname=$dbname", $user, $pass);
+        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-try {
-    // Сохранение выбранных языков программирования в таблицу programming_language (если они еще не существуют)
-    foreach ($_POST['favoriteLanguage'] as $language) {
-        $stmt = $db->prepare("INSERT IGNORE INTO programming_language (name) VALUES (?)");
-        $stmt->execute([$language]);
+        try {
+            // Вставка данных в таблицу application
+            $stmt = $db->prepare("INSERT INTO application (name, email, phone, dob, gender, bio, contract) VALUES (?, ?, ?, ?, ?, ?, ?)");
+            $stmt->execute([$name, $email, $phone, $dob, $gender, $bio, $contract]);
+            
+            // Получение ID вставленной записи
+            $application_id = $db->lastInsertId();
+
+            // Сохранение выбранных языков программирования в таблицу programming_language (если они еще не существуют)
+            foreach ($_POST['favoriteLanguage'] as $language) {
+                $stmt = $db->prepare("INSERT IGNORE INTO programming_language (name) VALUES (?)");
+                $stmt->execute([$language]);
+            }
+
+            // Получение идентификаторов языков программирования из таблицы programming_language
+            $stmt = $db->prepare("SELECT id FROM programming_language WHERE name IN (?)");
+            $stmt->execute([$_POST['favoriteLanguage']]);
+            $language_ids = $stmt->fetchAll(PDO::FETCH_COLUMN);
+
+            // Вставка данных в таблицу application_ability
+            foreach ($language_ids as $language_id) {
+                $stmt = $db->prepare("INSERT INTO application_ability (application_id, language_id) VALUES (?, ?)");
+                $stmt->execute([$application_id, $language_id]);
+            }
+
+            echo 'Данные успешно сохранены в базе данных!';
+        } catch(PDOException $e) {
+            echo 'Ошибка выполнения запроса: ' . $e->getMessage();
+        }
     }
-
-    // Получение идентификаторов языков программирования из таблицы programming_language
-    $stmt = $db->prepare("SELECT id, name FROM programming_language WHERE name IN (?)");
-    $stmt->execute([$_POST['favoriteLanguage']]);
-    $languages = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-    // Вставка данных в таблицу application_ability
-    $application_id = $db->lastInsertId();
-    foreach ($languages as $language) {
-        $stmt = $db->prepare("INSERT INTO application_ability (application_id, language_id) VALUES (?, ?)");
-        $stmt->execute([$application_id, $language['id']]);
-    }
-
-    echo 'Данные успешно сохранены в базе данных!';
-} catch(PDOException $e) {
-    echo 'Ошибка выполнения запроса: ' . $e->getMessage();
 }
-    
-}
-} 
-
-?>
+?> 
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -118,7 +121,6 @@ try {
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
 
 <div class="container">
   <h2>Регистрационная форма</h2>
