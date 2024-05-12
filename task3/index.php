@@ -66,9 +66,9 @@ function validate_data($data)
 function save_to_database($data)
 {
     // Database connection details
-    $user = 'db'; // Replace with your database username
-    $pass = '123'; // Replace with your database password
-    $dbname = 'test'; // Replace with your database name
+    $user = 'u67498'; // Replace with your database username
+    $pass = '2427367'; // Replace with your database password
+    $dbname = 'u67498'; // Replace with your database name
 
     try {
         // Establish database connection
