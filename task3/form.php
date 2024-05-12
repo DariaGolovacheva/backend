@@ -51,8 +51,25 @@
         color: #fff; /* Белый цвет текста в полях ввода */
       }
       
-      input[type="checkbox"] {
+      input[type="checkbox"],
+      input[type="radio"] {
         margin-right: 5px;
+      }
+
+      input[type="radio"] {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        border: 2px solid #FFA500; /* Оранжевая рамка */
+        outline: none;
+        cursor: pointer;
+      }
+
+      input[type="radio"]:checked {
+        background-color: #FFA500; /* Оранжевый цвет заполнения при выборе */
       }
       
       button {
@@ -104,6 +121,14 @@
     <label for="dob">Дата рождения:</label>
     <input type="date" id="dob" name="dob" value="<?php echo isset($_COOKIE['dob']) ? htmlspecialchars($_COOKIE['dob']) : ''; ?>">
     <?php echo isset($_COOKIE['dob_error']) ? '<span class="error">' . $_COOKIE['dob_error'] . '</span>' : ''; ?>
+</div>
+<div class="form-group <?php echo isset($_COOKIE['gender_error']) ? 'has-error' : ''; ?>">
+    <label>Пол:</label><br>
+    <input type="radio" id="male" name="gender" value="male" <?php echo (isset($_COOKIE['gender']) && $_COOKIE['gender'] == 'male') ? 'checked' : ''; ?>>
+    <label for="male">Мужской</label>
+    <input type="radio" id="female" name="gender" value="female" <?php echo (isset($_COOKIE['gender']) && $_COOKIE['gender'] == 'female') ? 'checked' : ''; ?>>
+    <label for="female">Женский</label>
+    <?php echo isset($_COOKIE['gender_error']) ? '<span class="error">' . $_COOKIE['gender_error'] . '</span>' : ''; ?>
 </div>
 <div class="form-group <?php echo isset($_COOKIE['favoriteLanguage_error']) ? 'has-error' : ''; ?>">
     <label for="favoriteLanguage">Любимый язык программирования:</label>
