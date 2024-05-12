@@ -8,7 +8,7 @@ function print_error($error)
 function validate_data($data)
 {
     $errors = [];
-    $all_names = ["name", "phone", "email", "dob", "gender", "favourite_language", "bio", "contract"];
+    $all_names = ["name", "phone", "email", "dob", "gender", "favoriteLanguage", "bio", "contract"];
     $re_patterns = ['name' => '/^[\w\s]+$/',
         'phone' => '/^(\s*)?(\+)?([- _():=+]?\d[- _():=+]?){10,14}(\s*)?$/',
         'email' => '/^[\w\-\.]+@([\w-]+\.)+[\w-]{2,4}$/'];
@@ -61,7 +61,7 @@ function save_to_database($data)
         $last_app_id = $db->lastInsertId();
         $link_req = "INSERT INTO app_link_lang (id_app, id_prog_lang) VALUES ";
         $data_for_link = [];
-        foreach ($data["favourite_language"] as $lang) {
+        foreach ($data["favoriteLanguage"] as $lang) {
             $data_for_link[] = "(" . $last_app_id . ", " . $lang . ")";
         }
         $link_req = $link_req . implode(", ", $data_for_link) . ";";
@@ -72,14 +72,13 @@ function save_to_database($data)
     }
 }
 
-
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $all_names = ["name", "phone", "email", "dob", "gender", "favourite_language", "bio", "contract"];
+    $all_names = ["name", "phone", "email", "dob", "gender", "favoriteLanguage", "bio", "contract"];
     $form_data = array_fill_keys($all_names, "");
-    $form_data['favourite_language'] = [];
+    $form_data['favoriteLanguage'] = [];
     foreach ($_POST as $key => $val) {
         if (!empty($val)) {
-            if ($key == 'favourite_language') {
+            if ($key == 'favoriteLanguage') {
                 $form_data[$key] = explode(',', $val);
             } else {
                 $form_data[$key] = $val;
@@ -98,70 +97,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Регистрационная форма</title>
-<style>
-  body {
-    font-family: Arial, sans-serif;
-    background-color: #000; /* Черный фон */
-    color: #fff; /* Белый цвет текста */
-    margin: 0;
-    padding: 0;
-  }
-  
-  .container {
-    max-width: 600px;
-    margin: 50px auto;
-    background-color: #222; /* Черный цвет фона контейнера */
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  }
-  
-  h2 {
-    text-align: center;
-    color: #FFA500; /* Оранжевый цвет заголовка */
-  }
-  
-  .form-group {
-    margin-bottom: 20px;
-  }
-  
-  label {
-    font-weight: bold;
-    color: #fff; /* Белый цвет текста меток */
-  }
-  
-  input[type="text"],
-  input[type="tel"],
-  input[type="email"],
-  input[type="date"],
-  textarea,
-  select {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-    background-color: #333; /* Черный цвет поля ввода */
-    color: #fff; /* Белый цвет текста в полях ввода */
-  }
-  
-  input[type="checkbox"] {
-    margin-right: 5px;
-  }
-  
-  button {
-    background-color: #FFA500; /* Оранжевый цвет кнопки */
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  button:hover {
-    background-color: #FF8C00; /* Темно-оранжевый цвет кнопки при наведении */
-  }
-</style>
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
