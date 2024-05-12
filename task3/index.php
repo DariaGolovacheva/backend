@@ -1,124 +1,175 @@
 <?php
-
-function print_error($error)
-{
-    print($error);
-    exit();
-}
-
-function validate_data($data)
-{
-    $errors = [];
-
-    // Validate Full Name (fio)
-    if (empty($data['fio'])) {
-        $errors['fio'] = 'Please enter your full name.';
-    } elseif (strlen($data['fio']) > 255) {
-        $errors['fio'] = 'Full name must be less than 255 characters.';
-    }
-
-    // Validate Telephone Number (telephone)
-    if (empty($data['telephone'])) {
-        $errors['telephone'] = 'Please enter your telephone number.';
-    } elseif (!preg_match('/^(\s*)?(\+)?([- _():=+]?\d[- _():=+]?){10,14}(\s*)?$/', $data['telephone'])) {
-        $errors['telephone'] = 'Invalid telephone number.';
-    }
-
-    // Validate Email Address (email)
-    if (empty($data['email'])) {
-        $errors['email'] = 'Please enter your email address.';
-    } elseif (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
-        $errors['email'] = 'Invalid email address format.';
-    }
-
-    // Validate Date of Birth (bday)
-    if (empty($data['bday'])) {
-        $errors['bday'] = 'Please enter your date of birth.';
-    } // Additional validation for date of birth can be added if needed
-
-    // Validate Gender (sex)
-    if (empty($data['sex'])) {
-        $errors['sex'] = 'Please select your gender.';
-    } // Additional validation for gender can be added if needed
-
-    // Validate Selected Programming Languages (langs)
-    if (empty($data['langs'])) {
-        $errors['langs'] = 'Please select at least one programming language.';
-    } // Additional validation for selected programming languages can be added if needed
-
-    // Validate Biography (biography)
-    if (empty($data['biography'])) {
-        $errors['biography'] = 'Please enter your biography.';
-    } elseif (strlen($data['biography']) > 512) {
-        $errors['biography'] = 'Biography must be less than 512 characters.';
-    }
-
-    // Validate Agreement to Terms and Conditions (contract)
-    if (empty($data['contract'])) {
-        $errors['contract'] = 'Please agree to the terms and conditions.';
-    }
-
-    // If there are no errors, return true
-    // Otherwise, return the array of errors
-    return empty($errors) ? true : $errors;
-}
-
-function save_to_database($data)
-{
-    // Database connection details
-    $user = 'u67498'; // Replace with your database username
-    $pass = '2427367'; // Replace with your database password
-    $dbname = 'u67498'; // Replace with your database name
-
-    try {
-        // Establish database connection
-        $db = new PDO('mysql:host=localhost;dbname=' . $dbname, $user, $pass, [
-            PDO::ATTR_PERSISTENT => true,
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
-        ]);
-
-        // Prepare INSERT statement for application table
-        $app_stmt = $db->prepare("INSERT INTO application (fio, telephone, email, bday, sex, biography) VALUES (?, ?, ?, ?, ?, ?)");
-
-        // Bind parameters and execute INSERT statement
-        $app_stmt->execute([$data['fio'], $data['telephone'], $data['email'], $data['bday'], $data['sex'], $data['biography']]);
-
-        // Prepare INSERT statement for app_link_lang table
-        $link_stmt = $db->prepare("INSERT INTO app_link_lang (id_app, id_prog_lang) VALUES (?, ?)");
-
-        // Assuming $data['langs'] is an array of selected programming languages
-        foreach ($data['langs'] as $lang) {
-            // Bind parameters and execute INSERT statement for each language
-            $link_stmt->execute([$db->lastInsertId(), $lang]);
-        }
-
-        // Print success message
-        print("Data successfully saved to the database.");
-    } catch (PDOException $e) {
-        // Handle database connection errors
-        print_error($e->getMessage());
-    }
-}
-
 header('Content-Type: text/html; charset=UTF-8');
 
-// Handle form submission
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Validate form data
-    $form_data = $_POST;
-    $validation_result = validate_data($form_data);
-
-    if ($validation_result === true) {
-        // If validation succeeds, save data to the database
-        save_to_database($form_data);
-    } else {
-        // If validation fails, display validation errors
-        foreach ($validation_result as $error) {
-            echo "<p>Error: $error</p>";
-        }
-    }
+function validate_email($email) {
+    return filter_var($email, FILTER_VALIDATE_EMAIL);
 }
 
-// Include form HTML
-include('form.php');
+function validate_phone($phone) {
+    // Пример простой валидации для телефона (можно доработать по необходимости)
+    return preg_match("/^\+?\d{1,3}\s?\(?\d{3}\)?[-\s]?\d{3}[-\s]?\d{2}[-\s]?\d{2}$/", $phone);
+}
+
+$errors = [];
+
+// Проверка метода запроса
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // Валидация ФИО
+    if (empty($_POST['name'])) {
+        $errors[] = 'Введите ФИО.';
+    } elseif (!preg_match('/^[a-zA-Zа-яА-Я\s]{1,150}$/', $_POST['name'])) {
+        $errors[] = 'Неправильный формат ФИО.';
+    }
+
+    // Валидация email
+    if (empty($_POST['email'])) {
+        $errors[] = 'Введите email.';
+    } elseif (!validate_email($_POST['email'])) {
+        $errors[] = 'Неправильный формат email.';
+    }
+
+    // Валидация телефона
+    if (empty($_POST['phone'])) {
+        $errors[] = 'Введите номер телефона.';
+    } elseif (!validate_phone($_POST['phone'])) {
+        $errors[] = 'Неправильный формат номера телефона.';
+    }
+
+    // Валидация даты рождения
+    if (empty($_POST['dob'])) {
+        $errors[] = 'Введите дату рождения.';
+    } elseif (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $_POST['dob'])) {
+        $errors[] = 'Неправильный формат даты рождения.';
+    }
+
+    // Валидация пола
+    if (empty($_POST['gender'])) {
+        $errors[] = 'Укажите ваш пол.';
+    }
+
+    // Валидация биографии
+    if (empty($_POST['bio'])) {
+        $errors[] = 'Введите вашу биографию.';
+    }
+
+    // Валидация контракта
+    if (!isset($_POST['contract'])) {
+        $errors[] = 'Необходимо ознакомиться с контрактом.';
+    }
+
+    // Валидация выбранного языка программирования
+    if (empty($_POST['favoriteLanguage'])) {
+        $errors[] = 'Выберите хотя бы один язык программирования.';
+    }
+
+    if (empty($errors)) {
+        // Если ошибок нет, можно обрабатывать данные
+        $name = $_POST['name'];
+        $email = $_POST['email'];
+        $phone = $_POST['phone'];
+        $dob = $_POST['dob'];
+        $gender = $_POST['gender'];
+        $bio = $_POST['bio'];
+        $contract = isset($_POST['contract']) ? 1 : 0;
+        $favoriteLanguages = implode(', ', $_POST['favoriteLanguage']); // Преобразуем массив в строку
+
+        // Подключение к базе данных
+       // Подключение к базе данных
+$user = 'u67498';
+$pass = '2427367';
+$dbname = 'u67498';
+$db = new PDO("mysql:host=localhost;dbname=$dbname", $user, $pass);
+$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+try {
+    // Сохранение выбранных языков программирования в таблицу programming_language (если они еще не существуют)
+    foreach ($_POST['favoriteLanguage'] as $language) {
+        $stmt = $db->prepare("INSERT IGNORE INTO programming_language (name) VALUES (?)");
+        $stmt->execute([$language]);
+    }
+
+    // Получение идентификаторов языков программирования из таблицы programming_language
+    $stmt = $db->prepare("SELECT id, name FROM programming_language WHERE name IN (?)");
+    $stmt->execute([$_POST['favoriteLanguage']]);
+    $languages = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // Вставка данных в таблицу application_ability
+    $application_id = $db->lastInsertId();
+    foreach ($languages as $language) {
+        $stmt = $db->prepare("INSERT INTO application_ability (application_id, language_id) VALUES (?, ?)");
+        $stmt->execute([$application_id, $language['id']]);
+    }
+
+    echo 'Данные успешно сохранены в базе данных!';
+} catch(PDOException $e) {
+    echo 'Ошибка выполнения запроса: ' . $e->getMessage();
+}
+    
+}
+} 
+
 ?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Регистрационная форма</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+
+<div class="container">
+  <h2>Регистрационная форма</h2>
+  <form id="registrationForm" method="POST" action="">
+    <div class="form-group">
+      <label for="name">ФИО:</label>
+      <input type="text" id="fullName" name="name" >
+    </div>
+    <div class="form-group">
+      <label for="phone">Телефон:</label>
+      <input type="tel" id="phone" name="phone">
+    </div>
+    <div class="form-group">
+      <label for="email">E-mail:</label>
+      <input type="email" id="email" name="email" >
+    </div>
+    <div class="form-group">
+      <label for="dob">Дата рождения:</label>
+      <input type="date" id="dob" name="dob" >
+    </div>
+    <div class="form-group">
+      <label>Пол:</label>
+      <label><input type="radio" name="gender" value="male" checked> Мужской</label>
+      <label><input type="radio" name="gender" value="female"> Женский</label>
+    </div>
+    <div class="form-group">
+      <label for="favoriteLanguage">Любимый язык программирования:</label>
+      <select id="favoriteLanguage" name="favoriteLanguage[]" multiple >
+        <option value="Pascal">Pascal</option>
+        <option value="C">C</option>
+        <option value="C++">C++</option>
+        <option value="JavaScript">JavaScript</option>
+        <option value="PHP">PHP</option>
+        <option value="Python">Python</option>
+        <option value="Java">Java</option>
+        <option value="Haskel">Haskel</option>
+        <option value="Clojure">Clojure</option>
+        <option value="Prolog">Prolog</option>
+        <option value="Scala">Scala</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="bio">Биография:</label>
+      <textarea id="bio" name="bio" rows="5" ></textarea>
+    </div>
+    <div class="form-group">
+      <label><input type="checkbox" id="contract" name="contract" > С контрактом ознакомлен (а)</label>
+    </div>
+    <button type="submit">Сохранить</button>
+  </form>
+</div>
+
+</body>
+</html>
