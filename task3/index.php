@@ -66,9 +66,9 @@ function validate_data($data)
 function save_to_database($data)
 {
     // Database connection details
-    $user = 'u67498'; // Replace with your database username
-    $pass = '2427367'; // Replace with your database password
-    $dbname = 'u67498'; // Replace with your database name
+    $user = 'db'; // Replace with your database username
+    $pass = '123'; // Replace with your database password
+    $dbname = 'test'; // Replace with your database name
 
     try {
         // Establish database connection
@@ -77,19 +77,19 @@ function save_to_database($data)
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
         ]);
 
-        // Prepare INSERT statement for users table
-        $user_stmt = $db->prepare("INSERT INTO users (full_name, telephone, email, date_of_birth, gender, biography, agreed_to_terms) VALUES (?, ?, ?, ?, ?, ?, 1)");
+        // Prepare INSERT statement for application table
+        $app_stmt = $db->prepare("INSERT INTO application (fio, telephone, email, bday, sex, biography) VALUES (?, ?, ?, ?, ?, ?)");
 
         // Bind parameters and execute INSERT statement
-        $user_stmt->execute([$data['fio'], $data['telephone'], $data['email'], $data['bday'], $data['sex'], $data['biography']]);
+        $app_stmt->execute([$data['fio'], $data['telephone'], $data['email'], $data['bday'], $data['sex'], $data['biography']]);
 
-        // Prepare INSERT statement for user_programming_languages table
-        $lang_stmt = $db->prepare("INSERT INTO user_programming_languages (user_id, lang_id) VALUES (?, ?)");
+        // Prepare INSERT statement for app_link_lang table
+        $link_stmt = $db->prepare("INSERT INTO app_link_lang (id_app, id_prog_lang) VALUES (?, ?)");
 
         // Assuming $data['langs'] is an array of selected programming languages
         foreach ($data['langs'] as $lang) {
             // Bind parameters and execute INSERT statement for each language
-            $lang_stmt->execute([$db->lastInsertId(), $lang]);
+            $link_stmt->execute([$db->lastInsertId(), $lang]);
         }
 
         // Print success message
