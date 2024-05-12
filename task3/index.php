@@ -1,4 +1,3 @@
-
 <?php
 header('Content-Type: text/html; charset=UTF-8');
 
@@ -90,11 +89,9 @@ try {
     }
 
     // Получение идентификаторов языков программирования из таблицы programming_language
-   // Получение идентификаторов языков программирования из таблицы programming_language
-$languageNames = implode(',', $_POST['favoriteLanguage']);
-$stmt = $db->prepare("SELECT id, name FROM programming_language WHERE name IN ($languageNames)");
-$stmt->execute();
-$languages = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $stmt = $db->prepare("SELECT id, name FROM programming_language WHERE name IN (?)");
+    $stmt->execute([$_POST['favoriteLanguage']]);
+    $languages = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     // Вставка данных в таблицу application_ability
     $application_id = $db->lastInsertId();
@@ -121,8 +118,6 @@ $languages = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
-
 
 
 <div class="container">
