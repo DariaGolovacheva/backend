@@ -30,7 +30,10 @@
       .form-group {
         margin-bottom: 20px;
       }
-      
+      input[type="text"]:hover {
+  border-color: #FFA500; /* Оранжевая рамка при наведении */
+}
+
       label {
         font-weight: bold;
         color: #fff; /* Белый цвет текста меток */
