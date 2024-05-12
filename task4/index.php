@@ -115,7 +115,7 @@ $favoriteLanguages = isset($_COOKIE['favoriteLanguages']) ? $_COOKIE['favoriteLa
 // Восстановление ошибок из Cookies
 $errors = isset($_COOKIE['errors']) ? json_decode($_COOKIE['errors'], true) : [];
 
-?>
+?> 
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -123,11 +123,6 @@ $errors = isset($_COOKIE['errors']) ? json_decode($_COOKIE['errors'], true) : []
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Регистрационная форма</title>
 <link rel="stylesheet" href="styles.css">
-<style>
-  .error {
-    color: red;
-  }
-</style>
 </head>
 <body>
 
@@ -136,46 +131,47 @@ $errors = isset($_COOKIE['errors']) ? json_decode($_COOKIE['errors'], true) : []
   <form id="registrationForm" method="POST" action="">
     <div class="form-group">
       <label for="name">ФИО:</label>
-      <input type="text" id="fullName" name="name" value="<?php echo $name; ?>">
-      <?php if(isset($errors['name'])) echo '<p class="error">' . $errors['name'] . '</p>'; ?>
+      <input type="text" id="fullName" name="name" >
     </div>
     <div class="form-group">
       <label for="phone">Телефон:</label>
-      <input type="tel" id="phone" name="phone" value="<?php echo $phone; ?>">
-      <?php if(isset($errors['phone'])) echo '<p class="error">' . $errors['phone'] . '</p>'; ?>
+      <input type="tel" id="phone" name="phone">
     </div>
     <div class="form-group">
       <label for="email">E-mail:</label>
-      <input type="email" id="email" name="email" value="<?php echo $email; ?>">
-      <?php if(isset($errors['email'])) echo '<p class="error">' . $errors['email'] . '</p>'; ?>
+      <input type="email" id="email" name="email" >
     </div>
     <div class="form-group">
       <label for="dob">Дата рождения:</label>
-      <input type="date" id="dob" name="dob" value="<?php echo $dob; ?>">
-      <?php if(isset($errors['dob'])) echo '<p class="error">' . $errors['dob'] . '</p>'; ?>
+      <input type="date" id="dob" name="dob" >
     </div>
     <div class="form-group">
       <label>Пол:</label>
-      <label><input type="radio" name="gender" value="male" <?php echo ($gender === 'male') ? 'checked' : ''; ?>> Мужской</label>
-      <label><input type="radio" name="gender" value="female" <?php echo ($gender === 'female') ? 'checked' : ''; ?>> Женский</label>
-      <?php if(isset($errors['gender'])) echo '<p class="error">' . $errors['gender'] . '</p>'; ?>
+      <label><input type="radio" name="gender" value="male" checked> Мужской</label>
+      <label><input type="radio" name="gender" value="female"> Женский</label>
     </div>
     <div class="form-group">
       <label for="favoriteLanguage">Любимый язык программирования:</label>
-      <select id="favoriteLanguage" name="favoriteLanguage[]" multiple>
-        <option value="Pascal" <?php echo strpos($favoriteLanguages, 'Pascal') !== false ? 'selected' : ''; ?>>Pascal</option>
-        <!-- Добавьте остальные опции с аналогичной проверкой -->
+      <select id="favoriteLanguage" name="favoriteLanguage[]" multiple >
+        <option value="Pascal">Pascal</option>
+        <option value="C">C</option>
+        <option value="C++">C++</option>
+        <option value="JavaScript">JavaScript</option>
+        <option value="PHP">PHP</option>
+        <option value="Python">Python</option>
+        <option value="Java">Java</option>
+        <option value="Haskel">Haskel</option>
+        <option value="Clojure">Clojure</option>
+        <option value="Prolog">Prolog</option>
+        <option value="Scala">Scala</option>
       </select>
-      <?php if(isset($errors['favoriteLanguage'])) echo '<p class="error">' . $errors['favoriteLanguage'] . '</p>'; ?>
     </div>
     <div class="form-group">
       <label for="bio">Биография:</label>
-      <textarea id="bio" name="bio" rows="5"><?php echo $bio; ?></textarea>
-      <?php if(isset($errors['bio'])) echo '<p class="error">' . $errors['bio'] . '</p>'; ?>
+      <textarea id="bio" name="bio" rows="5" ></textarea>
     </div>
     <div class="form-group">
-      <label><input type="checkbox" id="contract" name="contract" <?php echo $contract ? 'checked' : ''; ?>> С контрактом ознакомлен (а)</label>
-      <?php if(isset($errors['contract'])) echo '<p class="error">' . $errors['contract'] . '</p>'; ?>
+      <label><input type="checkbox" id="contract" name="contract" > С контрактом ознакомлен (а)</label>
     </div>
     <button type="submit">Сохранить</button>
   </form>
