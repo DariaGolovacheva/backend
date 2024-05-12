@@ -77,14 +77,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $form_data = array_fill_keys($all_names, "");
     $form_data['favoriteLanguage'] = [];
     foreach ($_POST as $key => $val) {
-        if (!empty($val)) {
-            if ($key == 'favoriteLanguage') {
-                $form_data[$key] = explode(',', $val);
-            } else {
-                $form_data[$key] = $val;
-            }
+    if (!empty($val)) {
+        // Обрабатываем множественный выбор по-другому
+        if ($key === 'favoriteLanguage') {
+            $form_data[$key] = $val; // Нет необходимости в explode, это уже массив
+        } else {
+            $form_data[$key] = $val;
         }
     }
+}
+
+    
     validate_data($form_data);
     save_to_database($form_data);
     setcookie('cor_data', serialize($form_data), time() + 3600 * 24 * 365);
