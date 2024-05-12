@@ -95,8 +95,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
 
             // Получение идентификаторов языков программирования из таблицы programming_language
-            $stmt = $db->prepare("SELECT id FROM programming_language WHERE name IN (?)");
-            $stmt->execute([$_POST['favoriteLanguage']]);
+            $stmt = $db->prepare("SELECT id FROM programming_language WHERE name IN (" . implode(',', array_fill(0, count($_POST['favoriteLanguage']), '?')) . ")");
+$stmt->execute($_POST['favoriteLanguage']);
+
             $language_ids = $stmt->fetchAll(PDO::FETCH_COLUMN);
 
             // Вставка данных в таблицу application_ability
