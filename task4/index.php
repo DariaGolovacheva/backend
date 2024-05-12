@@ -47,26 +47,31 @@ function save_to_database($data)
     try {
         $db = new PDO("mysql:host=localhost;dbname=$dbname", $user, $pass);
         $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $names_data_for_app = ['name', 'phone', 'email', 'dob', 'gender', 'bio'];
-        $app_req = "INSERT INTO application (" . implode(', ', $names_data_for_app) .
-            ") VALUES (";
-        $data_for_app = [];
-        foreach ($names_data_for_app as $name) {
-            $data_for_app[] = "'" . $data[$name] . "'";
-        }
-        $app_req = $app_req . implode(', ', $data_for_app) . ");";
+        
+        // Вставляем данные заявки
+        $app_req = "INSERT INTO application (name, phone, email, dob, gender, bio) VALUES (:name, :phone, :email, :dob, :gender, :bio)";
         $app_stmt = $db->prepare($app_req);
-        $app_stmt->execute();
+        $app_stmt->execute([
+            ':name' => $data['name'],
+            ':phone' => $data['phone'],
+            ':email' => $data['email'],
+            ':dob' => $data['dob'],
+            ':gender' => $data['gender'],
+            ':bio' => $data['bio']
+        ]);
 
+        // Получаем идентификатор последней вставленной заявки
         $last_app_id = $db->lastInsertId();
-        $link_req = "INSERT INTO app_link_lang (id_app, id_prog_lang) VALUES ";
-        $data_for_link = [];
-        foreach ($data["favoriteLanguage"] as $lang) {
-            $data_for_link[] = "(" . $last_app_id . ", " . $lang . ")";
+
+        // Вставляем связанные данные в таблицу application_ability
+        foreach ($data['favoriteLanguage'] as $lang) {
+            $ability_req = "INSERT INTO application_ability (application_id, programming_language_id) VALUES (:application_id, :programming_language_id)";
+            $ability_stmt = $db->prepare($ability_req);
+            $ability_stmt->execute([
+                ':application_id' => $last_app_id,
+                ':programming_language_id' => $lang
+            ]);
         }
-        $link_req = $link_req . implode(", ", $data_for_link) . ";";
-        $link_stmt = $db->prepare($link_req);
-        $link_stmt->execute();
     } catch (PDOException $e) {
         print_error($e->getMessage());
     }
@@ -77,17 +82,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $form_data = array_fill_keys($all_names, "");
     $form_data['favoriteLanguage'] = [];
     foreach ($_POST as $key => $val) {
-    if (!empty($val)) {
-        // Обрабатываем множественный выбор по-другому
-        if ($key === 'favoriteLanguage') {
-            $form_data[$key] = $val; // Нет необходимости в explode, это уже массив
-        } else {
-            $form_data[$key] = $val;
+        if (!empty($val)) {
+            if ($key === 'favoriteLanguage') {
+                $form_data[$key] = $val; // Нет необходимости в explode, это уже массив
+            } else {
+                $form_data[$key] = $val;
+            }
         }
     }
-}
-
-    
     validate_data($form_data);
     save_to_database($form_data);
     setcookie('cor_data', serialize($form_data), time() + 3600 * 24 * 365);
@@ -194,17 +196,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <div class="form-group">
       <label for="favoriteLanguage">Любимый язык программирования:</label>
       <select id="favoriteLanguage" name="favoriteLanguage[]" multiple >
-        <option value="Pascal">Pascal</option>
-        <option value="C">C</option>
-        <option value="C++">C++</option>
-        <option value="JavaScript">JavaScript</option>
-        <option value="PHP">PHP</option>
-        <option value="Python">Python</option>
-        <option value="Java">Java</option>
-        <option value="Haskel">Haskel</option>
-        <option value="Clojure">Clojure</option>
-        <option value="Prolog">Prolog</option>
-        <option value="Scala">Scala</option>
+        <option value="1">Pascal</option>
+        <option value="2">C</option>
+        <option value="3">C++</option>
+        <option value="4">JavaScript</option>
+        <option value="5">PHP</option>
+        <option value="6">Python</option>
+        <option value="7">Java</option>
+        <option value="8">Haskel</option>
+        <option value="9">Clojure</option>
+        <option value="10">Prolog</option>
+        <option value="11">Scala</option>
       </select>
     </div>
     <div class="form-group">
