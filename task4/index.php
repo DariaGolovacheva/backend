@@ -64,12 +64,12 @@ function save_to_database($data)
         $last_app_id = $db->lastInsertId();
 
         // Вставляем связанные данные в таблицу application_ability
-        foreach ($data['favoriteLanguage'] as $lang) {
+        foreach ($data['favoriteLanguage'] as $lang_id) {
             $ability_req = "INSERT INTO application_ability (application_id, programming_language_id) VALUES (:application_id, :programming_language_id)";
             $ability_stmt = $db->prepare($ability_req);
             $ability_stmt->execute([
                 ':application_id' => $last_app_id,
-                ':programming_language_id' => $lang
+                ':programming_language_id' => $lang_id
             ]);
         }
     } catch (PDOException $e) {
@@ -83,8 +83,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $form_data['favoriteLanguage'] = [];
     foreach ($_POST as $key => $val) {
         if (!empty($val)) {
-            if ($key === 'favoriteLanguage') {
-                $form_data[$key] = $val; // Нет необходимости в explode, это уже массив
+            if ($key == 'favoriteLanguage') {
+                $form_data[$key] = $val;
             } else {
                 $form_data[$key] = $val;
             }
