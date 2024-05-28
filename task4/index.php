@@ -94,14 +94,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     setcookie('data_value', '', 100000);
     $messages[] = '<div class="error">Неправильный формат даты рождения.</div>';
   }
-        if ($errors['ok']) {
+        if ($errors['contract']) {
     // Удаляем куки, указывая время устаревания в прошлом.
     setcookie('ok_error', '', 100000);
     setcookie('ok_value', '', 100000);
     // Выводим сообщение.
     $messages[] = '<div class="error">Необходимо ознакомиться с контрактом.</div>';
   }
-        if ($errors['pol']) {
+        if ($errors['gender']) {
     // Удаляем куки, указывая время устаревания в прошлом.
     setcookie('pol_error', '', 100000);
     setcookie('pol_value', '', 100000);
@@ -109,7 +109,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $messages[] = '<div class="error">Укажите ваш пол.</div>';
   }
 
-    if ($errors['abilities']) {
+    if ($errors['favouriteLanguage']) {
     // Удаляем куки, указывая время устаревания в прошлом.
     setcookie('abilities_error', '', 100000);
     setcookie('abilities_value', '', 100000);
@@ -340,55 +340,76 @@ foreach ($_COOKIE as $key => $value) {
 
 <div class="container">
   <h2>Регистрационная форма</h2>
-  <form id="registrationForm" method="POST" action="">
-    <div class="form-group">
-      <label for="name">ФИО:</label>
-      <input type="text" id="fullName" name="name" >
-    </div>
-    <div class="form-group">
-      <label for="phone">Телефон:</label>
-      <input type="tel" id="phone" name="phone">
-    </div>
-    <div class="form-group">
-      <label for="email">E-mail:</label>
-      <input type="email" id="email" name="email" >
-    </div>
-    <div class="form-group">
-      <label for="dob">Дата рождения:</label>
-      <input type="date" id="dob" name="dob" >
-    </div>
-    <div class="form-group">
-      <label>Пол:</label>
-      <label><input type="radio" name="gender" value="male" checked> Мужской</label>
-      <label><input type="radio" name="gender" value="female"> Женский</label>
-    </div>
-    <div class="form-group">
-      <label for="favoriteLanguage">Любимый язык программирования:</label>
-      <select id="favoriteLanguage" name="favoriteLanguage[]" multiple >
-        <option value="Pascal">Pascal</option>
-        <option value="C">C</option>
-        <option value="C++">C++</option>
-        <option value="JavaScript">JavaScript</option>
-        <option value="PHP">PHP</option>
-        <option value="Python">Python</option>
-        <option value="Java">Java</option>
-        <option value="Haskel">Haskel</option>
-        <option value="Clojure">Clojure</option>
-        <option value="Prolog">Prolog</option>
-        <option value="Scala">Scala</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label for="bio">Биография:</label>
-      <textarea id="bio" name="bio" rows="5" ></textarea>
-    </div>
-    <div class="form-group">
-      <label><input type="checkbox" id="contract" name="contract" > С контрактом ознакомлен (а)</label>
-    </div>
-    <button type="submit">Сохранить</button>
-  </form>
+  <label>
+      ФИО:<br />
+      <input 
+      name="name" style = "width: calc(100% - 18px);
+padding: 8px;
+margin-bottom: 20px;
+border: 1px solid #1c87c9;
+outline: none;"
+      placeholder="Введите ваше ФИО" <?php if ($errors['name'] || $errors['name_struct'] ) {print 'class="error"';} ?> value="<?php print $values['name']; ?>"/>
+    <label>
+    Телефон:<br />
+    <input  style = "width: calc(100% - 18px);
+padding: 8px;
+margin-bottom: 20px;
+border: 1px solid #1c87c9;
+outline: none;" name="phone"
+      type="tel"
+      placeholder="Введите ваш телефон" <?php if ($errors['phone']  || $errors['phone_len'] ) {print 'class="error"';} ?> value="<?php print $values['phone']; ?>"/>
+  </label><br />
+  <label>
+    Email:<br />
+    <input  style = "width: calc(100% - 18px);
+padding: 8px;
+margin-bottom: 20px;
+border: 1px solid #1c87c9;
+outline: none;" name="email"
+      placeholder="Введите вашу почту" <?php if ($errors['email'] || $errors['email_struct']  ) {print 'class="error"';} ?> value="<?php print $values['email']; ?>"/></label>
+      <label>
+        <br />
+        Дата рождения:<br />
+        <input style = "width: calc(100% - 18px);
+padding: 8px;
+margin-bottom: 20px;
+border: 1px solid #1c87c9;
+outline: none;" name="data"
+          type="date" value="<?php echo isset($values['data']) ? $values['data'] : '2000-01-01'; ?>"
+    type="date" <?php if ($errors['data']) {echo 'class="error"';} ?>/>
+      </label>
+Пол:<br />
+<label><input type="radio" 
+    name="pol" value="M" <?php if ($values['gender'] === 'M') {echo 'checked';} ?> <?php if ($errors['gender'] || $errors['gender_struct']) {echo 'class="error"';} ?>/>
+    Мужской</label>
+<label><input type="radio"
+    name="pol" value="W" <?php if ($values['gender'] === 'W') {echo 'checked';} ?> <?php if ($errors['gender'] || $errors['gender_struct']) {echo 'class="error"';} ?>/>
+    Женский</label><br />
+                <br />
+      Любимый язык программирования:
+      <br />
+    </label><br />
+  <select style="width: calc(100% - 18px); padding: 8px; margin-bottom: 20px; border: 1px solid #1c87c9; outline: none;" name="abilities[]" multiple="multiple" <?php if ($errors['favouriteLanguage']) {echo 'class="error"';} 
+$abilities_array = is_array($values['favouriteLanguage']) ? $values['favouriteLanguage'] : [];
+  ?>>
+    <option disabled>Выберите любимый язык пр.</option>
+    <option value="Pascal" <?php if(in_array('Pascal', $abilities_array)) {echo 'selected';}?>>Pascal</option>
+    <option value="C" <?php if(in_array('C', $abilities_array)) {echo 'selected';} ?>>C</option>
+    <option value="C++" <?php if(in_array('C++', $abilities_array)) {echo 'selected';} ?>>C++</option>
+    <option value="JavaScript" <?php if(in_array('JavaScript', $abilities_array)) {echo 'selected';} ?>>JavaScript</option>
+    <option value="PHP" <?php if(in_array('PHP', $abilities_array)) {echo 'selected';} ?>>PHP</option>
+    <option value="Python" <?php if(in_array('Python', $abilities_array)) {echo 'selected';} ?>>Python</option>
+    <option value="Java" <?php if(in_array('Java', $abilities_array)) {echo 'selected';} ?>>Java</option>
+    <option value="Haskel"<?php if (in_array('Haskel', $abilities_array)) { echo ' selected'; } ?>>Haskel</option>
+</select>
+    <label>
+      Биография:<br />
+     <textarea style="width: calc(100% - 18px); padding: 8px; margin-bottom: 20px; border: 1px solid #1c87c9; outline: none;" name="bio" placeholder="<?php print $values['bio']; ?>" <?php if ($errors['bio'] || $errors['bio_len']) { print 'class="error"'; } ?>><?php print $values['bio']; ?></textarea>
+<label><input type="checkbox"
+    name="ok" <?php if ($values['contract'] === 'on') {echo 'checked';} ?> <?php if ($errors['contract']) {echo 'class="error"';} ?>/>    С контрактом ознакомлен(а)</label>
+    <br />
+<button type="submit" href="/">Сохранить</button>
+</form>
 </div>
-
 </body>
 </html>
-
