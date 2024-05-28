@@ -139,7 +139,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
  $values['abilities'] = isset($_COOKIE['abilities_value']) ? unserialize($_COOKIE['abilities_value']) : [];
   $values['bio'] = empty($_COOKIE['bio_value']) ? '' : $_COOKIE['bio_value'];
   $values['ok'] = empty($_COOKIE['ok_value']) ? '' : $_COOKIE['ok_value'];
-
+  }
 // Проверка метода запроса
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
@@ -263,6 +263,8 @@ foreach ($_COOKIE as $key => $value) {
         setcookie($key, '', time() - 3600); // Удаление Cookie
     }
 }
+  }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
