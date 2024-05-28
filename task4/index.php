@@ -91,7 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $db = new PDO("mysql:host=localhost;dbname=$dbname", $user, $pass);
         $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        try {
+             try {
             // Вставка данных в таблицу application
             $stmt = $db->prepare("INSERT INTO application (name, email, phone, dob, gender, bio, contract) VALUES (?, ?, ?, ?, ?, ?, ?)");
             $stmt->execute([$name, $email, $phone, $dob, $gender, $bio, $contract]);
@@ -117,20 +117,10 @@ $stmt->execute($_POST['favoriteLanguage']);
                 $stmt->execute([$application_id, $language_id]);
             }
 
-    
-    }
-        // Выводим сообщение об успешном сохранении
-        echo 'Данные успешно сохранены в базе данных!';
-    } else {
-        // Если есть ошибки, сохраняем их в Cookies
-        $cookieExpiration = 0; // до конца сессии
-        foreach ($errors as $key => $value) {
-            setcookie($key . '_error', $value, $cookieExpiration);
+            echo 'Данные успешно сохранены в базе данных!';
+        } catch(PDOException $e) {
+            echo 'Ошибка выполнения запроса: ' . $e->getMessage();
         }
-
-        // Перенаправляем обратно на форму с GET запросом
-        header('Location: ' . $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING']);
-        exit;
     }
 }
 
