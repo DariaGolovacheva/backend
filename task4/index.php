@@ -10,56 +10,187 @@ function validate_phone($phone) {
     return preg_match("/^\+?\d{1,3}\s?\(?\d{3}\)?[-\s]?\d{3}[-\s]?\d{2}[-\s]?\d{2}$/", $phone);
 }
 
-$errors = [];
+if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+  // Массив для временного хранения сообщений пользователю.
+  $messages = array();
+
+  // В суперглобальном массиве $_COOKIE PHP хранит все имена и значения куки текущего запроса.
+  // Выдаем сообщение об успешном сохранении.
+  if (!empty($_COOKIE['save'])) {
+    // Удаляем куку, указывая время устаревания в прошлом.
+    setcookie('save', '', 100000);
+  // Складываем признак ошибок в массив.
+  $errors = array();
+  $errors['name'] = !empty($_COOKIE['name_error']);
+  $errors['name_len'] = !empty($_COOKIE['name_error_len']);
+  $errors['name_struct'] = !empty($_COOKIE['name_error_struct']);
+  $errors['phone'] = !empty($_COOKIE['phone_error']);
+  $errors['phone_struct'] = !empty($_COOKIE['phone_error_struct']);
+  $errors['phone_len'] = !empty($_COOKIE['phone_error_len']);
+  $errors['email'] = !empty($_COOKIE['email_error']);
+  $errors['email_struct'] = !empty($_COOKIE['email_error_struct']);
+  $errors['email_len'] = !empty($_COOKIE['email_error_len']);
+  $errors['data'] = !empty($_COOKIE['data_error']);
+  $errors['data_struct'] = !empty($_COOKIE['data_error_struct']);
+  $errors['pol'] = !empty($_COOKIE['pol_error']);
+  $errors['pol_struct'] = !empty($_COOKIE['pol_error_struct']);
+  $errors['ok'] = !empty($_COOKIE['ok_error']);
+  $errors['abilities'] = !empty($_COOKIE['abilities_error']);
+  $errors['abilities_struct'] = !empty($_COOKIE['abilities_error_struct']);
+  $errors['bio'] = !empty($_COOKIE['bio_error']);
+  $errors['bio_len'] = !empty($_COOKIE['bio_error_len']);
+  
+  // TODO: аналогично все поля.
+
+  // Выдаем сообщения об ошибках.
+  if ($errors['name']) {
+    // Удаляем куки, указывая время устаревания в прошлом.
+    setcookie('name_error', '', 100000);
+    setcookie('name_value', '', 100000);
+    // Выводим сообщение.
+    $messages[] = '<div class="error"> Введите ФИO.</div>';
+  }
+
+    if($errors['name_struct']) {
+    setcookie('name_error_struct', '', 100000);
+    setcookie('name_value', '', 100000);
+    $messages[] = '<div class="error">Неправильный формат ФИО.</div>';
+  }
+    if ($errors['phone']) {
+    // Удаляем куки, указывая время устаревания в прошлом.
+    setcookie('phone_error', '', 100000);
+    setcookie('phone_value', '', 100000);
+    // Выводим сообщение.
+    $messages[] = '<div class="error">Введите номер телефона.</div>';
+  }
+  if($errors['phone_len']) {
+    setcookie('phone_error_len', '', 100000);
+    setcookie('phone_value', '', 100000);
+    $messages[] = '<div class="error">Неправильный формат номера телефона.</div>';
+  }
+  
+    if ($errors['email']) {
+    // Удаляем куки, указывая время устаревания в прошлом.
+    setcookie('email_error', '', 100000);
+    setcookie('email_value', '', 100000);
+    // Выводим сообщение.
+    $messages[] = '<div class="error">Введите email.</div>';
+  }
+
+    if($errors['email_struct']) {
+    setcookie('email_error_struct', '', 100000);
+    setcookie('email_value', '', 100000);
+    $messages[] = '<div class="error">Неправильный формат email.</div>';
+  }
+      if ($errors['data']) {
+    // Удаляем куки, указывая время устаревания в прошлом.
+    setcookie('data_error', '', 100000);
+    setcookie('data_value', '', 100000);
+    // Выводим сообщение.
+    $messages[] = '<div class="error">Введите дату рождения.</div>';
+  }
+  if($errors['data_struct']) {
+    setcookie('data_error_struct', '', 100000);
+    setcookie('data_value', '', 100000);
+    $messages[] = '<div class="error">Неправильный формат даты рождения.</div>';
+  }
+        if ($errors['ok']) {
+    // Удаляем куки, указывая время устаревания в прошлом.
+    setcookie('ok_error', '', 100000);
+    setcookie('ok_value', '', 100000);
+    // Выводим сообщение.
+    $messages[] = '<div class="error">Необходимо ознакомиться с контрактом.</div>';
+  }
+        if ($errors['pol']) {
+    // Удаляем куки, указывая время устаревания в прошлом.
+    setcookie('pol_error', '', 100000);
+    setcookie('pol_value', '', 100000);
+    // Выводим сообщение.
+    $messages[] = '<div class="error">Укажите ваш пол.</div>';
+  }
+
+    if ($errors['abilities']) {
+    // Удаляем куки, указывая время устаревания в прошлом.
+    setcookie('abilities_error', '', 100000);
+    setcookie('abilities_value', '', 100000);
+    // Выводим сообщение.
+    $messages[] = '<div class="error">Выберите хотя бы один язык программирования.</div>';
+  }
+ 
+      if ($errors['bio']) {
+    // Удаляем куки, указывая время устаревания в прошлом.
+    setcookie('bio_error', '', 100000);
+    setcookie('bio_value', '', 100000);
+    // Выводим сообщение.
+    $messages[] = '<div class="error">Введите вашу биографию.</div>';
+  }
+
+  
+  
+  
+  
+  // Складываем предыдущие значения полей в массив, если есть.
+  $values = array();
+  $values['name'] = empty($_COOKIE['name_value']) ? '' : $_COOKIE['name_value'];
+  $values['phone'] = empty($_COOKIE['phone_value']) ? '' : $_COOKIE['phone_value'];
+  $values['email'] = empty($_COOKIE['email_value']) ? '' : $_COOKIE['email_value'];
+  $values['data'] = empty($_COOKIE['data_value']) ? '' : $_COOKIE['data_value'];
+  $values['pol'] = empty($_COOKIE['pol_value']) ? '' : $_COOKIE['pol_value'];
+ $values['abilities'] = isset($_COOKIE['abilities_value']) ? unserialize($_COOKIE['abilities_value']) : [];
+  $values['bio'] = empty($_COOKIE['bio_value']) ? '' : $_COOKIE['bio_value'];
+  $values['ok'] = empty($_COOKIE['ok_value']) ? '' : $_COOKIE['ok_value'];
 
 // Проверка метода запроса
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+      $errors = FALSE;
     // Валидация ФИО
     if (empty($_POST['name'])) {
-        $errors['name'] = 'Введите ФИО.';
+        setcookie('name_error', '1', time() + 24 * 60 * 60);
+          $errors = true;
     } elseif (!preg_match('/^[a-zA-Zа-яА-Я\s]{1,150}$/', $_POST['name'])) {
-        $errors['name'] = 'Неправильный формат ФИО.';
+       
     }
 
     // Валидация email
     if (empty($_POST['email'])) {
-        $errors['email'] = 'Введите email.';
+       
     } elseif (!validate_email($_POST['email'])) {
-        $errors['email'] = 'Неправильный формат email.';
+      
     }
 
     // Валидация телефона
     if (empty($_POST['phone'])) {
-        $errors['phone'] = 'Введите номер телефона.';
+       
     } elseif (!validate_phone($_POST['phone'])) {
-        $errors['phone'] = 'Неправильный формат номера телефона.';
+
     }
 
     // Валидация даты рождения
     if (empty($_POST['dob'])) {
-        $errors['dob'] = 'Введите дату рождения.';
+     
     } elseif (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $_POST['dob'])) {
-        $errors['dob'] = 'Неправильный формат даты рождения.';
+       
     }
 
     // Валидация пола
     if (empty($_POST['gender'])) {
-        $errors['gender'] = 'Укажите ваш пол.';
+        
     }
 
     // Валидация биографии
     if (empty($_POST['bio'])) {
-        $errors['bio'] = 'Введите вашу биографию.';
+       
     }
 
     // Валидация контракта
     if (!isset($_POST['contract'])) {
-        $errors['contract'] = 'Необходимо ознакомиться с контрактом.';
+      
     }
 
     // Валидация выбранного языка программирования
     if (empty($_POST['favoriteLanguage'])) {
-        $errors['favoriteLanguage'] = 'Выберите хотя бы один язык программирования.';
+      
     }
 
     if (empty($errors)) {
@@ -73,8 +204,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $contract = isset($_POST['contract']) ? 1 : 0;
         $favoriteLanguages = implode(', ', $_POST['favoriteLanguage']); // Преобразуем массив в строку
 
-        // Здесь ваш код для сохранения данных в базе данных
-
+        
         // Сохранение значений в Cookies
         $cookieExpiration = time() + (365 * 24 * 60 * 60); // На год
         setcookie('name', $name, $cookieExpiration);
@@ -83,7 +213,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         setcookie('dob', $dob, $cookieExpiration);
         setcookie('gender', $gender, $cookieExpiration);
         setcookie('bio', $bio, $cookieExpiration);
-        setcookie('favoriteLanguages', $favoriteLanguages, $cookieExpiration);
+        setcookie('favoriteLanguages',  serialize($favoriteLanguages), $cookieExpiration);
         // Подключение к базе данных
         $user = 'u67498';
         $pass = '2427367';
