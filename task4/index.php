@@ -84,7 +84,41 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         setcookie('gender', $gender, $cookieExpiration);
         setcookie('bio', $bio, $cookieExpiration);
         setcookie('favoriteLanguages', $favoriteLanguages, $cookieExpiration);
+        // Подключение к базе данных
+        $user = 'u67498';
+        $pass = '2427367';
+        $dbname = 'u67498';
+        $db = new PDO("mysql:host=localhost;dbname=$dbname", $user, $pass);
+        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
+        try {
+            // Вставка данных в таблицу application
+            $stmt = $db->prepare("INSERT INTO application (name, email, phone, dob, gender, bio, contract) VALUES (?, ?, ?, ?, ?, ?, ?)");
+            $stmt->execute([$name, $email, $phone, $dob, $gender, $bio, $contract]);
+            
+            // Получение ID вставленной записи
+            $application_id = $db->lastInsertId();
+
+            // Сохранение выбранных языков программирования в таблицу programming_language (если они еще не существуют)
+            foreach ($_POST['favoriteLanguage'] as $language) {
+                $stmt = $db->prepare("INSERT IGNORE INTO programming_language (name) VALUES (?)");
+                $stmt->execute([$language]);
+            }
+
+            // Получение идентификаторов языков программирования из таблицы programming_language
+            $stmt = $db->prepare("SELECT id FROM programming_language WHERE name IN (" . implode(',', array_fill(0, count($_POST['favoriteLanguage']), '?')) . ")");
+$stmt->execute($_POST['favoriteLanguage']);
+
+            $language_ids = $stmt->fetchAll(PDO::FETCH_COLUMN);
+
+            // Вставка данных в таблицу application_ability
+            foreach ($language_ids as $language_id) {
+                $stmt = $db->prepare("INSERT INTO application_ability (application_id, language_id) VALUES (?, ?)");
+                $stmt->execute([$application_id, $language_id]);
+            }
+
+    
+    }
         // Выводим сообщение об успешном сохранении
         echo 'Данные успешно сохранены в базе данных!';
     } else {
