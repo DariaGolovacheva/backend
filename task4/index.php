@@ -109,6 +109,7 @@ foreach ($_COOKIE as $key => $value) {
         setcookie($key, '', time() - 3600); // Удаление Cookie
     }
 }
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
