@@ -316,9 +316,12 @@ if (empty($_POST['bio'])) {
   }
 
   // Сохранение в базу данных.
-include('../db.php');
-$db = new PDO('mysql:host=localhost;dbname=' . $db_name, $db_login, $db_pass,
-  [PDO::ATTR_PERSISTENT => true, PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]); // Заменить test на имя БД, совпадает с логином uXXXXX
+ // Подключение к базе данных
+        $user = 'u67498';
+        $pass = '2427367';
+        $dbname = 'u67498';
+        $db = new PDO("mysql:host=localhost;dbname=$dbname", $user, $pass);
+        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 // Подготовленный запрос. Не именованные метки.
 try {
 $stmt = $db->prepare("INSERT INTO application (name, phone, email, data, pol, bio, ok) VALUES (?, ?, ?, ?, ?, ?, ?)");
