@@ -1,9 +1,4 @@
 <?php
-/**
- * Реализовать возможность входа с паролем и логином с использованием
- * сессии для изменения отправленных данных в предыдущей задаче,
- * пароль и логин генерируются автоматически при первоначальной отправке формы.
- */
 
 header('Content-Type: text/html; charset=UTF-8');
 
@@ -212,12 +207,7 @@ if (empty($_POST['language'])) {
     setcookie('language_value', $languageString, time() + 30 * 24 * 60 * 60);
 }
 
- // if (empty($_POST['language'])) {
- //      setcookie('language_error', '1', time() + 24 * 60 * 60);
- //      $errors = TRUE;
- //  } else {
- //      setcookie('language_value', $_POST['language'], time() + 30 * 24 * 60 * 60);
- //  }
+
 
   if (empty($_POST['biography']) || strlen($_POST['biography']) > 256) {
       setcookie('biography_error', '1', time() + 24 * 60 * 60);
@@ -233,10 +223,7 @@ if (empty($_POST['language'])) {
       setcookie('contract_agreement_value', $_POST['contract_agreement'], time() + 30 * 24 * 60 * 60);
   }
 
-// *************
-// TODO: тут необходимо проверить правильность заполнения всех остальных полей.
-// Сохранить в Cookie признаки ошибок и значения полей.
-// *************
+
 
   if ($errors) {
     // При наличии ошибок перезагружаем страницу и завершаем работу скрипта.
