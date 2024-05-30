@@ -154,17 +154,10 @@
                     <option value="Scala">Scala</option>
                 </select>
                 </div>
-            <div class="form-group <?php echo ($errors['bio']) ? 'has-error' : ''; ?>">
-    <label for="bio">Your biography</label>
-    <textarea required id="bio" name="bio"><?php echo htmlspecialchars($values['bio']); ?></textarea>
-    <?php if ($errors['bio']) { echo '<span class="error">Please provide your biography.</span>'; } ?>
-</div>
-            <div class="form-group">
-                <input required type="checkbox" id="contract" name="contract" <?php if ($errors['contract']) {print 'class="error"';} ?> value="Yes" <?php if ($values['contract'] == 'Yes') {print 'checked';} ?>>
-                <label for="contract">I agree with the contract.</label>
-            </div>
-            <div class="form-group">
-                <button type="submit">Submit</button>
-            </div>
-        </form>
-    </div>
+           <textarea required style="margin-top: 20px" name="biography" <?php if ($errors['biography']) {print 'class="error"';} ?> placeholder="Your biography"><?php print htmlspecialchars($values['biography']); ?></textarea>
+
+  <p><input required type="checkbox" name="contract_agreement" <?php if ($errors['contract_agreement']) {print 'class="error"';} ?> value="Yes" <?php if ($values['contract_agreement'] == 'Yes') {print 'checked';} ?>>I agree with the contract.</p>
+  <input required type="submit" value="Submit">
+</form>
+</body>
+</html>
