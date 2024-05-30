@@ -142,8 +142,8 @@
 </div>
             </div>
             <div class="form-group">
-                <label for="language">Languages</label>
-                <select id="language" name="language[]" multiple <?php if ($errors['language']) {print 'class="error"';} ?>>
+                <label for="favoriteLanguage">Languages</label>
+                <select id="favoriteLanguage" name="favoriteLanguage[]" multiple <?php if ($errors['favoriteLanguage']) {print 'class="error"';} ?>>
                     <option value="Pascal">Pascal</option>
                     <option value="C">C</option>
                     <option value="C++">C++</option>
