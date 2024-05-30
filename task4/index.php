@@ -128,7 +128,7 @@ if (empty($_POST['language'])) {
       $errors = TRUE;
     } else {
         // Преобразование массива в строку для сохранения в cookie
-        $favoriteLanguage_value = implode(',', $_POST['language']);
+        $language_value = implode(',', $_POST['language']);
         setcookie('language_value', $language_value, time() + 30 * 24 * 60 * 60);
     }
 
