@@ -86,7 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         setcookie('favoriteLanguage_error', '1', time() + 24 * 60 * 60);
         $errors = TRUE;
     } else {
-        $language_value = implode(',', $_POST['favoriteLanguagee']);
+        $language_value = implode(',', $_POST['favoriteLanguage']);
         setcookie('favoriteLanguage_value', $favoriteLanguage_value, time() + 30 * 24 * 60 * 60);
     }
 
