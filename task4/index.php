@@ -87,7 +87,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $errors = TRUE;
     } else {
         $language_value = implode(',', $_POST['favoriteLanguage']);
-        setcookie('favoriteLanguage_value', $favoriteLanguage_value, time() + 30 * 24 * 60 * 60);
+        setcookie('favoriteLanguage_value', $language_value, time() + 30 * 24 * 60 * 60);
     }
 
     if (empty($_POST['bio']) || strlen($_POST['bio']) > 256) {
