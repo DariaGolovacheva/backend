@@ -179,9 +179,9 @@ if (empty($_POST['favoriteLanguage'])) {
         ':bio' => $_POST['bio']
       ]);
 
-      $personId = $db->lastInsertId();
+      $application_id = $db->lastInsertId();
 
-      $stmt = $db->prepare("INSERT INTO application_ability (application_id, language_id) VALUES (:application_id, :id)");
+      $stmt = $db->prepare("INSERT INTO application_ability (application_id, id) VALUES (:application_id, :id)");
 
       foreach ($_POST['favoriteLanguage'] as $selectedOption) {
         $languageStmt = $db->prepare("SELECT id FROM programming_language WHERE name = :name");
