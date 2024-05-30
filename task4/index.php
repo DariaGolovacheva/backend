@@ -184,9 +184,9 @@ if (empty($_POST['favoriteLanguage'])) {
       $stmt = $db->prepare("INSERT INTO application_ability (application_id, language_id) VALUES (:application_id, :language_id)");
 
       foreach ($_POST['favoriteLanguage'] as $selectedOption) {
-        $favoriteLanguageStmt = $db->prepare("SELECT language_id FROM programming_language WHERE title = :title");
-        $favoriteLanguageStmt->execute([':title' => $selectedOption]);
-        $favoriteLanguage = $languageStmt->fetch(PDO::FETCH_ASSOC);
+        $languageStmt = $db->prepare("SELECT language_id FROM programming_language WHERE title = :title");
+        $languageStmt->execute([':title' => $selectedOption]);
+        $language = $languageStmt->fetch(PDO::FETCH_ASSOC);
 
         $stmt->execute([
           ':application_id' => $application_id,
