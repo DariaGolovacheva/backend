@@ -108,9 +108,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         header('Location: index.php');
         exit();
     } else {
-        foreach (array_keys($errors) as $field) {setcookie($field . '_error', '', 100000);
+        foreach ($errors as $field=>$isError) {if($isError){setcookie($field . '_error', '', 100000);
         }
     }
+    }
+
+
 
     $user = USER;
     $pass = PASSWORD;
