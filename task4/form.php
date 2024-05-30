@@ -130,7 +130,7 @@
                 <label for="dob">Date of birth</label>
                 <input required type="date" id="dob" name="dob" <?php if ($errors['dob']) {print 'class="error"';} ?> value="<?php print $values['dob']; ?>">
 
-Daria Golovacheva, [30.05.2024 18:01]
+
 </div>
             <div class="form-group">
                 <label>Gender</label>
