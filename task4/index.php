@@ -132,17 +132,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
         $applicationId = $db->lastInsertId();
 
-        $stmt = $db->prepare("INSERT INTO application_ability (applicationId, languageId) VALUES (:applicationId, :languageId)");
+        $stmt = $db->prepare("INSERT INTO application_ability (application_Id, language_Id) VALUES (:application_Id, :language_Id)");
 
-        foreach ($_POST['language'] as $selectedOption) {
-            $languageStmt = $db->prepare("SELECT id FROM language WHERE title = :title"); // Assuming the primary key is 'id'
+        foreach ($_POST['favoriteLanguage'] as $selectedOption) {
+            $languageStmt = $db->prepare("SELECT id FROM programming_language WHERE title = :title"); // Assuming the primary key is 'id'
             $languageStmt->execute([':title' => $selectedOption]);
             $language = $languageStmt->fetch(PDO::FETCH_ASSOC);
 
             if ($language) {
                 $stmt->execute([
-                    ':applicationId' => $applicationId,
-                    ':languageId' => $language['id']
+                    ':application_Id' => $application_Id,
+                    ':language_Id' => $language['id']
                 ]);
             }
         }
