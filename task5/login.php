@@ -1,6 +1,11 @@
 <?php
+
+define("user", "u67498");
+define("password", "2427367");
+define("dbname", "u67498");
+
 /**
- * Файл login.php для неавторизованного пользователя выводит форму логина.
+ * Файл login.php для не авторизованного пользователя выводит форму логина.
  * При отправке формы проверяет логин/пароль и создает сессию,
  * записывает в нее логин и id пользователя.
  * После авторизации пользователь перенаправляется на главную страницу
@@ -11,57 +16,95 @@
 // файл login.php должен быть в кодировке UTF-8 без BOM.
 header('Content-Type: text/html; charset=UTF-8');
 
-// Фиксируем, была ли начата сессия.
+// В суперглобальном массиве $_SESSION хранятся переменные сессии.
+// Будем сохранять туда логин после успешной авторизации.
 $session_started = false;
-
-// Если сессия уже существует, значит, пользователь уже авторизован.
-if ($_COOKIE[session_name()] && session_start()) {
+if (isset($_COOKIE[session_name()]) && session_start()) {
   $session_started = true;
   if (!empty($_SESSION['login'])) {
-    // Если пользователь уже авторизован, перенаправляем его на главную страницу.
+    // Если есть логин в сессии, то пользователь уже авторизован.
+    // TODO: Сделать выход (окончание сессии вызовом session_destroy()
+    //при нажатии на кнопку Выход).
+    if (isset($_POST['logout'])) {
+        session_destroy();
+        header('Location: ./');
+        exit();
+    }
+
+    // Делаем перенаправление на форму.
     header('Location: ./');
     exit();
   }
 }
 
-// Если запрос пришел методом GET, выводим форму логина.
+// В суперглобальном массиве $_SERVER PHP сохраняет некторые заголовки запроса HTTP
+// и другие сведения о клиненте и сервере, например метод текущего запроса $_SERVER['REQUEST_METHOD'].
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 ?>
 
+<body style="display: flex; flex-direction: column; justify-content: center; align-items: center">
+
+<h1>
+  Login
+</h1>
+
 <form action="" method="post">
-  <input name="login" placeholder="Логин" value="u67498"/>
-  <input name="pass" type="password" placeholder="Пароль" value="2427367"/>
-  <input type="submit" value="Войти"/>
+  <input name="login" />
+  <input name="pass" />
+  <input type="submit" value="Войти" />
 </form>
 
+</body>
+
+
+
+
 <?php
-} elseif ($_SERVER['REQUEST_METHOD'] == 'POST') {
-  // Если запрос пришел методом POST, обрабатываем логин и пароль.
-
-  // Фиктивные данные для проверки.
-  $correct_login = 'u67498';
-  $correct_password = '2427367';
-
-  $login = $_POST['login'];
-  $password = $_POST['pass'];
-
-  // Проверяем соответствие введенных данных фиктивным данным.
-  if ($login === $correct_login && $password === $correct_password) {
-    // Если логин и пароль верные, авторизуем пользователя.
-    if (!$session_started) {
-      session_start();
-    }
-
-    // Записываем логин и ID пользователя в сессию.
-    $_SESSION['login'] = $login;
-    $_SESSION['uid'] = 123; // Замените на реальный ID пользователя из базы данных.
-
-    // Перенаправляем пользователя на главную страницу.
-    header('Location: ./');
-    exit();
-  } else {
-    // Если логин и/или пароль неверные, выводим сообщение об ошибке.
-    echo "Неверный логин или пароль.";
-  }
 }
-?>
+// Иначе, если запрос был методом POST, т.е. нужно сделать авторизацию с записью логина в сессию.
+else {
+      if (!$session_started) {
+        session_start();
+      }
+
+      $user = user;
+      $pass = password;
+      $db = new PDO('mysql:host=localhost;dbname=' . dbname, $user, $pass, [
+        PDO::ATTR_PERSISTENT => true,
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+      ]);
+
+      try {
+        // Проверяем, есть ли пользователь с таким логином и паролем
+        $login = $_POST['login'];
+        $password = $_POST['pass'];
+        $md5Pass = md5($password);
+
+        $stmt = $db->prepare("SELECT personId FROM personAuthentificationData WHERE login = :login AND pass = :pass");
+        $stmt->execute([':login' => $login, ':pass' => $md5Pass]);
+        $authData = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($authData) {
+          // Пользователь существует, сохраняем данные в сессию
+          $_SESSION['login'] = $login;
+          $_SESSION['uid'] = $authData['personId'];
+
+          // Делаем перенаправление на главную страницу
+          header('Location: ./');
+          exit();
+        } else {
+          // Пользователь не найден, выдаем ошибку
+          echo "Неверный логин или пароль.";
+          echo $md5Pass;
+          exit();
+        }
+      } catch(PDOException $e){
+        print('Error : ' . $e->getMessage());
+        exit();
+      }
+
+
+
+  // Делаем перенаправление.
+  header('Location: ./');
+}
