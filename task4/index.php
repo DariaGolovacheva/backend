@@ -190,7 +190,7 @@ if (empty($_POST['favoriteLanguage'])) {
 
         $stmt->execute([
           ':application_id' => $application_id,
-          ':language_id' => $language['language_id']
+          ':language_id' => $language['id']
         ]);
       }
     }
