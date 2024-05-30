@@ -132,14 +132,14 @@
 
 
 </div>
-            <div class="form-group">
-                <label>Gender</label>
-                <div>
-                    <input required type="radio" id="gender_m" name="gender" <?php if ($errors['gender']) {print 'class="error"';} ?> value="M" <?php if ($values['gender'] == 'M') {print 'checked';} ?>>
-                    <label for="gender_m">Male</label>
-                    <input required type="radio" id="gender_f" name="gender" <?php if ($errors['gender']) {print 'class="error"';} ?> value="F" <?php if ($values['gender'] == 'F') {print 'checked';} ?>>
-                    <label for="gender_f">Female</label>
-                </div>
+           <div class="form-group <?php echo isset($_COOKIE['gender_error']) ? 'has-error' : ''; ?>">
+    <label>Пол:</label><br>
+    <input type="radio" id="male" name="gender" value="male" <?php echo (isset($_COOKIE['gender']) && $_COOKIE['gender'] == 'male') ? 'checked' : ''; ?>>
+    <label for="male">Мужской</label>
+    <input type="radio" id="female" name="gender" value="female" <?php echo (isset($_COOKIE['gender']) && $_COOKIE['gender'] == 'female') ? 'checked' : ''; ?>>
+    <label for="female">Женский</label>
+    <?php echo isset($_COOKIE['gender_error']) ? '<span class="error">' . $_COOKIE['gender_error'] . '</span>' : ''; ?>
+</div>
             </div>
             <div class="form-group">
                 <label for="language">Languages</label>
