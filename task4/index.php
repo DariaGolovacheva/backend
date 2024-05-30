@@ -130,7 +130,7 @@ if (empty($_POST['favoriteLanguage'])) {
     } else {
         // Преобразование массива в строку для сохранения в cookie
         $favoriteLanguage_value = implode(',', $_POST['favoriteLanguage']);
-        setcookie('favoriteLanguage_value', $favoriteLanguagee_value, time() + 30 * 24 * 60 * 60);
+        setcookie('favoriteLanguage_value', $favoriteLanguage_value, time() + 30 * 24 * 60 * 60);
     }
 
         if (empty($_POST['bio']) || strlen($_POST['bio']) > 256) {
