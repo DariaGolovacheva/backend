@@ -1,83 +1,96 @@
 <html>
 <head>
   <style>
-    body {
-  font-family: 'Roboto', sans-serif;
-  background-color: #f9f9f9;
-  color: #333;
-  margin: 0;
-  padding: 0;
-}
+   body {
+        font-family: Arial, sans-serif;
+        background-color: #000; /* Черный фон */
+        color: #fff; /* Белый цвет текста */
+        margin: 0;
+        padding: 0;
+      }
+      
+      .container {
+        max-width: 600px;
+        margin: 50px auto;
+        background-color: #222; /* Черный цвет фона контейнера */
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      }
+      
+      h2 {
+        text-align: center;
+        color: #FFA500; /* Оранжевый цвет заголовка */
+      }
+      
+      .form-group {
+        margin-bottom: 20px;
+      }
+      
+      label {
+        font-weight: bold;
+        color: #fff; /* Белый цвет текста меток */
+      }
+      
+      input[type="text"],
+      input[type="tel"],
+      input[type="email"],
+      input[type="date"],
+      textarea,
+      select {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+        background-color: #333; /* Черный цвет поля ввода */
+        color: #fff; /* Белый цвет текста в полях ввода */
+      }
+      
+      input[type="checkbox"],
+      input[type="radio"] {
+        margin-right: 5px;
+      }
 
-.container {
-  max-width: 800px;
-  margin: 50px auto;
-  background-color: #fff;
-  padding: 40px;
-  border-radius: 12px;
-  box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-}
+      input[type="radio"] {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        border: 2px solid #FFA500; /* Оранжевая рамка */
+        outline: none;
+        cursor: pointer;
+      }
 
-h2 {
-  text-align: center;
-  color: #007bff;
-  margin-bottom: 30px;
-}
-
-.form-group {
-  margin-bottom: 40px;
-}
-
-label {
-  font-weight: bold;
-  color: #555;
-  margin-bottom: 8px;
-  display: block;
-}
-
-input[type="text"],
-input[type="tel"],
-input[type="email"],
-input[type="date"],
-textarea,
-select {
-  width: calc(100% - 16px);
-  padding: 14px;
-  border: 2px solid #ddd;
-  border-radius: 8px;
-  box-sizing: border-box;
-  background-color: #f5f5f5;
-  color: #333;
-  transition: border-color 0.3s ease;
-}
-
-input[type="text"]:focus,
-input[type="tel"]:focus,
-input[type="email"]:focus,
-input[type="date"]:focus,
-textarea:focus,
-select:focus {
-  border-color: #007bff;
-}
-
-input[type="checkbox"] {
-  margin-right: 10px;
-}
-
-button {
-  background-color: #28a745;
-  color: #fff;
-  padding: 16px 32px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: background-color 0.3s ease;
-}
-
-button:hover {
-  background-color: #218838;
-}
+      input[type="radio"]:checked {
+        background-color: #FFA500; /* Оранжевый цвет заполнения при выборе */
+      }
+      
+      button {
+        background-color: #FFA500; /* Оранжевый цвет кнопки */
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      
+      button:hover {
+        background-color: #FF8C00; /* Темно-оранжевый цвет кнопки при наведении */
+      }
+      
+      .error {
+        color: #ff0000; /* Красный цвет текста ошибки */
+        font-size: 12px;
+      }
+      
+      .has-error input,
+      .has-error select,
+      .has-error textarea {
+        border-color: #ff0000; /* Красная рамка вокруг поля ввода с ошибкой */
+      }
     /* Сообщения об ошибках и поля с ошибками выводим с красным бордюром. */
     .error {
       border: 2px solid red;
