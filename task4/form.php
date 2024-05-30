@@ -156,7 +156,8 @@
             </div>
             <div class="form-group">
                 <label for="bio">Your biography</label>
-                <textarea required id="bio" name="bio" <?php if ($errors['bio']) {print 'class="error"';} ?>><?php print htmlspecialchars($values['bio']); ?></textarea>
+                <textarea required style="margin-top: 20px" name="biography" <?php if ($errors['biography']) {print 'class="error"';} ?> placeholder="Your biography"><?php print htmlspecialchars($values['biography']); ?></textarea>
+
             </div>
             <div class="form-group">
                 <input required type="checkbox" id="contract" name="contract" <?php if ($errors['contract']) {print 'class="error"';} ?> value="Yes" <?php if ($values['contract'] == 'Yes') {print 'checked';} ?>>
