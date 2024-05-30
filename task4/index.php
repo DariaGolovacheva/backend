@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         'email' => !empty($_COOKIE['email_error']),
         'dob' => !empty($_COOKIE['dob_error']),
         'gender' => !empty($_COOKIE['gender_error']),
-        'language' => !empty($_COOKIE['language_error']),
+        'favoriteLanguage' => !empty($_COOKIE['favoriteLanguage_error']),
         'bio' => !empty($_COOKIE['bio_error']),
         'contract' => !empty($_COOKIE['contract_error']),
     );
@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         'email' => empty($_COOKIE['email_value']) ? '' : $_COOKIE['email_value'],
         'dob' => empty($_COOKIE['dob_value']) ? '' : $_COOKIE['dob_value'],
         'gender' => empty($_COOKIE['gender_value']) ? '' : $_COOKIE['gender_value'],
-        'language' => empty($_COOKIE['language_value']) ? '' : $_COOKIE['language_value'],
+        'favoriteLanguage' => empty($_COOKIE['favoriteLanguage_value']) ? '' : $_COOKIE['favoriteLanguage_value'],
         'bio' => empty($_COOKIE['bio_value']) ? '' : $_COOKIE['bio_value'],
         'contract' => empty($_COOKIE['contract_value']) ? '' : $_COOKIE['contract_value'],
     );
@@ -82,12 +82,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         setcookie('gender_value', $_POST['gender'], time() + 30 * 24 * 60 * 60);
     }
 
-    if (empty($_POST['language'])) {
-        setcookie('language_error', '1', time() + 24 * 60 * 60);
+    if (empty($_POST['favoriteLanguage'])) {
+        setcookie('favoriteLanguage_error', '1', time() + 24 * 60 * 60);
         $errors = TRUE;
     } else {
-        $language_value = implode(',', $_POST['language']);
-        setcookie('language_value', $language_value, time() + 30 * 24 * 60 * 60);
+        $language_value = implode(',', $_POST['favoriteLanguagee']);
+        setcookie('favoriteLanguage_value', $language_value, time() + 30 * 24 * 60 * 60);
     }
 
     if (empty($_POST['bio']) || strlen($_POST['bio']) > 256) {
