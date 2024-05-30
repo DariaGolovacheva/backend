@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,149 +7,168 @@
     <title>Регистрационная форма</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #000; /* Черный фон */
-            color: #fff; /* Белый цвет текста */
+            font-family: 'Roboto', sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
             margin: 0;
             padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh; /* Занимает всю высоту экрана */
         }
-        
+
         .container {
-            max-width: 600px;
-            background-color: #222; /* Черный цвет фона контейнера */
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            max-width: 800px;
+            margin: 50px auto;
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
         }
-        
+
         h2 {
             text-align: center;
-            color: #FFA500; /* Оранжевый цвет заголовка */
+            color: #007bff;
+            margin-bottom: 30px;
         }
-        
+
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 40px;
         }
-        
+
         label {
             font-weight: bold;
-            color: #fff; /* Белый цвет текста меток */
+            color: #555;
+            margin-bottom: 8px;
+            display: block;
         }
-        
+
         input[type="text"],
         input[type="tel"],
         input[type="email"],
         input[type="date"],
         textarea,
         select {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
+            width: calc(100% - 16px);
+            padding: 14px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
             box-sizing: border-box;
-            background-color: #333; /* Черный цвет поля ввода */
-            color: #fff; /* Белый цвет текста в полях ввода */
-        }
-        
-        input[type="checkbox"],
-        input[type="radio"] {
-            margin-right: 5px;
+            background-color: #f5f5f5;
+            color: #333;
+            transition: border-color 0.3s ease;
         }
 
-        input[type="radio"] {
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            appearance: none;
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            border: 2px solid #FFA500; /* Оранжевая рамка */
-            outline: none;
-            cursor: pointer;
+        input[type="text"]:focus,
+        input[type="tel"]:focus,
+        input[type="email"]:focus,
+        input[type="date"]:focus,
+        textarea:focus,
+        select:focus {
+            border-color: #007bff;
         }
 
-        input[type="radio"]:checked {
-            background-color: #FFA500; /* Оранжевый цвет заполнения при выборе */
+        input[type="checkbox"] {
+            margin-right: 10px;
         }
-        
+
         button {
-            background-color: #FFA500; /* Оранжевый цвет кнопки */
-            color: white;
-            padding: 10px 20px;
+            background-color: #28a745;
+            color: #fff;
+            padding: 16px 32px;
             border: none;
-            border-radius: 4px;
+            border-radius: 8px;
             cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
         }
-        
+
         button:hover {
-            background-color: #FF8C00; /* Темно-оранжевый цвет кнопки при наведении */
+            background-color: #218838;
         }
-        
+
         .error {
-            color: #ff0000; /* Красный цвет текста ошибки */
+            color: #ff0000;
             font-size: 12px;
         }
-        
+
         .has-error input,
         .has-error select,
         .has-error textarea {
-            border-color: #ff0000; /* Красная рамка вокруг поля ввода с ошибкой */
+            border-color: #ff0000;
         }
-        /* Сообщения об ошибках и поля с ошибками выводим с красным бордюром. */
+
         .error {
             border: 2px solid red;
         }
     </style>
 </head>
 <body>
+    <div class="container">
+        <h2>Регистрационная форма</h2>
+        <?php
+        if (!empty($messages)) {
+            print('<div id="messages">');
+            foreach ($messages as $message) {
+                print($message);
+            }
+            print('</div>');
+        }
+        ?>
 
-<?php
-if (!empty($messages)) {
-  print('<div id="messages">');
-// Выводим все сообщения.
-foreach ($messages as $message) {
-print($message);
-}
-print('</div>');
-}
+        <form action="" method="POST">
+            <div class="form-group">
+                <label for="name">Full name</label>
+                <input required type="text" id="name" name="name" <?php if ($errors['name']) {print 'class="error"';} ?> value="<?php print $values['name']; ?>">
+            </div>
+            <div class="form-group">
+                <label for="phone">Phone number</label>
+                <input required type="tel" id="phone" name="phone" <?php if ($errors['phone']) {print 'class="error"';} ?> value="<?php print $values['phone']; ?>">
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input required type="email" id="email" name="email" <?php if ($errors['email']) {print 'class="error"';} ?> value="<?php print $values['email']; ?>">
+            </div>
+            <div class="form-group">
+                <label for="dob">Date of birth</label>
+                <input required type="date" id="dob" name="dob" <?php if ($errors['dob']) {print 'class="error"';} ?> value="<?php print $values['dob']; ?>">
 
-// Далее выводим форму отмечая элементы с ошибками классом error
-// и задавая начальные значения элементов ранее сохраненными.
-?>
-
-<form style="display: flex;flex-direction: column;width: 20%" action="" method="POST">
-  <input required type="text" name="name" <?php if ($errors['name']) {print 'class="error"';} ?> value="<?php print $values['name']; ?>" placeholder="Full name">
-  <input required type="tel" name="phone" <?php if ($errors['phone']) {print 'class="error"';} ?> value="<?php print $values['phone']; ?>" placeholder="Phone number">
-  <input required type="email" name="email" <?php if ($errors['email']) {print 'class="error"';} ?> value="<?php print $values['email']; ?>" placeholder="Email">
-  <input required type="date" name="dob" <?php if ($errors['dob']) {print 'class="error"';} ?> value="<?php print $values['dob']; ?>" placeholder="Date of birth">
-
-  <div style="flex-direction: row;margin-top: 20px">
-      <input required type="radio" name="gender" <?php if ($errors['gender']) {print 'class="error"';} ?> value="M" <?php if ($values['gender'] == 'M') {print 'checked';} ?>>Male
-      <input required type="radio" name="gender" <?php if ($errors['gender']) {print 'class="error"';} ?> value="F" <?php if ($values['gender'] == 'F') {print 'checked';} ?>>Female
-  </div>
-
-<select style="margin-top: 20px" name="language[]" multiple <?php if ($errors['language']) {print 'class="error"';} ?>>
-    <option value="Pascal">Pascal</option>
-    <option value="C">C</option>
-    <option value="C++">C++</option>
-    <option value="JavaScript">JavaScript</option>
-    <option value="PHP">PHP</option>
-    <option value="Python">Python</option>
-    <option value="Java">Java</option>
-    <option value="Haskel">Haskel</option>
-    <option value="Clojure">Clojure</option>
-    <option value="Prolog">Prolog</option>
-    <option value="Scala">Scala</option>
-  </select>
-
-  <textarea required style="margin-top: 20px" name="bio" <?php if ($errors['bio']) {print 'class="error"';} ?> placeholder="Your biography"><?php print htmlspecialchars($values['bio']); ?></textarea>
-
-  <p><input required type="checkbox" name="contract" <?php if ($errors['contract']) {print 'class="error"';} ?> value="Yes" <?php if ($values['contract'] == 'Yes') {print 'checked';} ?>>I agree with the contract.</p>
-  <input required type="submit" value="Submit">
-</form>
+Daria Golovacheva, [30.05.2024 18:01]
+</div>
+            <div class="form-group">
+                <label>Gender</label>
+                <div>
+                    <input required type="radio" id="gender_m" name="gender" <?php if ($errors['gender']) {print 'class="error"';} ?> value="M" <?php if ($values['gender'] == 'M') {print 'checked';} ?>>
+                    <label for="gender_m">Male</label>
+                    <input required type="radio" id="gender_f" name="gender" <?php if ($errors['gender']) {print 'class="error"';} ?> value="F" <?php if ($values['gender'] == 'F') {print 'checked';} ?>>
+                    <label for="gender_f">Female</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="language">Languages</label>
+                <select id="language" name="language[]" multiple <?php if ($errors['language']) {print 'class="error"';} ?>>
+                    <option value="Pascal">Pascal</option>
+                    <option value="C">C</option>
+                    <option value="C++">C++</option>
+                    <option value="JavaScript">JavaScript</option>
+                    <option value="PHP">PHP</option>
+                    <option value="Python">Python</option>
+                    <option value="Java">Java</option>
+                    <option value="Haskel">Haskel</option>
+                    <option value="Clojure">Clojure</option>
+                    <option value="Prolog">Prolog</option>
+                    <option value="Scala">Scala</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="bio">Your biography</label>
+                <textarea required id="bio" name="bio" <?php if ($errors['bio']) {print 'class="error"';} ?>><?php print htmlspecialchars($values['bio']); ?></textarea>
+            </div>
+            <div class="form-group">
+                <input required type="checkbox" id="contract" name="contract" <?php if ($errors['contract']) {print 'class="error"';} ?> value="Yes" <?php if ($values['contract'] == 'Yes') {print 'checked';} ?>>
+                <label for="contract">I agree with the contract.</label>
+            </div>
+            <div class="form-group">
+                <button type="submit">Submit</button>
+            </div>
+        </form>
+    </div>
 </body>
 </html>
