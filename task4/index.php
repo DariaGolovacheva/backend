@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
       setcookie('dob_value', '', 100000);
       $messages[] = '<div class="error">Укажите дату рождения.</div>';
   }
-   if ($errors['sex']) {
+   if ($errors['gender']) {
          setcookie('gender_error', '', 100000);
          setcookie('gender_value', '', 100000);
          $messages[] = '<div class="error">Заполните пол.</div>';
@@ -55,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             $messages[] = '<div class="error">Выберете языки.</div>';
          }
 
-   if ($errors['biography']) {
+   if ($errors['bio']) {
         setcookie('bio_error', '', 100000);
         setcookie('bio_value', '', 100000);
         $messages[] = '<div class="error">Заполните поле биографии.</div>';
