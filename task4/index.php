@@ -1,3 +1,4 @@
+
 <?php
 header('Content-Type: text/html; charset=UTF-8');
 
@@ -18,11 +19,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   $errors['name'] = !empty($_COOKIE['name_error']);
   $errors['phone'] = !empty($_COOKIE['phone_error']);
   $errors['email'] = !empty($_COOKIE['email_error']);
-  $errors['dob'] = !empty($_COOKIE['dob_error']);
-  $errors['gender'] = !empty($_COOKIE['gender_error']);
-  $errors['favoriteLanguage'] = !empty($_COOKIE['favoriteLanguage_error']);
-  $errors['bio'] = !empty($_COOKIE['bio_error']);
-  $errors['contract'] = !empty($_COOKIE['contract_error']);
+  $errors['year'] = !empty($_COOKIE['year_error']);
+  $errors['sex'] = !empty($_COOKIE['sex_error']);
+  $errors['language'] = !empty($_COOKIE['language_error']);
+  $errors['biography'] = !empty($_COOKIE['biography_error']);
+  $errors['contract_agreement'] = !empty($_COOKIE['contract_agreement_error']);
 
   if ($errors['name']) {
     setcookie('name_error', '', 100000);
@@ -39,30 +40,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     setcookie('email_value', '', 100000);
     $messages[] = '<div class="error">Заполните поле email.</div>';
   }
-  if ($errors['dob']) {
-      setcookie('dob_error', '', 100000);
-      setcookie('dob_value', '', 100000);
+  if ($errors['year']) {
+      setcookie('year_error', '', 100000);
+      setcookie('year_value', '', 100000);
       $messages[] = '<div class="error">Укажите дату рождения.</div>';
   }
-   if ($errors['gender']) {
-         setcookie('gender_error', '', 100000);
-         setcookie('gender_value', '', 100000);
+   if ($errors['sex']) {
+         setcookie('sex_error', '', 100000);
+         setcookie('sex_value', '', 100000);
          $messages[] = '<div class="error">Заполните пол.</div>';
       }
-      if ($errors['favoriteLanguage']) {
-            setcookie('favoriteLanguage_error', '', 100000);
-            setcookie('favoriteLanguage_value', '', 100000);
+      if ($errors['language']) {
+            setcookie('language_error', '', 100000);
+            setcookie('language_value', '', 100000);
             $messages[] = '<div class="error">Выберете языки.</div>';
          }
 
-   if ($errors['bio']) {
-        setcookie('bio', '', 100000);
-        setcookie('bio', '', 100000);
+   if ($errors['biography']) {
+        setcookie('biography_error', '', 100000);
+        setcookie('biography_value', '', 100000);
         $messages[] = '<div class="error">Заполните поле биографии.</div>';
       }
-      if ($errors['contract']) {
-              setcookie('contract_error', '', 100000);
-              setcookie('contract_value', '', 100000);
+      if ($errors['contract_agreement']) {
+              setcookie('contract_agreement_error', '', 100000);
+              setcookie('contract_agreement_value', '', 100000);
               $messages[] = '<div class="error">Поставьте галочку.</div>';
             }
 
@@ -71,11 +72,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   $values['name'] = empty($_COOKIE['name_value']) ? '' : $_COOKIE['name_value'];
   $values['phone'] = empty($_COOKIE['phone_value']) ? '' : $_COOKIE['phone_value'];
   $values['email'] = empty($_COOKIE['email_value']) ? '' : $_COOKIE['email_value'];
-  $values['dob'] = empty($_COOKIE['dob_value']) ? '' : $_COOKIE['dob_value'];
-  $values['gender'] = empty($_COOKIE['gender_value']) ? '' : $_COOKIE['gender_value'];
-  $values['favoriteLanguage'] = empty($_COOKIE['favoriteLanguage_value']) ? '' : $_COOKIE['favoriteLanguage_value'];
-  $values['bio'] = empty($_COOKIE['bio_value']) ? '' : $_COOKIE['bio_value'];
-  $values['contract'] = empty($_COOKIE['contract_value']) ? '' : $_COOKIE['contract_value'];
+  $values['year'] = empty($_COOKIE['year_value']) ? '' : $_COOKIE['year_value'];
+  $values['sex'] = empty($_COOKIE['sex_value']) ? '' : $_COOKIE['sex_value'];
+  $values['language'] = empty($_COOKIE['language_value']) ? '' : $_COOKIE['language_value'];
+  $values['biography'] = empty($_COOKIE['biography_value']) ? '' : $_COOKIE['biography_value'];
+  $values['contract_agreement'] = empty($_COOKIE['contract_agreement_value']) ? '' : $_COOKIE['contract_agreement_value'];
 
 
 
@@ -106,44 +107,49 @@ else {
         setcookie('email_value', $_POST['email'], time() + 30 * 24 * 60 * 60);
     }
 
-    if (empty($_POST['dob'])) {
-        setcookie('dob_error', '1', time() + 24 * 60 * 60);
+    if (empty($_POST['year'])) {
+        setcookie('year_error', '1', time() + 24 * 60 * 60);
         $errors = TRUE;
     } else {
-        setcookie('dob_value', $_POST['dob'], time() + 30 * 24 * 60 * 60);
+        setcookie('year_value', $_POST['year'], time() + 30 * 24 * 60 * 60);
     }
 
 
 
-    if (empty($_POST['gender'])) {
-        setcookie('gender_error', '1', time() + 24 * 60 * 60);
+    if (empty($_POST['sex'])) {
+        setcookie('sex_error', '1', time() + 24 * 60 * 60);
         $errors = TRUE;
     } else {
-        setcookie('gender_value', $_POST['gender'], time() + 30 * 24 * 60 * 60);
+        setcookie('sex_value', $_POST['sex'], time() + 30 * 24 * 60 * 60);
     }
 
+// if (empty($_POST['language'])) {
+//       setcookie('language_error', '1', time() + 24 * 60 * 60);
+//       $errors = TRUE;
+//   } else {
+//       setcookie('language_value', $_POST['language'], time() + 30 * 24 * 60 * 60);
+//   }
 
-
-if (empty($_POST['favoriteLanguage'])) {
-      setcookie('favoriteLanguage_error', '1', time() + 24 * 60 * 60);
+if (empty($_POST['language'])) {
+      setcookie('language_error', '1', time() + 24 * 60 * 60);
       $errors = TRUE;
     } else {
         // Преобразование массива в строку для сохранения в cookie
-        $favoriteLanguage_value = implode(',', $_POST['favoriteLanguage']);
-        setcookie('favoriteLanguage_value', $favoriteLanguage_value, time() + 30 * 24 * 60 * 60);
+        $language_value = implode(',', $_POST['language']);
+        setcookie('language_value', $language_value, time() + 30 * 24 * 60 * 60);
     }
 
-        if (empty($_POST['bio']) || strlen($_POST['bio']) > 256) {
-            setcookie('bio_error', '1', time() + 24 * 60 * 60);
+        if (empty($_POST['biography']) || strlen($_POST['biography']) > 256) {
+            setcookie('biography_error', '1', time() + 24 * 60 * 60);
             $errors = TRUE;
         } else {
-            setcookie('bio_value', $_POST['bio'], time() + 30 * 24 * 60 * 60);
+            setcookie('biography_value', $_POST['biography'], time() + 30 * 24 * 60 * 60);
         }
-        if (empty($_POST['contract'])) {
-                    setcookie('contract_error', '1', time() + 24 * 60 * 60);
+        if (empty($_POST['contract_agreement'])) {
+                    setcookie('contract_agreement_error', '1', time() + 24 * 60 * 60);
                     $errors = TRUE;
                 } else {
-                    setcookie('contract_value', $_POST['contract'], time() + 30 * 24 * 60 * 60);
+                    setcookie('contract_agreement_value', $_POST['contract_agreement'], time() + 30 * 24 * 60 * 60);
                 }
 
   if ($errors) {
@@ -154,11 +160,11 @@ if (empty($_POST['favoriteLanguage'])) {
     setcookie('name_error', '', 100000);
     setcookie('phone_error', '', 100000);
     setcookie('email_error', '', 100000);
-    setcookie('dob_error', '', 100000);
-    setcookie('gender_error', '', 100000);
-    setcookie('favoriteLanguage_error', '', 100000);
-    setcookie('bio_error', '', 100000);
-    setcookie('contract_error', '', 100000);
+    setcookie('year_error', '', 100000);
+    setcookie('sex_error', '', 100000);
+    setcookie('language_error', '', 100000);
+    setcookie('biography_error', '', 100000);
+    setcookie('contract_agreement_error', '', 100000);
   }
 
     $user = user;
@@ -169,28 +175,28 @@ if (empty($_POST['favoriteLanguage'])) {
     ]);
 
     try {
-      $stmt = $db->prepare("INSERT INTO application (name, email, phone, dob, gender, bio) VALUES (:name, :email, :phone, :dob, :gender, :bio)");
+      $stmt = $db->prepare("INSERT INTO person (name, email, phone, year, sex, biography) VALUES (:name, :email, :phone, :year, :sex, :biography)");
       $stmt->execute([
         ':name' => $_POST['name'],
         ':phone' => $_POST['phone'],
         ':email' => $_POST['email'],
-        ':dob' => $_POST['dob'],
-        ':gender' => $_POST['gender'],
-        ':bio' => $_POST['bio']
+        ':year' => $_POST['year'],
+        ':sex' => $_POST['sex'],
+        ':biography' => $_POST['biography']
       ]);
 
-      $application_id = $db->lastInsertId();
+      $personId = $db->lastInsertId();
 
-      $stmt = $db->prepare("INSERT INTO application_ability (application_id,language_id) VALUES (:application_id, :language_id)");
+      $stmt = $db->prepare("INSERT INTO personLanguage (personId, languageId) VALUES (:personId, :languageId)");
 
-      foreach ($_POST['favoriteLanguage'] as $selectedOption) {
-        $languageStmt = $db->prepare("SELECT id FROM programming_language WHERE name = :name");
-        $languageStmt->execute([':name' => $selectedOption]);
+      foreach ($_POST['language'] as $selectedOption) {
+        $languageStmt = $db->prepare("SELECT languageId FROM language WHERE title = :title");
+        $languageStmt->execute([':title' => $selectedOption]);
         $language = $languageStmt->fetch(PDO::FETCH_ASSOC);
 
         $stmt->execute([
-          ':application_id' => $application_id,
-          ':language_id' => $language['id']
+          ':personId' => $personId,
+          ':languageId' => $language['languageId']
         ]);
       }
     }
