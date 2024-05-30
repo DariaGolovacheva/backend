@@ -181,7 +181,7 @@ if (empty($_POST['favoriteLanguage'])) {
 
       $application_id = $db->lastInsertId();
 
-      $stmt = $db->prepare("INSERT INTO application_ability (application_id, id) VALUES (:application_id, :id)");
+      $stmt = $db->prepare("INSERT INTO application_ability (application_id,language_id) VALUES (:application_id, :language_id)");
 
       foreach ($_POST['favoriteLanguage'] as $selectedOption) {
         $languageStmt = $db->prepare("SELECT id FROM programming_language WHERE name = :name");
