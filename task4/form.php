@@ -129,8 +129,6 @@
             <div class="form-group">
                 <label for="dob">Date of birth</label>
                 <input required type="date" id="dob" name="dob" <?php if ($errors['dob']) {print 'class="error"';} ?> value="<?php print $values['dob']; ?>">
-
-
 </div>
            <div class="form-group <?php echo isset($_COOKIE['gender_error']) ? 'has-error' : ''; ?>">
     <label>Пол:</label><br>
@@ -140,7 +138,6 @@
     <label for="female">Женский</label>
     <?php echo isset($_COOKIE['gender_error']) ? '<span class="error">' . $_COOKIE['gender_error'] . '</span>' : ''; ?>
 </div>
-            </div>
             <div class="form-group">
                 <label for="favoriteLanguage">Languages</label>
                 <select id="favoriteLanguage" name="favoriteLanguage[]" multiple <?php if ($errors['favoriteLanguage']) {print 'class="error"';} ?>>
@@ -156,10 +153,6 @@
                     <option value="Prolog">Prolog</option>
                     <option value="Scala">Scala</option>
                 </select>
-            </div>
-            <div class="form-group">
-                <label for="bio">Your biography</label>
-                <textarea required id="bio" name="bio" <?php if ($errors['bio']) {print 'class="error"';} ?>><?php print htmlspecialchars($values['bio']); ?></textarea>
             </div>
             <div class="form-group">
                 <input required type="checkbox" id="contract" name="contract" <?php if ($errors['contract']) {print 'class="error"';} ?> value="Yes" <?php if ($values['contract'] == 'Yes') {print 'checked';} ?>>
