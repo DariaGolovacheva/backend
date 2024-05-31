@@ -1,99 +1,106 @@
 <html>
 <head>
-  <style>
-        body {
-            font-family: 'Roboto', sans-serif;
-            background-color: #f9f9f9;
-            color: #333;
-            margin: 0;
-            padding: 0;
-        }
+ <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 
-        .container {
-            max-width: 800px;
-            margin: 50px auto;
-            background-color: #fff;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-        }
+    body {
+        font-family: 'Roboto', sans-serif;
+        background-color: #333;
+        color: #fff;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
 
-        h2 {
-            text-align: center;
-            color: #007bff;
-            margin-bottom: 30px;
-        }
+    .container {
+        max-width: 800px;
+        width: 100%;
+        background-color: #1a1a1a;
+        padding: 40px;
+        border-radius: 12px;
+        box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        text-align: center;
+    }
 
-        .form-group {
-            margin-bottom: 40px;
-        }
+    h2 {
+        color: #ff9800;
+        margin-bottom: 30px;
+    }
 
-        label {
-            font-weight: bold;
-            color: #555;
-            margin-bottom: 8px;
-            display: block;
-        }
+    .form-group {
+        margin-bottom: 20px;
+        text-align: left;
+    }
 
-        input[type="text"],
-        input[type="tel"],
-        input[type="email"],
-        input[type="date"],
-        textarea,
-        select {
-            width: calc(100% - 16px);
-            padding: 14px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            box-sizing: border-box;
-            background-color: #f5f5f5;
-            color: #333;
-            transition: border-color 0.3s ease;
-        }
+    label {
+        font-weight: bold;
+        color: #ff9800;
+        margin-bottom: 8px;
+        display: block;
+    }
 
-        input[type="text"]:focus,
-        input[type="tel"]:focus,
-        input[type="email"]:focus,
-        input[type="date"]:focus,
-        textarea:focus,
-        select:focus {
-            border-color: #007bff;
-        }
+    input[type="text"],
+    input[type="tel"],
+    input[type="email"],
+    input[type="date"],
+    textarea,
+    select {
+        width: calc(100% - 16px);
+        padding: 14px;
+        border: 2px solid #ff9800;
+        border-radius: 8px;
+        box-sizing: border-box;
+        background-color: #444;
+        color: #fff;
+        transition: border-color 0.3s ease;
+    }
 
-        input[type="checkbox"] {
-            margin-right: 10px;
-        }
+    input[type="text"]:focus,
+    input[type="tel"]:focus,
+    input[type="email"]:focus,
+    input[type="date"]:focus,
+    textarea:focus,
+    select:focus {
+        border-color: #ff5722;
+    }
 
-        button {
-            background-color: #28a745;
-            color: #fff;
-            padding: 16px 32px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: background-color 0.3s ease;
-        }
+    input[type="checkbox"] {
+        margin-right: 10px;
+    }
 
-        button:hover {
-            background-color: #218838;
-        }
+    button {
+        background-color: #ff9800;
+        color: #fff;
+        padding: 16px 32px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: background-color 0.3s ease;
+    }
 
-        .error {
-            color: #ff0000;
-            font-size: 12px;
-        }
+    button:hover {
+        background-color: #e68900;
+    }
 
-        .has-error input,
-        .has-error select,
-        .has-error textarea {
-            border-color: #ff0000;
-        }
+    .error {
+        color: #ff0000;
+        font-size: 12px;
+    }
 
-        .error {
-            border: 2px solid red;
-        }
-    </style>
+    .has-error input,
+    .has-error select,
+    .has-error textarea {
+        border-color: #ff0000;
+    }
+
+    .error {
+        border: 2px solid red;
+    }
+</style>
 </head>
 <body>
 
