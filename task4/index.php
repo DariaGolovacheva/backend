@@ -187,6 +187,7 @@ else if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $login = $_SESSION['login'];
 
+    
     try {
       // Получаем personId из таблицы personAuthentificationData
       $stmt = $db->prepare("SELECT personId FROM personAuthentificationData WHERE login = :login");
