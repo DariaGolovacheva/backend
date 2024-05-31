@@ -1,6 +1,7 @@
 <html>
 <head>
- <style>
+ <title>Регистрационная форма</title>
+<style>
     @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 
     body {
@@ -22,25 +23,19 @@
         padding: 40px;
         border-radius: 12px;
         box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-        text-align: center;
         position: relative;
     }
 
     h2 {
         color: #ff9800;
         margin-bottom: 30px;
-        position: absolute;
-        top: 20px;
-        left: 50%;
-        transform: translateX(-50%);
+        text-align: center;
     }
 
-    .messages {
+    #messages {
         color: #ff9800;
-        position: absolute;
-        top: 60px;
-        left: 50%;
-        transform: translateX(-50%);
+        text-align: center;
+        margin-bottom: 20px;
     }
 
     .form-group {
@@ -114,6 +109,7 @@
         border: 2px solid red;
     }
 </style>
+
 </head>
 <body>
 
