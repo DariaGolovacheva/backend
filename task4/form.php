@@ -23,11 +23,24 @@
         border-radius: 12px;
         box-shadow: 0 8px 16px rgba(0,0,0,0.1);
         text-align: center;
+        position: relative;
     }
 
     h2 {
         color: #ff9800;
         margin-bottom: 30px;
+        position: absolute;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .messages {
+        color: #ff9800;
+        position: absolute;
+        top: 60px;
+        left: 50%;
+        transform: translateX(-50%);
     }
 
     .form-group {
