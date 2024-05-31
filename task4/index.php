@@ -15,9 +15,7 @@ foreach ($lines as $line) {
         $_ENV[$name] = trim($value, "\" \r");
     }
 }
-define("user", "u67498");
-define("password", "2427367");
-define("dbname", "u67498");
+
 
 $db = new PDO("mysql:host=localhost;dbname=$dbName", $dbUser, $dbPassword, [
     PDO::ATTR_PERSISTENT => true,
