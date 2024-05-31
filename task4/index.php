@@ -147,7 +147,7 @@ else if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
   $error_fields = [
       'name' => '/^([А-Яа-я\s]+|[A-Za-z\s]+)$/',
-      'phone' => '/((8|\+7)-?)?\(?\d{3,5}\)?-?\d{1}-?\d{1}-?\d{1}-?\d{1}-?\d{1}((-?\d{1})?-?\d{1})?/',
+      'phone' => '/(((8|\+7)-?)?\(?\d{3,5}\)?-?\d{1}-?\d{1}-?\d{1}-?\d{1}-?\d{1}((-?\d{1})?-?\d{1})?){10,20}/',
       'email' => '/^[\w_\.]+@([\w-]+\.)+[\w-]{2,4}$/',
       'year' => '',
       'sex' => '',
@@ -171,7 +171,18 @@ else if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $languageString = implode(',', $_POST['language']);
         setcookie('language_value', $languageString, time() + 30 * 24 * 60 * 60);
   }
-
+if (empty($_POST['phone'])) {
+    setcookie('phone_error', '1', time() + 24 * 60 * 60);
+    $errors = TRUE;
+} else {
+    $phone = $_POST['phone'];
+    if (strlen($phone) !== 10) { // Здесь можно указать нужную длину
+        setcookie('phone_length_error', '1', time() + 24 * 60 * 60);
+        $errors = TRUE;
+    } else {
+        setcookie('phone_value', $phone, time() + 30 * 24 * 60 * 60);
+    }
+}
   if ($errors) {
     header('Location: index.php');
     exit();
