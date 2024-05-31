@@ -97,7 +97,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         return in_array($optionValue, $savedLanguages) ? 'selected' : '';
   }
 
-  if (session_status() != PHP_SESSION_NONE) {
+  if (session_status() != PHP_SESSION_NONE && !empty($_SESSION['login'])) {
 
     try {
       $stmt = $db->prepare("SELECT name, phone, email, year, sex, biography FROM person WHERE personId = :personId");
