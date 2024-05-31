@@ -303,7 +303,7 @@ else if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
     catch(PDOException $e){
       error_log('Ошибка обновления данных.' . $e->getMessage());
-      echo 'Ошибка обновления данных.';
+      echo $e->getMessage();
       exit();
     }
   }
