@@ -187,7 +187,11 @@ else if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $login = $_SESSION['login'];
 
-    
+        $user = 'u67498';
+        $pass = '2427367';
+        $dbname = 'u67498';
+        $db = new PDO("mysql:host=localhost;dbname=$dbname", $user, $pass);
+        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     try {
       // Получаем personId из таблицы personAuthentificationData
       $stmt = $db->prepare("SELECT personId FROM personAuthentificationData WHERE login = :login");
