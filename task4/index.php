@@ -147,7 +147,7 @@ else if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
   $error_fields = [
       'name' => '/^([А-Яа-я\s]+|[A-Za-z\s]+)$/',
-      'phone' => '/(((8|\+7)-?)?\(?\d{3,5}\)?-?\d{1}-?\d{1}-?\d{1}-?\d{1}-?\d{1}((-?\d{1})?-?\d{1})?){10,20}/',
+      'phone' => '/((8|\+7)-?)?\(?\d{3,5}\)?-?\d{1}-?\d{1}-?\d{1}-?\d{1}-?\d{1}((-?\d{1})?-?\d{1})?/',
       'email' => '/^[\w_\.]+@([\w-]+\.)+[\w-]{2,4}$/',
       'year' => '',
       'sex' => '',
@@ -176,7 +176,7 @@ if (empty($_POST['phone'])) {
     $errors = TRUE;
 } else {
     $phone = $_POST['phone'];
-    if (strlen($phone) !== 10) { // Здесь можно указать нужную длину
+    if (strlen($phone) <=11) { // Здесь можно указать нужную длину
         setcookie('phone_length_error', '1', time() + 24 * 60 * 60);
         $errors = TRUE;
     } else {
