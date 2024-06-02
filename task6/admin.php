@@ -1,23 +1,39 @@
 <?php
 
-define("user", "u67498");
-define("password", "2427367");
-define("dbname", "u67498");
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
+$env = file_get_contents(__DIR__ . '/.env');
+$lines = explode("\n", $env);
+
+foreach ($lines as $line) {
+    if (strpos($line, '=') !== false) {
+        list($name, $value) = explode('=', $line, 2);
+        $_ENV[$name] = trim($value, "\" \r");
+    }
+}
 
 $isAdminAuth = false;
 
-$user = user;
-$pass = password;
-$db = new PDO('mysql:host=localhost;dbname=' . dbname, $user, $pass, [
-  PDO::ATTR_PERSISTENT => true,
-  PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+$dbUser = $_ENV['DB_USER'];
+$dbPassword = $_ENV['DB_PASSWORD'];
+$dbName = $_ENV['DB_NAME'];
+
+$db = new PDO("mysql:host=localhost;dbname=$dbName", $dbUser, $dbPassword, [
+    PDO::ATTR_PERSISTENT => true,
+    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
 ]);
+
+// Функция для проверки CSRF токена
+function checkCsrfToken($token) {
+    return !empty($_SESSION['csrf_token_admin']) && hash_equals($_SESSION['csrf_token_admin'], $token);
+}
 
 if (!empty($_SERVER['PHP_AUTH_USER']) &&
     !empty($_SERVER['PHP_AUTH_PW'])) {
 
     try {
-        // Проверяем, есть ли пользователь с таким логином и паролем
         $admin_login = $_SERVER['PHP_AUTH_USER'];
         $admin_pass = $_SERVER['PHP_AUTH_PW'];
         $md5AdminPass = md5($admin_pass);
@@ -27,21 +43,20 @@ if (!empty($_SERVER['PHP_AUTH_USER']) &&
         $authData = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($authData) {
+            $_SESSION['isAdminAuth'] = true;
             $isAdminAuth = true;
         }
     } catch(PDOException $e){
-        print('Error : ' . $e->getMessage());
+        error_log('Error : ' . $e->getMessage());
         exit();
     }
 }
-
-
 
 if (empty($_SERVER['PHP_AUTH_USER']) ||
     empty($_SERVER['PHP_AUTH_PW']) ||
     !$isAdminAuth) {
 
-  header('HTTP/1.1 401 Unanthorized');
+  header('HTTP/1.1 401 Unauthorized');
   header('WWW-Authenticate: Basic realm="My site"');
   print('<h1>401 Требуется авторизация</h1>');
   exit();
@@ -49,14 +64,9 @@ if (empty($_SERVER['PHP_AUTH_USER']) ||
 
 echo "Вы успешно авторизовались и видите защищенные паролем данные.";
 
-
 $usersDB = [];
 
 try {
-    $admin_login = $_SERVER['PHP_AUTH_USER'];
-    $admin_pass = $_SERVER['PHP_AUTH_PW'];
-    $md5Pass = md5($admin_pass);
-
     $stmt = $db->prepare("SELECT * FROM person");
     $stmt->execute();
     $authData = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -65,9 +75,21 @@ try {
         $usersDB = $authData;
     }
 } catch(PDOException $e){
-    print('Error : ' . $e->getMessage());
+    error_log('Error : ' . $e->getMessage());
     exit();
 }
+
+if (!isset($_SESSION['csrf_token_admin'])) {
+    $_SESSION['csrf_token_admin'] = bin2hex(random_bytes(32));
+}
+
+$csrfTokenAdmin = $_SESSION['csrf_token_admin'];
+
+if (!isset($_SESSION['csrf_token_admin_delete'])) {
+    $_SESSION['csrf_token_admin_delete'] = bin2hex(random_bytes(32));
+}
+
+$csrfTokenAdminDelete = $_SESSION['csrf_token_admin_delete'];
 
 ?>
 <body style="display: flex; flex-direction: column; justify-content: center; align-items: center">
@@ -81,6 +103,7 @@ try {
 </h3>
 
 <form style="display: flex;flex-direction: column;width: 20%" action="admin.php" method="POST">
+    <input type="hidden" name="csrf_token_admin" value="<?php echo $csrfTokenAdmin; ?>">
     <select name="userId">
         <?php foreach($usersDB as $option) : ?>
             <option value="<?php echo $option['personId']; ?>"><?php echo "ID: " . $option['personId'] . " "; echo "Name: " . $option['name']; ?></option>
@@ -109,8 +132,12 @@ function isSelected($optionValue, $savedLanguages) {
     return in_array($optionValue, $savedLanguages) ? 'selected' : '';
 }
 
-// Проверяем, была ли форма отправлена и установлен ли ключ 'user'
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['userId'])) {
+
+    if (!checkCsrfToken($_POST['csrf_token_admin'])) {
+        die('CSRF token validation failed.');
+    }
+
     $selectOption = $_POST['userId'];
 
     try {
@@ -120,6 +147,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['userId'])) {
 
         $userData = $stmt->fetch(PDO::FETCH_ASSOC);
 
+
         if ($userData) {
             $values['personId'] = strip_tags($selectOption);
             $values['name'] = strip_tags($userData['name']);
@@ -128,24 +156,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['userId'])) {
             $values['year'] = strip_tags($userData['year']);
             $values['sex'] = strip_tags($userData['sex']);
             $values['biography'] = strip_tags($userData['biography']);
-            $selectedLanguagesStmt = $db->prepare("SELECT title FROM language1 INNER JOIN personLanguage ON language1.languageId = personLanguage.languageId WHERE personLanguage.personId = :personId");
+            $selectedLanguagesStmt = $db->prepare("SELECT title FROM language INNER JOIN personLanguage ON language.languageId = personLanguage.languageId WHERE personLanguage.personId = :personId");
             $selectedLanguagesStmt->execute([':personId' => $values['personId']]);
             $savedLanguages = $selectedLanguagesStmt->fetchAll(PDO::FETCH_COLUMN, 0);
         } else {
             echo 'Данные пользователя не найдены.';
         }
     } catch(PDOException $e) {
-        echo 'Ошибка при загрузке данных: ' . $e->getMessage();
+        error_log('Error : ' . $e->getMessage());
+        echo 'Ошибка при загрузке данных.';
     }
 }
 ?>
-
 
 <h3>
   This user form
 </h3>
 
 <form style="display: flex;flex-direction: column;width: 20%" action="admin.php" method="POST">
+  <input type="hidden" name="csrf_token_admin" value="<?php echo $csrfTokenAdmin; ?>">
   <input required type="text" name="name" value="<?php print $values['name']; ?>" placeholder="Full name">
   <input required type="tel" name="phone" value="<?php print $values['phone']; ?>" placeholder="Phone number">
   <input required type="email" name="email" value="<?php print $values['email']; ?>" placeholder="Email">
@@ -171,7 +200,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['userId'])) {
 </select>
 
   <textarea required style="margin-top: 20px" name="biography" placeholder="Your biography"><?php print htmlspecialchars($values['biography']); ?></textarea>
-  <textarea required style="margin-top: 20px" name="personId" placeholder="personId"></textarea>
+  <input type="hidden" name="personId" value="<?php echo $values['personId']; ?>">
 
   <input required type="submit" value="Change data">
 </form>
@@ -179,74 +208,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['userId'])) {
 </body>
 
 <form style="display: flex;flex-direction: column;width: 20%" action="admin.php" method="POST">
-  <!-- Форма и поля ввода... -->
-</form>
-
-<?php
-
-    if ($_SERVER['REQUEST_METHOD'] == 'POST' &&
-         isset($_POST['personId']) &&
-         isset($_POST['name']) &&
-         isset($_POST['email']) &&
-         isset($_POST['phone']) &&
-         isset($_POST['year']) &&
-         isset($_POST['sex']) &&
-         isset($_POST['biography']) &&
-         isset($_POST['language'])
-    ) {
-        try {
-
-
-            $stmt = $db->prepare("UPDATE person SET name = :name, email = :email, phone = :phone, year = :year, sex = :sex, biography = :biography WHERE personId = :personId");
-            $stmt->execute([
-              ':name' => $_POST['name'],
-              ':email' => $_POST['email'],
-              ':phone' => $_POST['phone'],
-              ':year' => $_POST['year'],
-              ':sex' => $_POST['sex'],
-              ':biography' => $_POST['biography'],
-              ':personId' => intval($_POST['personId'])
-            ]);
-
-            if (is_array($_POST['language'])) {
-                // Обновляем данные в таблице personLanguage.
-                foreach ($_POST['language'] as $selectedOption) {
-                    $languageStmt = $db->prepare("SELECT languageId FROM language1 WHERE title = :title");
-                    $languageStmt->execute([':title' => $selectedOption]);
-                    $language = $languageStmt->fetch(PDO::FETCH_ASSOC);
-
-                    // Проверяем, существует ли уже запись для данного personId и languageId.
-                    $checkStmt = $db->prepare("SELECT * FROM personLanguage WHERE personId = :personId AND languageId = :languageId");
-                    $checkStmt->execute([
-                      ':personId' => intval($_POST['personId']),
-                      ':languageId' => $language['languageId']
-                    ]);
-
-                    if ($checkStmt->fetch(PDO::FETCH_ASSOC)) {
-                        // Если запись существует, обновляем ее.
-                        $updateStmt = $db->prepare("UPDATE personLanguage SET languageId = :languageId WHERE personId = :personId AND languageId = :languageId");
-                        $updateStmt->execute([
-                          ':personId' => intval($_POST['personId']),
-                          ':languageId' => $language['languageId']
-                        ]);
-                    } else {
-                        // Если записи не существует, вставляем новую.
-                        $insertStmt = $db->prepare("INSERT INTO personLanguage (personId, languageId) VALUES (:personId, :languageId)");
-                        $insertStmt->execute([
-                          ':personId' => intval($_POST['personId']),
-                          ':languageId' => $language['languageId']
-                        ]);
-                    }
-                }
-            }
-        } catch(PDOException $e){
-            print('Error : ' . $e->getMessage());
-            exit();
-        }
-    }
-?>
-
-<form style="display: flex;flex-direction: column;width: 20%" action="admin.php" method="POST">
+    <input type="hidden" name="csrf_token_admin_delete" value="<?php echo $csrfTokenAdminDelete; ?>">
     <textarea required style="margin-top: 20px" name="personId" placeholder="Введите personId пользователя, которого хотите удалить"></textarea>
     <input required type="submit" value="Удалить этого пользователя">
 </form>
@@ -254,25 +216,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['userId'])) {
 <?php
     if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['personId'])) {
 
+
+        if (!checkCsrfToken($_POST['csrf_token_admin_delete'])) {
+            die('CSRF token validation failed.');
+        }
         try {
             $stmt = $db->prepare("DELETE FROM personLanguage WHERE personId = :personId");
-            $stmt->execute([':personId' => $_POST['personId']]);
+            $stmt->execute([':personId' => intval($_POST['personId'])]);
 
             $stmt = $db->prepare("DELETE FROM personAuthentificationData WHERE personId = :personId");
-            $stmt->execute([':personId' => $_POST['personId']]);
+            $stmt->execute([':personId' => intval($_POST['personId'])]);
 
             $stmt = $db->prepare("DELETE FROM person WHERE personId = :personId");
-            $stmt->execute([':personId' => $_POST['personId']]);
+            $stmt->execute([':personId' => intval($_POST['personId'])]);
 
         } catch (PDOException $e) {
             echo "Ошибка выполнения запроса: " . $e->getMessage();
         }
     }
 
-
     // Запрос для подсчета количества пользователей по языкам
     $sql = "SELECT l.title, COUNT(pl.personId) AS user_count
-            FROM language1 l
+            FROM language l
             LEFT JOIN personLanguage pl ON l.languageId = pl.languageId
             GROUP BY l.title";
     try {
