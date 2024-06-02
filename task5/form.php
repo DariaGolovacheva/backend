@@ -25,6 +25,7 @@ if (!empty($messages)) {
 
 <html>
 <head>
+    <title>Задание №5</title>
     <style>
         /* Сообщения об ошибках и поля с ошибками выводим с красным бордюром. */
         .error {
@@ -161,7 +162,7 @@ if (!empty($messages)) {
 <body style="display: flex; flex-direction: column; justify-content: center; align-items: center">
 
 <h1>
-    Form
+    Регистрационная форма 
 </h1>
 
 <form style="display: flex;flex-direction: column;width: 20%" action="" method="POST">
