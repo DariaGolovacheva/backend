@@ -1,219 +1,76 @@
-<html>
-<head>
-<title>Задание №5</title>
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
-<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
-<style>
-  /* Сообщения об ошибках и поля с ошибками выводим с красным бордюром. */
-.error {
-  border: 2px solid red !important;
-}
-html, body {
-min-height: 100%;
-padding: 0;
-margin: 0;
-font-family: Roboto, Arial, sans-serif;
-font-size: 14px;
-color: #666;
-}
-h1 {
-margin: 0 0 20px;
-font-weight: 400;
-color: #1c87c9;
-}
-p {
-margin: 0 0 5px;
-}
-.main-block {
-display: flex;
-flex-direction: column;
-justify-content: center;
-align-items: center;
-min-height: 100vh;
-background: #1c87c9;
-}
-form {
-padding: 25px;
-margin: 25px;
-box-shadow: 0 2px 5px #f5f5f5; 
-background: #f5f5f5; 
-}
-.login-link{
-  text-decoration: none;
-  font-weight: bold;
-}
-.login{
-    color: #1c87c9;
-}
-.password{
-    color: #1c87c9;
-}
-.fas {
-margin: 25px 10px 0;
-font-size: 72px;
-color: #fff;
-}
-.fa-envelope {
-transform: rotate(-20deg);
-}
-.fa-at , .fa-mail-bulk{
-transform: rotate(10deg);
-}
-.f {
-width: calc(100% - 18px);
-padding: 8px;
-margin-bottom: 20px;
-border: 1px solid #1c87c9;
-outline: none;
-}
-input::placeholder {
-color: #666;
-}
-button {
-width: 100%;
-padding: 10px;
-border: none;
-background: #1c87c9; 
-font-size: 16px;
-font-weight: 400;
-color: #fff;
-}
-button:hover {
-background: #2371a0;
-} 
-@media (min-width: 1300px) {
-.main-block {
-flex-direction: row;
-}
-.left-part, form {
-width: 50%;
-}
-.fa-envelope {
-margin-top: 0;
-margin-left: 20%;
-}
-.fa-at {
-margin-top: -10%;
-margin-left: 65%;
-}
-.fa-mail-bulk {
-margin-top: 2%;
-margin-left: 28%;
-}) {
-.main-block {
-flex-direction: row;
-}
-.left-part, form {
-width: 50%;
-}
-.fa-envelope {
-margin-top: 0;
-margin-left: 20%;
-}
-.fa-at {
-margin-top: -10%;
-margin-left: 65%;
-}
-.fa-mail-bulk {
-margin-top: 2%;
-margin-left: 28%;
-}
-</style>
-</head>
-<body>
-<div class="main-block">
-<div class="left-part">
-<i class="fas fa-envelope"></i>
-<i class="fas fa-at"></i>
-<i class="fas fa-mail-bulk"></i>
-</div>
-<form action="" method="POST">
-<h1 style="display: flex;
-justify-content: center;
-align-items: center;">Заявка</h1>
-      <?php
-if (!empty($messages)) {
-  print('<div id="messages">');
-  // Выводим все сообщения.
-  foreach ($messages as $message) {
-    print($message);
-  }
-  print('</div>');
+<?php
+
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
 }
 
-// Далее выводим форму отмечая элементы с ошибками классом error
-// и задавая начальные значения элементов ранее сохраненными.
+if (!isset($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+
+$csrfToken = $_SESSION['csrf_token'];
+
+if (!empty($messages)) {
+    print('<div id="messages">');
+
+    // Выводим все сообщения.
+    foreach ($messages as $message) {
+        print($message);
+    }
+
+    print('</div>');
+}
+
 ?>
-    <label>
-      ФИО:<br />
-      <input 
-      name="name" style = "width: calc(100% - 18px);
-padding: 8px;
-margin-bottom: 20px;
-border: 1px solid #1c87c9;
-outline: none;"
-      placeholder="Введите ваше ФИО" <?php if ($errors['name'] || $errors['name_struct'] || $errors['name_len'] ) {print 'class="error"';} ?> value="<?php print $values['name']; ?>"/>
-    <label>
-    Телефон:<br />
-    <input  style = "width: calc(100% - 18px);
-padding: 8px;
-margin-bottom: 20px;
-border: 1px solid #1c87c9;
-outline: none;" name="phone"
-      type="tel"
-      placeholder="Введите ваш телефон" <?php if ($errors['phone'] || $errors['phone_struct'] || $errors['phone_len'] ) {print 'class="error"';} ?> value="<?php print $values['phone']; ?>"/>
-  </label><br />
-  <label>
-    Email:<br />
-    <input  style = "width: calc(100% - 18px);
-padding: 8px;
-margin-bottom: 20px;
-border: 1px solid #1c87c9;
-outline: none;" name="email"
-      placeholder="Введите вашу почту" <?php if ($errors['email'] || $errors['email_struct'] || $errors['email_len'] ) {print 'class="error"';} ?> value="<?php print $values['email']; ?>"/></label>
-      <label>
-        <br />
-        Дата рождения:<br />
-        <input style = "width: calc(100% - 18px);
-padding: 8px;
-margin-bottom: 20px;
-border: 1px solid #1c87c9;
-outline: none;" name="data"
-          type="date" value="<?php echo isset($values['data']) ? $values['data'] : '2000-01-01'; ?>"
-    type="date" <?php if ($errors['data']) {echo 'class="error"';} ?>/>
-      </label>
-Пол:<br />
-<label><input type="radio" 
-    name="pol" value="M" <?php if ($values['pol'] === 'M') {echo 'checked';} ?> <?php if ($errors['pol'] || $errors['pol_struct']) {echo 'class="error"';} ?>/>
-    Мужской</label>
-<label><input type="radio"
-    name="pol" value="W" <?php if ($values['pol'] === 'W') {echo 'checked';} ?> <?php if ($errors['pol'] || $errors['pol_struct']) {echo 'class="error"';} ?>/>
-    Женский</label><br />
-                <br />
-      Любимый язык программирования:
-      <br />
-<select style="width: calc(100% - 18px); padding: 8px; margin-bottom: 20px; border: 1px solid #1c87c9; outline: none;" name="abilities[]" multiple="multiple" <?php if ($errors['abilities'] || $errors['abilities_struct']) {echo 'class="error"';} 
-$abilities_array = is_array($values['abilities']) ? $values['abilities'] : [];
-  ?>>
-    <option disabled>Выберите любимый язык пр.</option>
-    <option value="Pascal" <?php if(in_array('Pascal', $abilities_array)) {echo 'selected';}?>>Pascal</option>
-    <option value="C" <?php if(in_array('C', $abilities_array)) {echo 'selected';} ?>>C</option>
-    <option value="C++" <?php if(in_array('C++', $abilities_array)) {echo 'selected';} ?>>C++</option>
-    <option value="JavaScript" <?php if(in_array('JavaScript', $abilities_array)) {echo 'selected';} ?>>JavaScript</option>
-    <option value="PHP" <?php if(in_array('PHP', $abilities_array)) {echo 'selected';} ?>>PHP</option>
-    <option value="Python" <?php if(in_array('Python', $abilities_array)) {echo 'selected';} ?>>Python</option>
-    <option value="Java" <?php if(in_array('Java', $abilities_array)) {echo 'selected';} ?>>Java</option>
-    <option value="Haskel"<?php if (in_array('Haskel', $abilities_array)) { echo ' selected'; } ?>>Haskel</option>
-</select>
-    <label>
-      Биография:<br />
-     <textarea style="width: calc(100% - 18px); padding: 8px; margin-bottom: 20px; border: 1px solid #1c87c9; outline: none;" name="bio" placeholder="<?php print $values['bio']; ?>" <?php if ($errors['bio'] || $errors['bio_len']) { print 'class="error"'; } ?>><?php print $values['bio']; ?></textarea>
-<label><input type="checkbox"
-    name="ok" <?php if ($values['ok'] === 'on') {echo 'checked';} ?> <?php if ($errors['ok']) {echo 'class="error"';} ?>/>    С контрактом ознакомлен(а)</label>
-    <br />
-<button type="submit" name = "button" value="ok">Сохранить</button>
-<button type="submit" style = "margin-top:20px;" name="button"  value="exit">Выход</button>
+
+<html>
+<head>
+    <style>
+        /* Сообщения об ошибках и поля с ошибками выводим с красным бордюром. */
+        .error {
+            border: 2px solid red;
+        }
+    </style>
+</head>
+
+<body style="display: flex; flex-direction: column; justify-content: center; align-items: center">
+
+<h1>
+    Form
+</h1>
+
+<form style="display: flex;flex-direction: column;width: 20%" action="" method="POST">
+    <input type="hidden" name="csrf_token" value="<?php echo $csrfToken; ?>">
+    <input required type="text" name="name" <?php if ($errors['name']) {print 'class="error"';} ?> value="<?php print $values['name']; ?>" placeholder="Full name">
+    <input required type="tel" name="phone" <?php if ($errors['phone']) {print 'class="error"';} ?> value="<?php print $values['phone']; ?>" placeholder="Phone number">
+    <input required type="email" name="email" <?php if ($errors['email']) {print 'class="error"';} ?> value="<?php print $values['email']; ?>" placeholder="Email">
+    <input required type="date" name="year" <?php if ($errors['year']) {print 'class="error"';} ?> value="<?php print $values['year']; ?>" placeholder="Date of birth">
+
+    <div style="flex-direction: row;margin-top: 20px">
+        <input required type="radio" name="sex" <?php if ($errors['sex']) {print 'class="error"';} ?> value="M" <?php if ($values['sex'] == 'M') {print 'checked';} ?>>Male
+        <input required type="radio" name="sex" <?php if ($errors['sex']) {print 'class="error"';} ?> value="F" <?php if ($values['sex'] == 'F') {print 'checked';} ?>>Female
+    </div>
+
+    <select style="margin-top: 20px" name="language[]" multiple <?php if ($errors['language']) {print 'class="error"';} ?>>
+        <option value="Pascal" <?php echo isSelected('Pascal', $savedLanguages); ?>>Pascal</option>
+        <option value="C" <?php echo isSelected('C', $savedLanguages); ?>>C</option>
+        <option value="C++" <?php echo isSelected('C++', $savedLanguages); ?>>C++</option>
+        <option value="JavaScript" <?php echo isSelected('JavaScript', $savedLanguages); ?>>JavaScript</option>
+        <option value="PHP" <?php echo isSelected('PHP', $savedLanguages); ?>>PHP</option>
+        <option value="Python" <?php echo isSelected('Python', $savedLanguages); ?>>Python</option>
+        <option value="Java" <?php echo isSelected('Java', $savedLanguages); ?>>Java</option>
+        <option value="Haskel" <?php echo isSelected('Haskel', $savedLanguages); ?>>Haskel</option>
+        <option value="Clojure" <?php echo isSelected('Clojure', $savedLanguages); ?>>Clojure</option>
+        <option value="Prolog" <?php echo isSelected('Prolog', $savedLanguages); ?>>Prolog</option>
+        <option value="Scala" <?php echo isSelected('Scala', $savedLanguages); ?>>Scala</option>
+    </select>
+
+    <textarea required style="margin-top: 20px" name="biography" <?php if ($errors['biography']) {print 'class="error"';} ?> placeholder="Your biography"><?php print htmlspecialchars($values['biography']); ?></textarea>
+
+    <p><input required type="checkbox" name="contract_agreement" <?php if ($errors['contract_agreement']) {print 'class="error"';} ?> value="Yes" <?php if ($values['contract_agreement'] == 'Yes') {print 'checked';} ?>>I agree with the contract.</p>
+
+    <input required type="submit" value="Submit">
 </form>
-</div>
+
 </body>
 </html>
