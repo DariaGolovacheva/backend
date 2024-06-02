@@ -146,7 +146,7 @@ function isSelected($optionValue, $savedLanguages) {
 
         $personId = $_SESSION['uid'];
         
-        $selectedLanguagesStmt = $db->prepare("SELECT title FROM language INNER JOIN personLanguage ON language.languageId = personLanguage.languageId WHERE personLanguage.personId = :personId");
+        $selectedLanguagesStmt = $db->prepare("SELECT title FROM language1 INNER JOIN personLanguage ON language1.languageId = personLanguage.languageId WHERE personLanguage.personId = :personId");
         $selectedLanguagesStmt->execute([':personId' => $personId]);
         $savedLanguages = $selectedLanguagesStmt->fetchAll(PDO::FETCH_COLUMN, 0);
 
