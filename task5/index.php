@@ -145,7 +145,7 @@ function isSelected($optionValue, $savedLanguages) {
 
         $personId = $_SESSION['uid'];
         
-        $selectedLanguagesStmt = $db->prepare("SELECT title FROM language INNER JOIN personLanguage ON language.languageId = personLanguage.languageId WHERE personLanguage.personId = :personId");
+        $selectedLanguagesStmt = $db->prepare("SELECT title FROM language1 INNER JOIN personLanguage ON language1.languageId = personLanguage.languageId WHERE personLanguage.personId = :personId");
         $selectedLanguagesStmt->execute([':personId' => $personId]);
         $savedLanguages = $selectedLanguagesStmt->fetchAll(PDO::FETCH_COLUMN, 0);
 
@@ -291,7 +291,7 @@ if (empty($_POST['language'])) {
   
       // Обновляем данные в таблице personLanguage.
       foreach ($_POST['language'] as $selectedOption) {
-        $languageStmt = $db->prepare("SELECT languageId FROM language WHERE title = :title");
+        $languageStmt = $db->prepare("SELECT languageId FROM language1 WHERE title = :title");
         $languageStmt->execute([':title' => $selectedOption]);
         $language = $languageStmt->fetch(PDO::FETCH_ASSOC);
   
@@ -371,7 +371,7 @@ if (empty($_POST['language'])) {
       $stmt = $db->prepare("INSERT INTO personLanguage (personId, languageId) VALUES (:personId, :languageId)");
 
       foreach ($_POST['language'] as $selectedOption) {
-        $languageStmt = $db->prepare("SELECT languageId FROM language WHERE title = :title");
+        $languageStmt = $db->prepare("SELECT languageId FROM language1 WHERE title = :title");
         $languageStmt->execute([':title' => $selectedOption]);
         $language = $languageStmt->fetch(PDO::FETCH_ASSOC);
 
