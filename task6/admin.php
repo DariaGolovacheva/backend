@@ -128,7 +128,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['userId'])) {
             $values['year'] = strip_tags($userData['year']);
             $values['sex'] = strip_tags($userData['sex']);
             $values['biography'] = strip_tags($userData['biography']);
-            $selectedLanguagesStmt = $db->prepare("SELECT title FROM language INNER JOIN personLanguage ON language.languageId = personLanguage.languageId WHERE personLanguage.personId = :personId");
+            $selectedLanguagesStmt = $db->prepare("SELECT title FROM language1 INNER JOIN personLanguage ON language1.languageId = personLanguage.languageId WHERE personLanguage.personId = :personId");
             $selectedLanguagesStmt->execute([':personId' => $values['personId']]);
             $savedLanguages = $selectedLanguagesStmt->fetchAll(PDO::FETCH_COLUMN, 0);
         } else {
@@ -211,7 +211,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['userId'])) {
             if (is_array($_POST['language'])) {
                 // Обновляем данные в таблице personLanguage.
                 foreach ($_POST['language'] as $selectedOption) {
-                    $languageStmt = $db->prepare("SELECT languageId FROM language WHERE title = :title");
+                    $languageStmt = $db->prepare("SELECT languageId FROM language1 WHERE title = :title");
                     $languageStmt->execute([':title' => $selectedOption]);
                     $language = $languageStmt->fetch(PDO::FETCH_ASSOC);
 
@@ -272,7 +272,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['userId'])) {
 
     // Запрос для подсчета количества пользователей по языкам
     $sql = "SELECT l.title, COUNT(pl.personId) AS user_count
-            FROM language l
+            FROM language1 l
             LEFT JOIN personLanguage pl ON l.languageId = pl.languageId
             GROUP BY l.title";
     try {
