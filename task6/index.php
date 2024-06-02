@@ -365,7 +365,7 @@ if (empty($_POST['language'])) {
         ':biography' => $_POST['biography']
       ]);
 
-      $personId = $db->lastInsertId() + 1;
+      $personId = $db->lastInsertId();
 
       $stmt = $db->prepare("INSERT INTO personLanguage (personId, languageId) VALUES (:personId, :languageId)");
 
