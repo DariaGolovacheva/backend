@@ -289,54 +289,55 @@ if (empty($_POST['language'])) {
       ]);
   
       // Обновляем данные в таблице personLanguage.
-      foreach ($_POST['language'] as $selectedOption) {
+     foreach ($_POST['language'] as $selectedOption) {
+        // Получаем languageId для выбранного языка
         $languageStmt = $db->prepare("SELECT languageId FROM language1 WHERE title = :title");
         $languageStmt->execute([':title' => $selectedOption]);
         $language = $languageStmt->fetch(PDO::FETCH_ASSOC);
-  
-        // Проверяем, существует ли уже запись для данного personId и languageId.
-        $checkStmt = $db->prepare("SELECT * FROM personLanguage WHERE personId = :personId AND languageId = :languageId");
-        $checkStmt->execute([
-          ':personId' => $personId,
-          ':languageId' => $language['languageId']
-        ]);
-  
-        if ($checkStmt->fetch(PDO::FETCH_ASSOC)) {
-          // Если запись существует, обновляем ее.
-          $updateStmt = $db->prepare("UPDATE personLanguage SET personId = :personId, languageId = :languageId WHERE personId = :personId AND languageId = :languageId");
-          $updateStmt->execute([
-            ':personId' => $personId,
-            ':languageId' => $language['languageId']
-          ]);
+        
+        if ($language) {
+            $languageId = $language['languageId'];
+
+            // Проверяем, существует ли уже запись для данного personId и languageId.
+            $checkStmt = $db->prepare("SELECT * FROM personLanguage WHERE personId = :personId AND languageId = :languageId");
+            $checkStmt->execute([
+                ':personId' => $personId,
+                ':languageId' => $languageId
+            ]);
+
+            if ($checkStmt->fetch(PDO::FETCH_ASSOC)) {
+                // Если запись существует, можно пропустить обновление, так как значения одинаковы.
+                echo "Запись для personId: $personId и languageId: $languageId уже существует.<br>";
+            } else {
+                // Если записи не существует, вставляем новую.
+                $insertStmt = $db->prepare("INSERT INTO personLanguage (personId, languageId) VALUES (:personId, :languageId)");
+                $insertStmt->execute([
+                    ':personId' => $personId,
+                    ':languageId' => $languageId
+                ]);
+                echo "Добавлена новая запись: personId: $personId, languageId: $languageId.<br>";
+            }
         } else {
-          // Если записи не существует, вставляем новую.
-          $insertStmt = $db->prepare("INSERT INTO personLanguage (personId, languageId) VALUES (:personId, :languageId)");
-          $insertStmt->execute([
-            ':personId' => $personId,
-            ':languageId' => $language['languageId']
-          ]);
+            echo "Language с title '$selectedOption' не найден.<br>";
         }
-      }
-    } catch(PDOException $e){
-      print('Error : ' . $e->getMessage());
-      exit();
     }
-  }
+} catch(PDOException $e) {
+    print('Error : ' . $e->getMessage());
+    exit();
+}
 
-  else {
+// Функция для генерации случайной строки
+function getRandString($n) {
+    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $randomString = '';
 
-    $n=10;
-    function getRandString($n) {
-      $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-      $randomString = '';
-
-      for ($i = 0; $i < $n; $i++) {
-          $index = rand(0, strlen($characters) - 1);
-          $randomString .= $characters[$index];
-      }
-
-      return $randomString;
+    for ($i = 0; $i < $n; $i++) {
+        $index = rand(0, strlen($characters) - 1);
+        $randomString .= $characters[$index];
     }
+
+    return $randomString;
+}
     // Генерируем уникальный логин и пароль.
     // TODO: сделать механизм генерации, например функциями rand(), uniquid(), md5(), substr().
     $login = getRandString($n);
