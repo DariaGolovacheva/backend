@@ -290,7 +290,7 @@ if (empty($_POST['language'])) {
   
       // Обновляем данные в таблице personLanguage.
       foreach ($_POST['language'] as $selectedOption) {
-        $languageStmt = $db->prepare("SELECT languageId FROM language WHERE title = :title");
+        $languageStmt = $db->prepare("SELECT languageId FROM language1 WHERE title = :title");
         $languageStmt->execute([':title' => $selectedOption]);
         $language = $languageStmt->fetch(PDO::FETCH_ASSOC);
   
@@ -370,7 +370,7 @@ if (empty($_POST['language'])) {
       $stmt = $db->prepare("INSERT INTO personLanguage (personId, languageId) VALUES (:personId, :languageId)");
 
       foreach ($_POST['language'] as $selectedOption) {
-        $languageStmt = $db->prepare("SELECT languageId FROM language WHERE title = :title");
+        $languageStmt = $db->prepare("SELECT languageId FROM language1 WHERE title = :title");
         $languageStmt->execute([':title' => $selectedOption]);
         $language = $languageStmt->fetch(PDO::FETCH_ASSOC);
 
