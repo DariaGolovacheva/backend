@@ -127,9 +127,12 @@ else
   // TODO: Проверть есть ли такой логин и пароль в базе данных.
   // Выдать сообщение об ошибках.
 
-    include('../db.php');
-$db = new PDO('mysql:host=localhost;dbname=' . $db_name, $db_login, $db_pass,
-  [PDO::ATTR_PERSISTENT => true, PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]); // Заменить test на имя БД, совпадает с логином uXXXXX
+       // Подключение к базе данных
+        $user = 'u67498';
+        $pass = '2427367';
+        $dbname = 'u67498';
+        $db = new PDO("mysql:host=localhost;dbname=$dbname", $user, $pass);
+        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
   // Получение данных из формы
     $login = $_POST['login'];
     $password = $_POST['password'];
