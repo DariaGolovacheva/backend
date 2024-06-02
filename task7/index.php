@@ -317,5 +317,5 @@ if (!empty($_SESSION['login'])) {
 
   // Делаем перенаправление.
   header('Location: ./');
-}
+
 ?>
