@@ -1,6 +1,7 @@
 
 <html>
 <head>
+  <title>Задание №6</title>
   <style>
     /* Сообщения об ошибках и поля с ошибками выводим с красным бордюром. */
     .error {
@@ -151,7 +152,7 @@ print('</div>');
 ?>
 
 <h1>
- Form
+ Регистрационная форма 
 </h1>
 
 <form style="display: flex;flex-direction: column;width: 20%" action="" method="POST">
