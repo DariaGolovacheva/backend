@@ -295,10 +295,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['userId'])) {
 
 
     // Запрос для подсчета количества пользователей по языкам
-    $sql = "SELECT l.title, COUNT(pl.personId) AS user_count
-            FROM language l
-            LEFT JOIN personLanguage pl ON l.languageId = pl.languageId
-            GROUP BY l.title";
+   $sql = "SELECT l.title, COUNT(pl.personId) AS user_count
+        FROM language1 l
+        LEFT JOIN personLanguage pl ON l.languageId = pl.languageId
+        GROUP BY l.title";
     try {
         $stmt = $db->prepare($sql);
         $stmt->execute();
