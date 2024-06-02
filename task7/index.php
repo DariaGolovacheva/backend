@@ -184,11 +184,15 @@ else if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     setcookie('language_error', '', 100000);
   }
 
-  // Проверяем меняются ли ранее сохраненные данные или отправляются новые.
-  if (!empty($_COOKIE[session_name()]) &&
-      session_start() && !empty($_SESSION['login'])) {
+  // Проверяем, активна ли уже сессия
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
+// Проверяем наличие данных о логине в сессии
+if (!empty($_SESSION['login'])) {
     $login = $_SESSION['login'];
+}
 
     try {
       // Получаем personId из таблицы personAuthentificationData
