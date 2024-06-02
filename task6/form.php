@@ -6,6 +6,131 @@
     .error {
       border: 2px solid red;
     }
+    html, body {
+      min-height: 100%;
+      padding: 0;
+      margin: 0;
+      font-family: Roboto, Arial, sans-serif;
+      font-size: 14px;
+      color: #fff;
+      background-color: #000;
+    }
+
+    h1 {
+      margin: 0 0 20px;
+      font-weight: 400;
+      color: #FFA500;
+    }
+
+    p {
+      margin: 0 0 5px;
+    }
+
+    .main-block {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: #000;
+    }
+
+    form {
+      padding: 25px;
+      margin: 25px;
+      box-shadow: 0 2px 5px #FFA500;
+      background: #222;
+    }
+
+    .fas {
+      margin: 25px 10px 0;
+      font-size: 72px;
+      color: #FFA500;
+    }
+
+    .fa-envelope {
+      transform: rotate(-20deg);
+    }
+
+    .fa-at, .fa-mail-bulk {
+      transform: rotate(10deg);
+    }
+
+    .f {
+      width: calc(100% - 18px);
+      padding: 8px;
+      margin-bottom: 20px;
+      border: 1px solid #FFA500;
+      outline: none;
+    }
+
+    input::placeholder {
+      color: #fff;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      background: #FFA500;
+      font-size: 16px;
+      font-weight: 400;
+      color: #fff;
+    }
+
+    button:hover {
+      background: #D48100;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+    }
+
+    table, th, td {
+      border: 1px solid #FFA500;
+    }
+
+    th, td {
+      padding: 10px;
+      text-align: left;
+      background: #333;
+    }
+
+    th {
+      background: #444;
+    }
+
+    table {
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    @media (min-width: 1300px) {
+      .main-block {
+        flex-direction: row;
+      }
+
+      .left-part, form {
+        width: 50%;
+      }
+
+      .fa-envelope {
+        margin-top: 0;
+        margin-left: 20%;
+      }
+
+      .fa-at {
+        margin-top: -10%;
+        margin-left: 65%;
+      }
+
+      .fa-mail-bulk {
+        margin-top: 2%;
+        margin-left: 28%;
+      }
+    }
   </style>
 </head>
 
