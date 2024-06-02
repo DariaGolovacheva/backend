@@ -4,105 +4,130 @@
 
 <style>
 html, body {
-  min-height: 100%;
-  padding: 0;
-  margin: 0;
-  font-family: Roboto, Arial, sans-serif;
-  font-size: 14px;
-  color: #fff; /* Белый текст */
-  background-color: #000; /* Черный фон */
-}
+      min-height: 100%;
+      padding: 0;
+      margin: 0;
+      font-family: Roboto, Arial, sans-serif;
+      font-size: 14px;
+      color: #fff;
+      background-color: #000;
+    }
 
-h1 {
-  margin: 0 0 20px;
-  font-weight: 400;
-  color: #FFA500; /* Оранжевый цвет заголовка */
-}
+    h1 {
+      margin: 0 0 20px;
+      font-weight: 400;
+      color: #FFA500;
+    }
 
-p {
-  margin: 0 0 5px;
-}
+    p {
+      margin: 0 0 5px;
+    }
 
-.main-block {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  background: #000; /* Черный фон */
-}
+    .main-block {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: #000;
+    }
 
-form {
-  padding: 25px;
-  margin: 25px;
-  box-shadow: 0 2px 5px #FFA500; /* Оранжевый оттенок для тени */
-  background: #222; /* Темно-серый фон для формы */
-}
+    form {
+      padding: 25px;
+      margin: 25px;
+      box-shadow: 0 2px 5px #FFA500;
+      background: #222;
+    }
 
-.fas {
-  margin: 25px 10px 0;
-  font-size: 72px;
-  color: #FFA500; /* Оранжевый цвет для иконки */
-}
+    .fas {
+      margin: 25px 10px 0;
+      font-size: 72px;
+      color: #FFA500;
+    }
 
-.fa-envelope {
-  transform: rotate(-20deg);
-}
+    .fa-envelope {
+      transform: rotate(-20deg);
+    }
 
-.fa-at, .fa-mail-bulk {
-  transform: rotate(10deg);
-}
+    .fa-at, .fa-mail-bulk {
+      transform: rotate(10deg);
+    }
 
-.f {
-  width: calc(100% - 18px);
-  padding: 8px;
-  margin-bottom: 20px;
-  border: 1px solid #FFA500; /* Оранжевая рамка для полей ввода */
-  outline: none;
-}
+    .f {
+      width: calc(100% - 18px);
+      padding: 8px;
+      margin-bottom: 20px;
+      border: 1px solid #FFA500;
+      outline: none;
+    }
 
-input::placeholder {
-  color: #fff; /* Белый цвет для плейсхолдера */
-}
+    input::placeholder {
+      color: #fff;
+    }
 
-button {
-  width: 100%;
-  padding: 10px;
-  border: none;
-  background: #FFA500; /* Оранжевый фон для кнопки */
-  font-size: 16px;
-  font-weight: 400;
-  color: #fff; /* Белый цвет текста на кнопке */
-}
+    button {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      background: #FFA500;
+      font-size: 16px;
+      font-weight: 400;
+      color: #fff;
+    }
 
-button:hover {
-  background: #D48100; /* Темно-оранжевый цвет при наведении */
-}
+    button:hover {
+      background: #D48100;
+    }
 
-@media (min-width: 1300px) {
-  .main-block {
-    flex-direction: row;
-  }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+    }
 
-  .left-part, form {
-    width: 50%;
-  }
+    table, th, td {
+      border: 1px solid #FFA500;
+    }
 
-  .fa-envelope {
-    margin-top: 0;
-    margin-left: 20%;
-  }
+    th, td {
+      padding: 10px;
+      text-align: left;
+      background: #333;
+    }
 
-  .fa-at {
-    margin-top: -10%;
-    margin-left: 65%;
-  }
+    th {
+      background: #444;
+    }
 
-  .fa-mail-bulk {
-    margin-top: 2%;
-    margin-left: 28%;
-  }
-}
+    table {
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    @media (min-width: 1300px) {
+      .main-block {
+        flex-direction: row;
+      }
+
+      .left-part, form {
+        width: 50%;
+      }
+
+      .fa-envelope {
+        margin-top: 0;
+        margin-left: 20%;
+      }
+
+      .fa-at {
+        margin-top: -10%;
+        margin-left: 65%;
+      }
+
+      .fa-mail-bulk {
+        margin-top: 2%;
+        margin-left: 28%;
+      }
+    }
     
 </style>
 </head>
@@ -116,7 +141,7 @@ button:hover {
 <form action="" method="POST">
 <h1 style="display: flex;
 justify-content: center;
-align-items: center;">Заявка</h1>
+align-items: center;">Регистрационная форма</h1>
     <label>
       ФИО:<br />
       <input class = "f" name="name"
